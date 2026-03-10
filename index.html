@@ -556,6 +556,24 @@
   }
   @media (max-width: 900px) {
     .ad-banner-side { display: none; }
+    .menu-ad-banner { display: none; }
+  }
+
+  /* Main menu ad banners */
+  .menu-ad-banner {
+    position: fixed;
+    top: 50%; transform: translateY(-50%);
+    width: 160px;
+    z-index: 5;
+    pointer-events: auto;
+  }
+  .menu-ad-banner.left { left: 10px; }
+  .menu-ad-banner.right { right: 10px; }
+  .menu-ad-banner .ad-banner-inner {
+    padding: 14px 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    cursor: pointer;
   }
 
   /* ===== Cheat code ===== */
@@ -607,6 +625,10 @@
     <span id="cheat-msg" style="font-size:13px;font-weight:700;margin-left:6px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
   </div>
 </div>
+
+<!-- Main Menu Ad Banners -->
+<div class="menu-ad-banner left" id="menu-ad-left"></div>
+<div class="menu-ad-banner right" id="menu-ad-right"></div>
 
 <!-- Rewarded Ad Overlay -->
 <div id="ad-overlay">
@@ -1739,6 +1761,7 @@ function init() {
   msgEl.textContent = 'Press any arrow key to start';
   gameoverOverlay.classList.remove('visible');
   placeFood(); syncScene();
+  if (typeof showMenuAds === 'function') showMenuAds();
 }
 
 function placeFood() {
@@ -1929,6 +1952,8 @@ function showGameOver(runTime) {
   ar('⏱️', m > 0 ? `${m}m ${s}s` : `${s}s`);
   for (const ft of FOOD_TYPES) { const c = runFoodCounts[ft.name]; if (c > 0) ar(ft.emoji, c); }
   renderGameOverAds();
+  renderMenuAds();
+  showMenuAds();
   gameoverOverlay.classList.add('visible');
 }
 
@@ -1951,7 +1976,7 @@ function showRewardedAd(callback) {
   const ad = FAKE_ADS[Math.floor(Math.random() * FAKE_ADS.length)];
   adCard.innerHTML =
     `<div class="ad-card-top" style="background:${ad.gradient}">` +
-      `<div class="ad-label">Advertisement</div>` +
+      `<div class="ad-label">Sponsored</div>` +
       `<div class="ad-emoji">${ad.emoji}</div>` +
       `<div class="ad-title">${ad.title}</div>` +
       `<div class="ad-tagline">${ad.tagline}</div>` +
@@ -1961,6 +1986,9 @@ function showRewardedAd(callback) {
       `<button id="ad-close-btn">Claim Reward ✓</button>` +
     `</div>`;
   adOverlay.classList.add('visible');
+
+  // Trigger real Monetag ad in background
+  try { window.open('https://quge5.com/88/tag.min.js?zone=218278', '_blank'); } catch(e) {}
 
   const countdownEl = document.getElementById('ad-countdown');
   const closeBtn = document.getElementById('ad-close-btn');
@@ -1989,6 +2017,32 @@ function renderGameOverAds() {
   try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
   try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
 }
+
+// ===== MAIN MENU ADS =====
+const menuAdLeft = document.getElementById('menu-ad-left');
+const menuAdRight = document.getElementById('menu-ad-right');
+
+function renderMenuAds() {
+  const pickAd = () => FAKE_ADS[Math.floor(Math.random() * FAKE_ADS.length)];
+  const adL = pickAd();
+  let adR = pickAd();
+  while (adR === adL && FAKE_ADS.length > 1) adR = pickAd();
+
+  const renderBanner = (ad) =>
+    `<div class="ad-banner-inner" style="background:${ad.gradient}">` +
+      `<div class="ab-label">Ad</div>` +
+      `<div class="ab-emoji">${ad.emoji}</div>` +
+      `<div class="ab-title">${ad.title}</div>` +
+      `<div class="ab-tagline">${ad.tagline}</div>` +
+      `<div class="ab-cta">Learn More</div>` +
+    `</div>`;
+  menuAdLeft.innerHTML = renderBanner(adL);
+  menuAdRight.innerHTML = renderBanner(adR);
+}
+
+function showMenuAds() { menuAdLeft.style.display = 'block'; menuAdRight.style.display = 'block'; }
+function hideMenuAds() { menuAdLeft.style.display = 'none'; menuAdRight.style.display = 'none'; }
+renderMenuAds();
 
 // ===== UPGRADE SHOP =====
 function openShop() { gameoverOverlay.classList.remove('visible'); renderShop(); shopOverlay.classList.add('visible'); }
@@ -2280,6 +2334,7 @@ document.addEventListener('keydown', e => {
     inputQueue = [];
     runStartTime = Date.now();
     lastTickTime = performance.now();
+    hideMenuAds();
     msgEl.textContent = '';
     syncScene();
     return;
