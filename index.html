@@ -1057,7 +1057,7 @@ function loadGame(username) {
     if (!raw) return null;
     const data = JSON.parse(raw);
     wallet = data.wallet || 0;
-    upgradeLevels = data.upgradeLevels || { speed:0, life:0, magnet:0, mult:0, powerDur:0, fruit:0 };
+    upgradeLevels = { speed:0, life:0, magnet:0, mult:0, powerDur:0, fruit:0, ...(data.upgradeLevels || {}) };
     currentMap = data.currentMap || 'classic';
     currentSkin = data.currentSkin || 'blue';
     MAP_DEFS.forEach(m => m.owned = (data.ownedMaps || ['classic']).includes(m.id));
@@ -2596,13 +2596,13 @@ function renderShop() {
       btn.addEventListener('click', () => { if (wallet >= cost) { wallet -= cost; upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); checkStatAchievements(); } });
     }
     card.appendChild(btn);
-    // Watch Ad button for unaffordable upgrades
-    if (!maxed && !canAfford) {
+    // Watch Ad button for all non-maxed upgrades
+    if (!maxed) {
       const adBtn = document.createElement('button');
       adBtn.className = 'watch-ad-btn';
       adBtn.textContent = '▶ Watch Ad';
       adBtn.addEventListener('click', () => {
-        showRewardedAd(() => { upgradeLevels[def.id]++; renderShop(); updateHUD(); });
+        showRewardedAd(() => { upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); });
       });
       card.appendChild(adBtn);
     }
@@ -3665,16 +3665,20 @@ function showRoyaleGameOver(runTime, won) {
 }
 
 function cleanupRoyale() {
+  // Remove ALL bot meshes from scene entirely (not just hide)
   for (const bot of botSnakes) {
-    for (const m of bot.meshes) { m.visible = false; botBodyPool.push(m); }
-    if (bot.headMesh) { bot.headMesh.visible = false; botHeadPool.push(bot.headMesh); }
-    bot.meshes = []; bot.headMesh = null;
+    for (const m of bot.meshes) scene.remove(m);
+    if (bot.headMesh) scene.remove(bot.headMesh);
   }
   botSnakes = [];
-  // Also hide all pooled meshes to ensure nothing leaks
-  for (const m of botBodyPool) m.visible = false;
-  for (const m of botHeadPool) m.visible = false;
-  for (const m of royaleFoodMeshes) m.visible = false;
+  // Remove all pooled meshes from scene too
+  for (const m of botBodyPool) scene.remove(m);
+  for (const m of botHeadPool) scene.remove(m);
+  botBodyPool.length = 0;
+  botHeadPool.length = 0;
+  // Hide royale food meshes
+  for (const m of royaleFoodMeshes) scene.remove(m);
+  royaleFoodMeshes.length = 0;
   royaleFoods = [];
   royaleActive = false;
   hideAllNameLabels();
