@@ -2,7 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="google-adsense-account" content="ca-pub-1899513491544813">
 <title>3D Snake Game</title>
+<script>
+if (location.protocol !== 'file:') {
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1899513491544813';
+  s.crossOrigin = 'anonymous';
+  document.head.appendChild(s);
+}
+</script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -611,7 +621,9 @@
 
 <!-- Game Over -->
 <div id="gameover-overlay">
-  <div class="ad-banner-side left" id="go-ad-left"></div>
+  <div class="ad-banner-side left" id="go-ad-left">
+    <ins class="adsbygoogle" style="display:inline-block;width:140px;height:360px" data-ad-client="ca-pub-1899513491544813" data-ad-slot="auto" data-ad-format="vertical"></ins>
+  </div>
   <div id="gameover-panel">
     <div class="go-banner">GAME OVER</div>
     <div class="stars-row" id="stars-row"></div>
@@ -628,7 +640,9 @@
       <button class="candy-btn btn-skins-go" id="btn-open-skins-go">Skins</button>
     </div>
   </div>
-  <div class="ad-banner-side right" id="go-ad-right"></div>
+  <div class="ad-banner-side right" id="go-ad-right">
+    <ins class="adsbygoogle" style="display:inline-block;width:140px;height:360px" data-ad-client="ca-pub-1899513491544813" data-ad-slot="auto" data-ad-format="vertical"></ins>
+  </div>
 </div>
 
 <!-- Shop -->
@@ -1974,24 +1988,12 @@ function showRewardedAd(callback) {
   }, { once: true });
 }
 
+let goAdsLoaded = false;
 function renderGameOverAds() {
-  const leftEl = document.getElementById('go-ad-left');
-  const rightEl = document.getElementById('go-ad-right');
-  const pickAd = () => FAKE_ADS[Math.floor(Math.random() * FAKE_ADS.length)];
-  const adL = pickAd();
-  let adR = pickAd();
-  while (adR === adL && FAKE_ADS.length > 1) adR = pickAd();
-
-  const renderBanner = (ad) =>
-    `<div class="ad-banner-inner" style="background:${ad.gradient}">` +
-      `<div class="ab-label">Ad</div>` +
-      `<div class="ab-emoji">${ad.emoji}</div>` +
-      `<div class="ab-title">${ad.title}</div>` +
-      `<div class="ab-tagline">${ad.tagline}</div>` +
-      `<div class="ab-cta">Learn More</div>` +
-    `</div>`;
-  leftEl.innerHTML = renderBanner(adL);
-  rightEl.innerHTML = renderBanner(adR);
+  if (goAdsLoaded || location.protocol === 'file:') return;
+  goAdsLoaded = true;
+  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
 }
 
 // ===== UPGRADE SHOP =====
