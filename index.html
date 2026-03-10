@@ -8,8 +8,6 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1899513491544813" crossorigin="anonymous"></script>
 <!-- Monetag: Push Notifications -->
 <script src="https://5gvci.com/act/files/tag.min.js?z=10710453" data-cfasync="false" async></script>
-<!-- Monetag: In-Page Push (banner notifications) -->
-<script>(function(s){s.dataset.zone='10710458',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <!-- Adsterra: Social Bar -->
 <script src="https://pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73ddcf3f97353491f.js"></script>
 <style>
@@ -1719,6 +1717,10 @@ function init() {
   updateHUD();
   msgEl.textContent = 'Press any arrow key to start';
   gameoverOverlay.classList.remove('visible');
+  // Show menu UI again
+  document.getElementById('cam-indicator').style.display = '';
+  document.getElementById('map-badge').style.display = '';
+  document.getElementById('cheat-bar').style.display = '';
   placeFood(); syncScene();
 }
 
@@ -2256,6 +2258,10 @@ document.addEventListener('keydown', e => {
     runStartTime = Date.now();
     lastTickTime = performance.now();
     msgEl.textContent = '';
+    // Hide menu UI during gameplay
+    document.getElementById('cam-indicator').style.display = 'none';
+    document.getElementById('map-badge').style.display = 'none';
+    document.getElementById('cheat-bar').style.display = 'none';
     syncScene();
     return;
   }
