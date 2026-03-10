@@ -838,7 +838,7 @@
     <div class="go-rewards-row" id="go-rewards"></div>
     <div class="go-buttons" style="flex-wrap:wrap;">
       <button class="candy-btn btn-retry" id="btn-play-again">Retry</button>
-      <button class="candy-btn btn-shop-go" id="btn-open-shop">Shop</button>
+      <button class="candy-btn btn-shop-go" id="btn-open-shop">Upgrades</button>
       <button class="candy-btn btn-maps-go" id="btn-open-maps-go">Maps</button>
       <button class="candy-btn btn-skins-go" id="btn-open-skins-go">Skins</button>
       <button class="candy-btn btn-shop-go" id="btn-open-coins-go" style="font-size:12px;">💰 Coins</button>
@@ -860,7 +860,7 @@
 <!-- Shop -->
 <div id="shop-overlay">
   <div id="shop-panel">
-    <h2>UPGRADE SHOP</h2>
+    <h2>UPGRADES</h2>
     <div id="shop-wallet">🪙 $0</div>
     <div class="shop-grid" id="shop-grid"></div>
     <button class="shop-close-btn" id="shop-close">Close</button>
@@ -1018,7 +1018,7 @@ function getDefaultSaveData(username) {
   return {
     version: 1, username,
     wallet: 0,
-    upgradeLevels: { speed:0, life:0, magnet:0, mult:0 },
+    upgradeLevels: { speed:0, life:0, magnet:0, mult:0, powerDur:0, fruit:0 },
     currentMap: 'classic', currentSkin: 'blue',
     ownedMaps: ['classic'],
     ownedSkins: ['blue','green','red','purple','orange','pink','cyan','yellow','white'],
@@ -1057,7 +1057,7 @@ function loadGame(username) {
     if (!raw) return null;
     const data = JSON.parse(raw);
     wallet = data.wallet || 0;
-    upgradeLevels = data.upgradeLevels || { speed:0, life:0, magnet:0, mult:0 };
+    upgradeLevels = data.upgradeLevels || { speed:0, life:0, magnet:0, mult:0, powerDur:0, fruit:0 };
     currentMap = data.currentMap || 'classic';
     currentSkin = data.currentSkin || 'blue';
     MAP_DEFS.forEach(m => m.owned = (data.ownedMaps || ['classic']).includes(m.id));
@@ -1102,7 +1102,7 @@ function doLogout() {
   currentUser = null;
   localStorage.removeItem('snakeGame_currentUser');
   // Reset to defaults
-  wallet = 0; upgradeLevels = { speed:0, life:0, magnet:0, mult:0 };
+  wallet = 0; upgradeLevels = { speed:0, life:0, magnet:0, mult:0, powerDur:0, fruit:0 };
   currentMap = 'classic'; currentSkin = 'blue';
   MAP_DEFS.forEach(m => m.owned = m.cost === 0);
   SKIN_DEFS.forEach(s => s.owned = s.cost === 0);
@@ -1170,9 +1170,10 @@ const UPGRADE_DEFS = [
   { id:'magnet', name:'Coin Magnet', icon:'🧲', desc:'Bonus coins per fruit.', costs:[15,30], maxLevel:2, effectLabel: l => l===0?'None':`+${l} coins` },
   { id:'mult', name:'Score Multi', icon:'✖️', desc:'Multiply score during a run.', costs:[20,40], maxLevel:2, effectLabel: l => l===0?'1x':`${1+l*0.5}x` },
   { id:'powerDur', name:'Power Duration', icon:'⏱️', desc:'Power-ups last longer.', costs:[20,40,60], maxLevel:3, effectLabel: l => l===0?'15s':`${15+l*2.5}s` },
+  { id:'fruit', name:'More Fruit', icon:'🍎', desc:'More fruit on the field.', costs:[15,30], maxLevel:2, effectLabel: l => `${2+l} max fruit` },
 ];
 let wallet = 0;
-let upgradeLevels = { speed:0, life:0, magnet:0, mult:0, powerDur:0 };
+let upgradeLevels = { speed:0, life:0, magnet:0, mult:0, powerDur:0, fruit:0 };
 
 // ===== MAP SYSTEM =====
 const MAP_DEFS = [
@@ -2091,7 +2092,7 @@ const eyePupilMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness:
 let foodGroup = null;
 // Multi-food system for classic mode
 let classicFoods = []; // array of { x, y, type, mesh }
-const MAX_CLASSIC_FOOD = 4;
+function getMaxClassicFood() { return 2 + (upgradeLevels.fruit || 0); }
 function clearFoodMesh() { if (foodGroup) { scene.remove(foodGroup); foodGroup = null; } }
 function clearAllClassicFood() {
   for (const f of classicFoods) { if (f.mesh) scene.remove(f.mesh); }
@@ -2227,9 +2228,9 @@ function init() {
 }
 
 function placeFood() {
-  // In classic mode, maintain up to MAX_CLASSIC_FOOD items
+  // In classic mode, maintain up to getMaxClassicFood() items
   if (gameMode !== 'royale') {
-    while (classicFoods.length < MAX_CLASSIC_FOOD) {
+    while (classicFoods.length < getMaxClassicFood()) {
       let attempts = 0, x, y;
       while (attempts++ < 50) {
         x = Math.floor(Math.random() * COLS);
@@ -3040,13 +3041,61 @@ let collectedPowerupTypes = new Set();
 function createPowerupMesh(type) {
   if (powerupMesh) { scene.remove(powerupMesh); powerupMesh = null; }
   const g = new THREE.Group();
-  let geo;
-  if (type.shape === 'octahedron') geo = new THREE.OctahedronGeometry(CELL * 0.35);      // shield
-  else if (type.shape === 'torus') geo = new THREE.TorusGeometry(CELL * 0.25, CELL * 0.1, 8, 12); // magnet
-  else if (type.shape === 'tetrahedron') geo = new THREE.TetrahedronGeometry(CELL * 0.38); // ghost
-  else geo = new THREE.BoxGeometry(CELL * 0.5, CELL * 0.5, CELL * 0.5); // double (coin box)
-  const mat = new THREE.MeshStandardMaterial({ color:type.color, emissive:type.color, emissiveIntensity:0.6, roughness:0.15, metalness:0.4, transparent: type.id === 'ghost', opacity: type.id === 'ghost' ? 0.7 : 1 });
-  const m = new THREE.Mesh(geo, mat); m.castShadow = true; g.add(m);
+  const mat = new THREE.MeshStandardMaterial({ color:type.color, emissive:type.color, emissiveIntensity:0.6, roughness:0.15, metalness:0.4, transparent: type.id === 'ghost', opacity: type.id === 'ghost' ? 0.6 : 1 });
+  const s = CELL;
+  if (type.id === 'shield') {
+    // Shield: hemisphere dome shape
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(s*0.35, 12, 8, 0, Math.PI*2, 0, Math.PI/2), mat);
+    dome.rotation.x = -Math.PI * 0.1;
+    g.add(dome);
+    // Cross/plus on top
+    const bar1 = new THREE.Mesh(new THREE.BoxGeometry(s*0.06, s*0.3, s*0.06), mat.clone());
+    bar1.material.emissiveIntensity = 1.0;
+    bar1.position.y = 0.05;
+    g.add(bar1);
+    const bar2 = new THREE.Mesh(new THREE.BoxGeometry(s*0.3, s*0.06, s*0.06), mat.clone());
+    bar2.material.emissiveIntensity = 1.0;
+    bar2.position.y = 0.05;
+    g.add(bar2);
+  } else if (type.id === 'magnet') {
+    // Magnet: U-shape made from torus segment + two prongs
+    const horseshoe = new THREE.Mesh(new THREE.TorusGeometry(s*0.22, s*0.06, 8, 12, Math.PI), mat);
+    horseshoe.rotation.x = Math.PI / 2;
+    g.add(horseshoe);
+    // Red tip
+    const tipMat = new THREE.MeshStandardMaterial({ color:0xff0000, emissive:0xff0000, emissiveIntensity:0.5 });
+    const tip1 = new THREE.Mesh(new THREE.CylinderGeometry(s*0.06, s*0.06, s*0.1, 6), tipMat);
+    tip1.position.set(-s*0.22, 0, -0.05); g.add(tip1);
+    const tip2 = new THREE.Mesh(new THREE.CylinderGeometry(s*0.06, s*0.06, s*0.1, 6), tipMat);
+    tip2.position.set(s*0.22, 0, -0.05); g.add(tip2);
+  } else if (type.id === 'ghost') {
+    // Ghost: rounded head + wavy bottom
+    const head = new THREE.Mesh(new THREE.SphereGeometry(s*0.25, 10, 8), mat);
+    head.position.y = 0.1;
+    g.add(head);
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(s*0.25, s*0.2, s*0.25, 8), mat);
+    body.position.y = -0.05;
+    g.add(body);
+    // Eyes (dark)
+    const eyeMat = new THREE.MeshStandardMaterial({ color:0x000000 });
+    const eye1 = new THREE.Mesh(new THREE.SphereGeometry(s*0.06, 6, 4), eyeMat);
+    eye1.position.set(-s*0.1, 0.12, s*0.2); g.add(eye1);
+    const eye2 = new THREE.Mesh(new THREE.SphereGeometry(s*0.06, 6, 4), eyeMat);
+    eye2.position.set(s*0.1, 0.12, s*0.2); g.add(eye2);
+  } else {
+    // 2x Coins: gold coin stack
+    const coinMat = new THREE.MeshStandardMaterial({ color:0xffd700, emissive:0xffa500, emissiveIntensity:0.5, metalness:0.8, roughness:0.2 });
+    const coin1 = new THREE.Mesh(new THREE.CylinderGeometry(s*0.25, s*0.25, s*0.06, 12), coinMat);
+    coin1.position.y = -0.05; g.add(coin1);
+    const coin2 = new THREE.Mesh(new THREE.CylinderGeometry(s*0.25, s*0.25, s*0.06, 12), coinMat);
+    coin2.position.y = 0.03; coin2.rotation.z = 0.15; g.add(coin2);
+    // "x2" text - use a small box with X shape
+    const xMat = new THREE.MeshStandardMaterial({ color:0xff4500, emissive:0xff4500, emissiveIntensity:0.8 });
+    const xBar1 = new THREE.Mesh(new THREE.BoxGeometry(s*0.04, s*0.2, s*0.04), xMat);
+    xBar1.rotation.z = Math.PI/4; xBar1.position.set(0, 0.15, s*0.26); g.add(xBar1);
+    const xBar2 = new THREE.Mesh(new THREE.BoxGeometry(s*0.04, s*0.2, s*0.04), xMat);
+    xBar2.rotation.z = -Math.PI/4; xBar2.position.set(0, 0.15, s*0.26); g.add(xBar2);
+  }
   const glow = new THREE.PointLight(type.color, 2.5, 5); glow.position.y = 0.2; g.add(glow);
   scene.add(g); powerupMesh = g;
 }
@@ -3236,8 +3285,6 @@ function addKillFeed(text) {
 
 function tickBot(bot, now) {
   if (!bot.alive) return;
-  // Update interpolation progress
-  if (bot.speed > 0) bot.tickProgress = Math.min((now - bot.lastTick) / bot.speed, 1);
   if (now - bot.lastTick < bot.speed) return;
   bot.lastTick = now;
   bot.tickProgress = 0;
@@ -3262,6 +3309,8 @@ function tickBot(bot, now) {
 }
 
 function initRoyale() {
+  // Clean up previous royale state first (fixes restart bug)
+  if (royaleActive) cleanupRoyale();
   clearAllClassicFood();
   gameMode = 'royale'; royaleActive = true;
   royaleKills = 0;
@@ -3408,6 +3457,14 @@ function projectToScreen(worldX, worldY, worldZ) {
 
 function syncRoyaleScene() {
   const half = getGridHalf();
+  const now = performance.now();
+  // Update bot tickProgress every frame for smooth interpolation
+  for (const bot of botSnakes) {
+    if (!bot.alive) continue;
+    if (bot.speed > 0 && bot.lastTick > 0) {
+      bot.tickProgress = Math.min((now - bot.lastTick) / bot.speed, 1);
+    }
+  }
   syncScene();
   let labelIdx = 0;
   // Player name label
@@ -3611,8 +3668,12 @@ function cleanupRoyale() {
   for (const bot of botSnakes) {
     for (const m of bot.meshes) { m.visible = false; botBodyPool.push(m); }
     if (bot.headMesh) { bot.headMesh.visible = false; botHeadPool.push(bot.headMesh); }
+    bot.meshes = []; bot.headMesh = null;
   }
   botSnakes = [];
+  // Also hide all pooled meshes to ensure nothing leaks
+  for (const m of botBodyPool) m.visible = false;
+  for (const m of botHeadPool) m.visible = false;
   for (const m of royaleFoodMeshes) m.visible = false;
   royaleFoods = [];
   royaleActive = false;
@@ -3873,7 +3934,7 @@ const TUTORIAL_STEPS = [
   { title:'Eating', text:'Eat fruits to grow longer, earn points, and collect coins. Rarer fruits give more!' },
   { title:'HUD', text:'Top bar shows your Score, Coins earned this run, and your Wallet balance.' },
   { title:'Camera', text:'Press C to switch camera views (Orbit / Snake Eyes). Press P for Retro pixel mode.' },
-  { title:'Shops', text:'Open Map Shop (M), Skin Shop (K), Upgrade Shop, or Coin Store from the buttons.' },
+  { title:'Shops', text:'Open Map Shop (M), Skin Shop (K), Upgrades, or Coin Store from the buttons.' },
   { title:'Power-Ups', text:'Glowing pickups spawn on the field: Shield 🛡️, Magnet 🧲, Ghost 👻, 2x Coins 💰' },
   { title:'Game Modes', text:'Choose Classic mode or Snake Royale — battle 25 bot snakes, last one standing wins!' },
   { title:'Challenges', text:'Check Daily Challenges for bonus coins. Earn Achievements for milestones!' },
