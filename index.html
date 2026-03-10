@@ -560,9 +560,220 @@
     50% { transform: translateY(-30px) scale(1.1); }
     100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
   }
+
+  /* ===== LOGIN OVERLAY ===== */
+  #login-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
+    z-index:400; justify-content:center; align-items:center; backdrop-filter:blur(8px);
+  }
+  #login-overlay.visible { display:flex; animation:fadeIn 0.4s ease; }
+  #login-panel {
+    background:linear-gradient(145deg,#fff8ee,#ffecd2);
+    border-radius:24px; padding:32px 36px; min-width:320px; max-width:380px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.3); text-align:center; border:3px solid #f9ca24;
+  }
+  #login-panel h2 { font-size:28px; color:#e8783a; margin-bottom:4px;
+    text-shadow:0 2px 0 #c45a20; }
+  #login-panel .login-subtitle { font-size:13px; color:#8d6e3f; margin-bottom:16px; }
+  #login-panel input {
+    display:block; width:100%; padding:10px 14px; margin:8px 0; border-radius:14px;
+    border:2px solid #e0c89a; background:#fff; font-family:'Baloo 2',sans-serif;
+    font-size:15px; font-weight:600; color:#5a3a1a; outline:none; text-align:center;
+  }
+  #login-panel input:focus { border-color:#f9ca24; box-shadow:0 0 8px rgba(249,202,36,0.3); }
+  .login-btn {
+    display:block; width:100%; padding:10px; margin:8px 0; border:none; border-radius:14px;
+    font-family:'Baloo 2',sans-serif; font-size:16px; font-weight:700; cursor:pointer;
+    transition:transform 0.15s,box-shadow 0.15s;
+  }
+  .login-btn:hover { transform:scale(1.03); }
+  .login-btn.primary { background:linear-gradient(135deg,#f9ca24,#e8783a); color:#fff;
+    box-shadow:0 4px 12px rgba(232,120,58,0.3); }
+  .login-btn.secondary { background:rgba(255,255,255,0.7); color:#5a3a1a;
+    border:2px solid #e0c89a; }
+  .login-btn.guest { background:linear-gradient(135deg,#a8e063,#56ab2f); color:#fff;
+    box-shadow:0 4px 12px rgba(86,171,47,0.3); margin-top:12px; }
+  .login-toggle { font-size:13px; color:#8d6e3f; margin-top:8px; cursor:pointer; }
+  .login-toggle span { color:#e8783a; font-weight:700; text-decoration:underline; }
+  .login-error { color:#ff4444; font-size:13px; font-weight:700; min-height:18px; margin:4px 0; }
+
+  /* ===== PROFILE BAR ===== */
+  #profile-bar {
+    position:fixed; top:8px; right:12px; display:flex; gap:6px;
+    z-index:15; pointer-events:auto;
+  }
+  #profile-bar .hud-pill { font-size:12px; padding:3px 10px; cursor:pointer; }
+  #profile-bar .hud-pill:hover { background:rgba(255,255,255,1); }
+
+  /* ===== POWERUP BAR ===== */
+  #powerup-bar {
+    display:flex; gap:6px; margin-top:4px; min-height:24px;
+  }
+  .powerup-pill {
+    background:rgba(0,0,0,0.6); border-radius:14px; padding:2px 10px;
+    font-size:12px; font-weight:700; color:#fff; display:flex; align-items:center; gap:4px;
+    border:2px solid rgba(255,255,255,0.3); animation:fadeIn 0.3s ease;
+  }
+
+  /* ===== MODE SELECTOR ===== */
+  #mode-selector {
+    display:flex; gap:10px; margin-top:8px; pointer-events:auto;
+  }
+  #mode-selector .candy-btn { font-size:14px; padding:6px 18px; }
+  .mode-active { box-shadow:0 0 12px rgba(249,202,36,0.6) !important; border:2px solid #f9ca24 !important; }
+
+  /* ===== COIN SHOP ===== */
+  #coinshop-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5);
+    z-index:200; justify-content:center; align-items:center; backdrop-filter:blur(6px);
+  }
+  #coinshop-overlay.visible { display:flex; animation:fadeIn 0.3s ease; }
+  #coinshop-panel {
+    background:linear-gradient(145deg,#fff8ee,#ffecd2); border-radius:20px;
+    padding:24px 28px; min-width:340px; max-width:440px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.25); text-align:center; border:3px solid #f9ca24;
+  }
+  .coinpack-card {
+    background:rgba(255,255,255,0.8); border-radius:14px; padding:14px;
+    margin:8px 0; display:flex; justify-content:space-between; align-items:center;
+    border:2px solid #e0c89a; transition:transform 0.15s;
+  }
+  .coinpack-card:hover { transform:scale(1.02); }
+  .coinpack-info { text-align:left; }
+  .coinpack-coins { font-size:20px; font-weight:800; color:#5a3a1a; }
+  .coinpack-price {
+    background:linear-gradient(135deg,#f9ca24,#e8783a); color:#fff; border:none;
+    border-radius:12px; padding:8px 16px; font-family:'Baloo 2',sans-serif;
+    font-size:14px; font-weight:700; cursor:pointer; transition:transform 0.15s;
+  }
+  .coinpack-price:hover { transform:scale(1.08); }
+
+  /* ===== LEADERBOARD ===== */
+  #leaderboard-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5);
+    z-index:200; justify-content:center; align-items:center; backdrop-filter:blur(6px);
+  }
+  #leaderboard-overlay.visible { display:flex; animation:fadeIn 0.3s ease; }
+  #leaderboard-panel {
+    background:linear-gradient(145deg,#fff8ee,#ffecd2); border-radius:20px;
+    padding:24px 28px; min-width:400px; max-width:520px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.25); text-align:center; border:3px solid #f9ca24;
+  }
+  #leaderboard-table {
+    width:100%; border-collapse:collapse; margin:12px 0; font-size:13px;
+  }
+  #leaderboard-table th {
+    background:#e8783a; color:#fff; padding:6px 8px; font-weight:700;
+  }
+  #leaderboard-table td { padding:6px 8px; border-bottom:1px solid #e0c89a; }
+  #leaderboard-table tr:nth-child(even) { background:rgba(255,255,255,0.5); }
+  #leaderboard-table .rank-1 { color:#FFD700; font-weight:800; }
+  #leaderboard-table .rank-2 { color:#C0C0C0; font-weight:700; }
+  #leaderboard-table .rank-3 { color:#CD7F32; font-weight:700; }
+
+  /* ===== CHALLENGES ===== */
+  #challenges-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5);
+    z-index:200; justify-content:center; align-items:center; backdrop-filter:blur(6px);
+  }
+  #challenges-overlay.visible { display:flex; animation:fadeIn 0.3s ease; }
+  #challenges-panel {
+    background:linear-gradient(145deg,#fff8ee,#ffecd2); border-radius:20px;
+    padding:24px 28px; min-width:360px; max-width:440px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.25); text-align:center; border:3px solid #f9ca24;
+  }
+  .challenge-card {
+    background:rgba(255,255,255,0.8); border-radius:14px; padding:14px;
+    margin:10px 0; text-align:left; border:2px solid #e0c89a;
+  }
+  .challenge-card.completed { border-color:#00b894; background:rgba(0,184,148,0.1); }
+  .challenge-text { font-size:14px; font-weight:700; color:#5a3a1a; }
+  .challenge-reward { font-size:12px; color:#e8783a; font-weight:700; }
+  .challenge-bar-bg {
+    height:8px; background:#e0c89a; border-radius:4px; margin:6px 0; overflow:hidden;
+  }
+  .challenge-bar-fill {
+    height:100%; background:linear-gradient(90deg,#f9ca24,#e8783a); border-radius:4px;
+    transition:width 0.3s ease;
+  }
+  .challenge-claim {
+    background:linear-gradient(135deg,#00b894,#00cec9); color:#fff; border:none;
+    border-radius:10px; padding:5px 14px; font-family:'Baloo 2',sans-serif;
+    font-size:12px; font-weight:700; cursor:pointer; margin-top:4px;
+  }
+  .challenge-claim:disabled { opacity:0.4; cursor:default; }
+
+  /* ===== ACHIEVEMENTS ===== */
+  #achievements-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5);
+    z-index:200; justify-content:center; align-items:center; backdrop-filter:blur(6px);
+  }
+  #achievements-overlay.visible { display:flex; animation:fadeIn 0.3s ease; }
+  #achievements-panel {
+    background:linear-gradient(145deg,#fff8ee,#ffecd2); border-radius:20px;
+    padding:24px 28px; min-width:400px; max-width:520px; max-height:80vh; overflow-y:auto;
+    box-shadow:0 8px 30px rgba(0,0,0,0.25); text-align:center; border:3px solid #f9ca24;
+  }
+  .achievement-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0; }
+  .achievement-card {
+    background:rgba(255,255,255,0.8); border-radius:12px; padding:10px;
+    text-align:center; border:2px solid #e0c89a; transition:transform 0.15s;
+  }
+  .achievement-card.unlocked { border-color:#f9ca24; background:rgba(249,202,36,0.15); }
+  .achievement-card.locked { opacity:0.5; filter:grayscale(0.5); }
+  .achievement-icon { font-size:24px; }
+  .achievement-name { font-size:12px; font-weight:700; color:#5a3a1a; }
+  .achievement-desc { font-size:10px; color:#8d6e3f; }
+  .achievement-popup {
+    position:fixed; top:-60px; left:50%; transform:translateX(-50%);
+    background:linear-gradient(135deg,#f9ca24,#e8783a); color:#fff;
+    border-radius:16px; padding:10px 20px; font-family:'Baloo 2',sans-serif;
+    font-size:14px; font-weight:700; z-index:500; box-shadow:0 4px 16px rgba(0,0,0,0.3);
+    transition:top 0.4s ease; white-space:nowrap;
+  }
+  .achievement-popup.show { top:20px; }
+
+  /* ===== TUTORIAL ===== */
+  #tutorial-overlay {
+    display:none; position:fixed; inset:0; z-index:600; background:rgba(0,0,0,0.75);
+  }
+  #tutorial-overlay.visible { display:flex; justify-content:center; align-items:center; }
+  .tutorial-box {
+    background:#fff; border-radius:20px; padding:24px 28px; max-width:360px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.4); text-align:center; border:3px solid #f9ca24;
+  }
+  .tutorial-box h3 { color:#e8783a; font-size:20px; margin-bottom:8px; }
+  .tutorial-box p { font-size:14px; color:#5a3a1a; line-height:1.5; margin-bottom:16px; }
+  .tutorial-step { font-size:11px; color:#8d6e3f; margin-bottom:12px; }
+  .tutorial-btns { display:flex; gap:10px; justify-content:center; }
+  .tutorial-btns button {
+    border:none; border-radius:12px; padding:8px 20px; font-family:'Baloo 2',sans-serif;
+    font-size:14px; font-weight:700; cursor:pointer; transition:transform 0.15s;
+  }
+  .tutorial-btns button:hover { transform:scale(1.05); }
+  .tutorial-next { background:linear-gradient(135deg,#f9ca24,#e8783a); color:#fff; }
+  .tutorial-skip { background:rgba(0,0,0,0.1); color:#5a3a1a; }
+
+  /* ===== ROYALE HUD ===== */
+  #royale-hud { display:none; margin-top:4px; }
+  #royale-hud.visible { display:flex; gap:8px; }
+  .kill-feed {
+    position:fixed; top:60px; right:12px; z-index:15;
+    display:flex; flex-direction:column; gap:4px; pointer-events:none;
+  }
+  .kill-feed-item {
+    background:rgba(0,0,0,0.6); color:#fff; padding:3px 10px; border-radius:8px;
+    font-size:11px; font-weight:700; animation:fadeIn 0.3s ease;
+  }
 </style>
 </head>
 <body>
+
+<!-- Profile Bar -->
+<div id="profile-bar">
+  <span class="hud-pill" id="profile-pill">👤 Guest</span>
+  <span class="hud-pill" id="logout-btn">🚪</span>
+</div>
 
 <div id="hud">
   <div id="hud-title">SNAKE 3D</div>
@@ -577,6 +788,15 @@
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="pixel-btn">🎮 Retro (P)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="map-btn">🗺️ Maps (M)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="skin-btn">🐍 Skins (K)</span>
+  </div>
+  <div id="powerup-bar"></div>
+  <div id="royale-hud">
+    <span class="hud-pill" id="alive-pill">👥 26 Alive</span>
+    <span class="hud-pill" id="kills-pill">💀 0 Kills</span>
+  </div>
+  <div id="mode-selector">
+    <button class="candy-btn btn-retry mode-active" id="btn-classic">🐍 Classic</button>
+    <button class="candy-btn btn-shop-go" id="btn-royale">⚔️ Snake Royale</button>
   </div>
   <div id="map-badge" style="margin-top:4px;"><span class="hud-pill" style="font-size:12px;padding:2px 10px;">🌿 Classic Meadow</span></div>
   <div id="message">Press any arrow key to start</div>
@@ -612,6 +832,10 @@
       <button class="candy-btn btn-shop-go" id="btn-open-shop">Shop</button>
       <button class="candy-btn btn-maps-go" id="btn-open-maps-go">Maps</button>
       <button class="candy-btn btn-skins-go" id="btn-open-skins-go">Skins</button>
+      <button class="candy-btn btn-shop-go" id="btn-open-coins-go" style="font-size:12px;">💰 Coins</button>
+      <button class="candy-btn btn-maps-go" id="btn-open-lb-go" style="font-size:12px;">🏆 Scores</button>
+      <button class="candy-btn btn-skins-go" id="btn-open-ch-go" style="font-size:12px;">📋 Challenges</button>
+      <button class="candy-btn btn-retry" id="btn-open-ach-go" style="font-size:12px;">🏅 Badges</button>
     </div>
   </div>
   <div class="ad-banner-side right" id="go-ad-right">
@@ -650,6 +874,83 @@
   </div>
 </div>
 
+<!-- Login -->
+<div id="login-overlay">
+  <div id="login-panel">
+    <h2>SNAKE 3D</h2>
+    <div class="login-subtitle">Save your progress across sessions!</div>
+    <div id="login-form">
+      <input type="text" id="login-user" placeholder="Username" maxlength="20">
+      <input type="password" id="login-pass" placeholder="Password" maxlength="30">
+      <div class="login-error" id="login-error"></div>
+      <button class="login-btn primary" id="login-submit">Login</button>
+      <div class="login-toggle">No account? <span id="show-register">Register</span></div>
+    </div>
+    <div id="register-form" style="display:none">
+      <input type="text" id="reg-user" placeholder="Choose username" maxlength="20">
+      <input type="password" id="reg-pass" placeholder="Choose password" maxlength="30">
+      <input type="password" id="reg-pass2" placeholder="Confirm password" maxlength="30">
+      <div class="login-error" id="reg-error"></div>
+      <button class="login-btn primary" id="reg-submit">Register</button>
+      <div class="login-toggle">Have an account? <span id="show-login">Login</span></div>
+    </div>
+    <button class="login-btn guest" id="guest-btn">Play as Guest</button>
+  </div>
+</div>
+
+<!-- Coin Shop -->
+<div id="coinshop-overlay">
+  <div id="coinshop-panel">
+    <h2>💰 COIN STORE</h2>
+    <div id="coinshop-wallet">🏦 $0</div>
+    <div id="coinshop-grid"></div>
+    <button class="shop-close-btn" id="coinshop-close">Close</button>
+  </div>
+</div>
+
+<!-- Leaderboard -->
+<div id="leaderboard-overlay">
+  <div id="leaderboard-panel">
+    <h2>🏆 LEADERBOARD</h2>
+    <table id="leaderboard-table">
+      <thead><tr><th>#</th><th>Score</th><th>Length</th><th>Time</th><th>Map</th></tr></thead>
+      <tbody id="leaderboard-body"></tbody>
+    </table>
+    <button class="shop-close-btn" id="leaderboard-close">Close</button>
+  </div>
+</div>
+
+<!-- Daily Challenges -->
+<div id="challenges-overlay">
+  <div id="challenges-panel">
+    <h2>📋 DAILY CHALLENGES</h2>
+    <div id="challenges-date" style="font-size:12px;color:#8d6e3f;margin-bottom:8px;"></div>
+    <div id="challenges-grid"></div>
+    <button class="shop-close-btn" id="challenges-close">Close</button>
+  </div>
+</div>
+
+<!-- Achievements -->
+<div id="achievements-overlay">
+  <div id="achievements-panel">
+    <h2>🏅 ACHIEVEMENTS</h2>
+    <div id="achievements-count" style="font-size:13px;color:#8d6e3f;margin-bottom:8px;"></div>
+    <div class="achievement-grid" id="achievements-grid"></div>
+    <button class="shop-close-btn" id="achievements-close">Close</button>
+  </div>
+</div>
+
+<!-- Tutorial -->
+<div id="tutorial-overlay">
+  <div class="tutorial-box" id="tutorial-box"></div>
+</div>
+
+<!-- Kill Feed -->
+<div class="kill-feed" id="kill-feed"></div>
+
+<!-- Achievement Popup -->
+<div class="achievement-popup" id="achievement-popup"></div>
+
 <script type="importmap">
 {
   "imports": {
@@ -681,6 +982,148 @@ const mapBadge = document.getElementById('map-badge');
 const skinShopOverlay = document.getElementById('skinshop-overlay');
 const skinShopContent = document.getElementById('skinshop-content');
 const skinShopWalletEl = document.getElementById('skinshop-wallet');
+const loginOverlay = document.getElementById('login-overlay');
+const coinShopOverlay = document.getElementById('coinshop-overlay');
+const leaderboardOverlay = document.getElementById('leaderboard-overlay');
+const challengesOverlay = document.getElementById('challenges-overlay');
+const achievementsOverlay = document.getElementById('achievements-overlay');
+const tutorialOverlay = document.getElementById('tutorial-overlay');
+const profilePill = document.getElementById('profile-pill');
+const killFeedEl = document.getElementById('kill-feed');
+const achievementPopup = document.getElementById('achievement-popup');
+
+// ===== LOGIN / SAVE SYSTEM =====
+let currentUser = null; // null = guest
+
+function djb2Hash(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) hash = ((hash << 5) + hash) + str.charCodeAt(i);
+  return (hash >>> 0).toString(36);
+}
+
+function getDefaultSaveData(username) {
+  return {
+    version: 1, username,
+    wallet: 0,
+    upgradeLevels: { speed:0, life:0, magnet:0, mult:0 },
+    currentMap: 'classic', currentSkin: 'blue',
+    ownedMaps: ['classic'],
+    ownedSkins: ['blue','green','red','purple','orange','pink','cyan','yellow','white'],
+    stats: { totalGames:0, totalScore:0, totalCoins:0, totalFoodEaten:0,
+             totalTimePlayed:0, bestScore:0, bestLength:0, longestSurvival:0,
+             royaleWins:0, royaleGames:0, royaleKills:0, powerupsCollected:{} },
+    highscores: [],
+    achievements: {},
+    dailyChallenges: { date:'', challenges:[], progress:[0,0,0], claimed:[false,false,false] },
+    tutorialCompleted: false,
+  };
+}
+
+function saveGame() {
+  if (!currentUser) return;
+  try {
+    const data = getDefaultSaveData(currentUser);
+    data.wallet = wallet;
+    data.upgradeLevels = { ...upgradeLevels };
+    data.currentMap = currentMap;
+    data.currentSkin = currentSkin;
+    data.ownedMaps = MAP_DEFS.filter(m => m.owned).map(m => m.id);
+    data.ownedSkins = SKIN_DEFS.filter(s => s.owned).map(s => s.id);
+    data.stats = { ...gameStats };
+    data.highscores = highscores.slice(0, 10);
+    data.achievements = { ...unlockedAchievements };
+    data.dailyChallenges = { ...dailyChallengeData };
+    data.tutorialCompleted = tutorialDone;
+    localStorage.setItem('snakeGame_user_' + currentUser, JSON.stringify(data));
+  } catch(e) { console.warn('Save failed:', e); }
+}
+
+function loadGame(username) {
+  try {
+    const raw = localStorage.getItem('snakeGame_user_' + username);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    wallet = data.wallet || 0;
+    upgradeLevels = data.upgradeLevels || { speed:0, life:0, magnet:0, mult:0 };
+    currentMap = data.currentMap || 'classic';
+    currentSkin = data.currentSkin || 'blue';
+    MAP_DEFS.forEach(m => m.owned = (data.ownedMaps || ['classic']).includes(m.id));
+    SKIN_DEFS.forEach(s => s.owned = (data.ownedSkins || getDefaultSaveData('').ownedSkins).includes(s.id));
+    Object.assign(gameStats, data.stats || {});
+    highscores = (data.highscores || []).slice(0, 10);
+    Object.assign(unlockedAchievements, data.achievements || {});
+    Object.assign(dailyChallengeData, data.dailyChallenges || {});
+    tutorialDone = data.tutorialCompleted || false;
+    return data;
+  } catch(e) { console.warn('Load failed:', e); return null; }
+}
+
+function registerUser(username, password) {
+  if (!username || username.length < 2) return 'Username must be 2+ characters';
+  if (!password || password.length < 3) return 'Password must be 3+ characters';
+  if (localStorage.getItem('snakeGame_user_' + username)) return 'Username already taken';
+  const data = getDefaultSaveData(username);
+  data.passwordHash = djb2Hash(password);
+  localStorage.setItem('snakeGame_user_' + username, JSON.stringify(data));
+  return null; // success
+}
+
+function loginUser(username, password) {
+  const raw = localStorage.getItem('snakeGame_user_' + username);
+  if (!raw) return 'User not found';
+  const data = JSON.parse(raw);
+  if (data.passwordHash !== djb2Hash(password)) return 'Wrong password';
+  return null; // success
+}
+
+function doLogin(username) {
+  currentUser = username;
+  localStorage.setItem('snakeGame_currentUser', username);
+  loadGame(username);
+  profilePill.textContent = '👤 ' + username;
+  loginOverlay.classList.remove('visible');
+}
+
+function doLogout() {
+  if (currentUser) saveGame();
+  currentUser = null;
+  localStorage.removeItem('snakeGame_currentUser');
+  // Reset to defaults
+  wallet = 0; upgradeLevels = { speed:0, life:0, magnet:0, mult:0 };
+  currentMap = 'classic'; currentSkin = 'blue';
+  MAP_DEFS.forEach(m => m.owned = m.cost === 0);
+  SKIN_DEFS.forEach(s => s.owned = s.cost === 0);
+  highscores = []; Object.keys(unlockedAchievements).forEach(k => delete unlockedAchievements[k]);
+  gameStats = { ...getDefaultSaveData('').stats };
+  dailyChallengeData = { ...getDefaultSaveData('').dailyChallenges };
+  tutorialDone = false;
+  profilePill.textContent = '👤 Guest';
+  showLoginScreen();
+}
+
+function showLoginScreen() {
+  loginOverlay.classList.add('visible');
+  document.getElementById('login-form').style.display = '';
+  document.getElementById('register-form').style.display = 'none';
+  document.getElementById('login-error').textContent = '';
+  document.getElementById('reg-error').textContent = '';
+}
+
+function playAsGuest() {
+  currentUser = null;
+  profilePill.textContent = '👤 Guest';
+  loginOverlay.classList.remove('visible');
+  if (!tutorialDone) { tutorialDone = true; startTutorial(); }
+}
+
+// Stats tracking
+let gameStats = { totalGames:0, totalScore:0, totalCoins:0, totalFoodEaten:0,
+                  totalTimePlayed:0, bestScore:0, bestLength:0, longestSurvival:0,
+                  royaleWins:0, royaleGames:0, royaleKills:0, powerupsCollected:{} };
+let highscores = [];
+let unlockedAchievements = {};
+let dailyChallengeData = { date:'', challenges:[], progress:[0,0,0], claimed:[false,false,false] };
+let tutorialDone = false;
 
 const COLS = 20, ROWS = 20, CELL = 1;
 const HALF = COLS / 2;
@@ -1657,7 +2100,8 @@ const snakeMeshes = [];
 let headGroup = null;
 
 function gridToWorld(gx, gy) {
-  return { x: (gx - HALF + 0.5) * CELL, z: (gy - HALF + 0.5) * CELL };
+  const half = getGridHalf();
+  return { x: (gx - half + 0.5) * CELL, z: (gy - half + 0.5) * CELL };
 }
 
 function createHeadGroup() {
@@ -1703,6 +2147,8 @@ function getCoinBonus() { return upgradeLevels.magnet; }
 function getScoreMult() { return 1 + upgradeLevels.mult * 0.5; }
 
 function init() {
+  if (royaleActive) cleanupRoyale();
+  gameMode = 'classic';
   snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
   prevSnake = snake.map(s => ({ ...s }));
   tickProgress = 1;
@@ -1716,12 +2162,28 @@ function init() {
   runFoodTotal = 0; runMaxLength = snake.length;
   runStartTime = null; extraLivesLeft = upgradeLevels.life;
   lastFoodTypeIndex = -1;
+  // Reset powerups
+  activePowerups = {}; shieldActive = false;
+  clearPowerupMesh(); spawnedPowerup = null;
+  renderPowerupBar();
+  // Reset session challenge progress
+  sessionProgress = { fruitsEaten:0, score:0, survivalTime:0, length:0, coinsEarned:0, mangosEaten:0 };
+  collectedPowerupTypes = new Set();
+  // Restore banner text
+  document.querySelector('.go-banner').textContent = 'GAME OVER';
   updateHUD();
   msgEl.textContent = 'Press any arrow key to start';
   gameoverOverlay.classList.remove('visible');
   // Show menu UI again
   document.getElementById('map-badge').style.display = '';
   document.getElementById('cheat-bar').style.display = '';
+  document.getElementById('mode-selector').style.display = '';
+  // Reset camera for classic
+  camera.position.set(0, 16, 14);
+  orbitControls.maxDistance = 45;
+  const sc2 = dirLight.shadow.camera;
+  sc2.left = -18; sc2.right = 18; sc2.top = 18; sc2.bottom = -18;
+  sc2.updateProjectionMatrix();
   placeFood(); syncScene();
 }
 
@@ -1766,10 +2228,34 @@ function spawnFloatingText(text, color, worldPos) {
 function handleDeath() {
   gameOver = true; running = false;
   const runTime = runStartTime ? ((Date.now() - runStartTime) / 1000) : 0;
-  wallet += runCoins; updateHUD(); showGameOver(runTime);
+  wallet += runCoins;
+  // Update stats
+  gameStats.totalGames++;
+  gameStats.totalScore += score;
+  gameStats.totalCoins += runCoins;
+  gameStats.totalFoodEaten += runFoodTotal;
+  gameStats.totalTimePlayed += runTime;
+  gameStats.bestScore = Math.max(gameStats.bestScore, score);
+  gameStats.bestLength = Math.max(gameStats.bestLength, runMaxLength);
+  gameStats.longestSurvival = Math.max(gameStats.longestSurvival, runTime);
+  // Update challenge progress
+  updateChallengeProgress();
+  // Add to leaderboard
+  addHighscore(score, runMaxLength, runTime, currentMap);
+  // Check achievements
+  if (score >= 100) checkAchievement('score_100');
+  if (score >= 500) checkAchievement('score_500');
+  if (runTime >= 60) checkAchievement('survive_60');
+  if (runTime >= 120) checkAchievement('survive_120');
+  if (runMaxLength >= 30) checkAchievement('length_30');
+  if (runMaxLength >= 50) checkAchievement('length_50');
+  checkStatAchievements();
+  saveGame();
+  updateHUD(); showGameOver(runTime);
 }
 
 function gameTick() {
+  if (gameMode === 'royale') return; // royale uses royaleTick
   // Consume next direction from the input queue
   while (inputQueue.length > 0) {
     const nd = inputQueue.shift();
@@ -1781,9 +2267,22 @@ function gameTick() {
     }
   }
   const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-  const coll = head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS ||
-    snake.some(s => s.x === head.x && s.y === head.y);
+  const ghostActive = isPowerupActive('ghost');
+  let coll;
+  if (ghostActive) {
+    head.x = (head.x + COLS) % COLS;
+    head.y = (head.y + ROWS) % ROWS;
+    coll = snake.some(s => s.x === head.x && s.y === head.y);
+  } else {
+    coll = head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS ||
+      snake.some(s => s.x === head.x && s.y === head.y);
+  }
   if (coll) {
+    if (shieldActive) {
+      shieldActive = false; renderPowerupBar();
+      spawnFloatingText('🛡️ Saved!', '#3498db', gridToWorld(snake[0].x, snake[0].y));
+      return;
+    }
     if (extraLivesLeft > 0) {
       extraLivesLeft--; renderUpgradeBadges();
       spawnFloatingText('💔 Saved!', '#ff6b6b', gridToWorld(snake[0].x, snake[0].y));
@@ -1799,13 +2298,30 @@ function gameTick() {
   snake.unshift(head);
   if (head.x === food.x && head.y === food.y) {
     const ft = foodType;
-    const cg = ft.coins + getCoinBonus(), sg = Math.round(ft.score * getScoreMult());
+    const coinMult = isPowerupActive('double') ? 2 : 1;
+    const cg = (ft.coins + getCoinBonus()) * coinMult, sg = Math.round(ft.score * getScoreMult());
     score += sg; runCoins += cg; runFoodCounts[ft.name]++; runFoodTotal++;
+    if (ft.name === 'Mango') sessionProgress.mangosEaten++;
+    sessionProgress.fruitsEaten++;
+    sessionProgress.score = score;
+    sessionProgress.coinsEarned = runCoins;
     runMaxLength = Math.max(runMaxLength, snake.length);
+    sessionProgress.length = runMaxLength;
     spawnFloatingText(`${ft.emoji} +${sg}  🪙${cg}`, '#fff', gridToWorld(head.x, head.y));
     placeFood(); if (speed > 60) speed -= 2;
     prevSnake.push({ ...prevSnake[prevSnake.length - 1] });
+    // Powerup spawn chance
+    if (!spawnedPowerup && Math.random() < 0.15) spawnPowerup();
   } else { snake.pop(); }
+  // Check powerup collection
+  if (spawnedPowerup && head.x === spawnedPowerup.x && head.y === spawnedPowerup.y) {
+    activatePowerup(spawnedPowerup.type);
+  }
+  // Magnet: move food toward player
+  if (isPowerupActive('magnet')) {
+    if (food.x < head.x) food.x++; else if (food.x > head.x) food.x--;
+    if (food.y < head.y) food.y++; else if (food.y > head.y) food.y--;
+  }
   updateHUD();
 }
 
@@ -1983,7 +2499,7 @@ function renderShop() {
     const btn = document.createElement('button'); btn.className = 'shop-buy-btn';
     if (maxed) { btn.textContent = 'MAXED'; btn.disabled = true; }
     else { btn.textContent = `Buy — $${cost}`; btn.disabled = !canAfford;
-      btn.addEventListener('click', () => { if (wallet >= cost) { wallet -= cost; upgradeLevels[def.id]++; renderShop(); updateHUD(); } });
+      btn.addEventListener('click', () => { if (wallet >= cost) { wallet -= cost; upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); checkStatAchievements(); } });
     }
     card.appendChild(btn);
     // Watch Ad button for unaffordable upgrades
@@ -2047,7 +2563,7 @@ function renderMapShop() {
           buildEnvironment(currentMap);
           init();
           renderMapShop();
-          updateHUD();
+          updateHUD(); saveGame(); checkStatAchievements();
         }
       });
     }
@@ -2153,7 +2669,7 @@ function renderSkinShop() {
           currentSkin = skin.id;
           updateSnakeMaterials();
           renderSkinShop();
-          updateHUD();
+          updateHUD(); saveGame(); checkStatAchievements();
         }
       });
     }
@@ -2179,10 +2695,24 @@ function renderSkinShop() {
   skinShopContent.appendChild(paidGrid);
 }
 
+function closeAllOverlays() {
+  shopOverlay.classList.remove('visible');
+  mapShopOverlay.classList.remove('visible');
+  skinShopOverlay.classList.remove('visible');
+  coinShopOverlay.classList.remove('visible');
+  leaderboardOverlay.classList.remove('visible');
+  challengesOverlay.classList.remove('visible');
+  achievementsOverlay.classList.remove('visible');
+}
+
 document.getElementById('btn-play-again').addEventListener('click', () => init());
 document.getElementById('btn-open-shop').addEventListener('click', () => openShop());
 document.getElementById('btn-open-maps-go').addEventListener('click', () => openMapShop());
 document.getElementById('btn-open-skins-go').addEventListener('click', () => openSkinShop());
+document.getElementById('btn-open-coins-go').addEventListener('click', () => openCoinShop());
+document.getElementById('btn-open-lb-go').addEventListener('click', () => openLeaderboard());
+document.getElementById('btn-open-ch-go').addEventListener('click', () => openChallenges());
+document.getElementById('btn-open-ach-go').addEventListener('click', () => openAchievements());
 document.getElementById('shop-close').addEventListener('click', () => closeShop());
 document.getElementById('mapshop-close').addEventListener('click', () => closeMapShop());
 document.getElementById('skinshop-close').addEventListener('click', () => closeSkinShop());
@@ -2191,6 +2721,21 @@ document.getElementById('map-btn').addEventListener('click', () => {
 });
 document.getElementById('skin-btn').addEventListener('click', () => {
   if (!running || gameOver) openSkinShop();
+});
+
+// Mode selector
+document.getElementById('btn-classic').addEventListener('click', () => {
+  document.getElementById('btn-classic').classList.add('mode-active');
+  document.getElementById('btn-royale').classList.remove('mode-active');
+  if (royaleActive) { cleanupRoyale(); buildEnvironment(currentMap); }
+  init();
+});
+document.getElementById('btn-royale').addEventListener('click', () => {
+  document.getElementById('btn-royale').classList.add('mode-active');
+  document.getElementById('btn-classic').classList.remove('mode-active');
+  // Hide classic food
+  if (foodGroup) { scene.remove(foodGroup); foodGroup = null; }
+  initRoyale();
 });
 
 // ===== INPUT =====
@@ -2222,8 +2767,17 @@ document.addEventListener('keydown', e => {
     if (key === 'p' || key === 'P') { togglePixelMode(); return; }
     if (key === 'm' || key === 'M') { if (!running || gameOver) openMapShop(); return; }
     if (key === 'k' || key === 'K') { if (!running || gameOver) openSkinShop(); return; }
-    if (key === 'r' || key === 'R') { shopOverlay.classList.remove('visible'); mapShopOverlay.classList.remove('visible'); skinShopOverlay.classList.remove('visible'); init(); return; }
+    if (key === 'b' || key === 'B') { if (!running || gameOver) openCoinShop(); return; }
+    if (key === 'l' || key === 'L') { if (!running || gameOver) openLeaderboard(); return; }
+    if (key === 'j' || key === 'J') { if (!running || gameOver) openChallenges(); return; }
+    if (key === 'h' || key === 'H') { if (!running || gameOver) openAchievements(); return; }
+    if (key === 'r' || key === 'R') { closeAllOverlays(); init(); return; }
     if (key === 'Escape') {
+      if (tutorialOverlay.classList.contains('visible')) { endTutorial(); return; }
+      if (coinShopOverlay.classList.contains('visible')) { closeCoinShop(); return; }
+      if (leaderboardOverlay.classList.contains('visible')) { closeLeaderboard(); return; }
+      if (challengesOverlay.classList.contains('visible')) { closeChallenges(); return; }
+      if (achievementsOverlay.classList.contains('visible')) { closeAchievements(); return; }
       if (skinShopOverlay.classList.contains('visible')) { closeSkinShop(); return; }
       if (mapShopOverlay.classList.contains('visible')) { closeMapShop(); return; }
       if (shopOverlay.classList.contains('visible')) { closeShop(); return; }
@@ -2232,7 +2786,7 @@ document.addEventListener('keydown', e => {
   }
 
   e.preventDefault();
-  if (shopOverlay.classList.contains('visible') || gameoverOverlay.classList.contains('visible') || mapShopOverlay.classList.contains('visible') || skinShopOverlay.classList.contains('visible')) return;
+  if (shopOverlay.classList.contains('visible') || gameoverOverlay.classList.contains('visible') || mapShopOverlay.classList.contains('visible') || skinShopOverlay.classList.contains('visible') || coinShopOverlay.classList.contains('visible') || leaderboardOverlay.classList.contains('visible') || challengesOverlay.classList.contains('visible') || achievementsOverlay.classList.contains('visible') || loginOverlay.classList.contains('visible') || tutorialOverlay.classList.contains('visible')) return;
 
   const normKey = normalizeKey(key);
   let nd;
@@ -2249,7 +2803,7 @@ document.addEventListener('keydown', e => {
 
   if (!running && !gameOver) {
     const testHead = { x: snake[0].x + nd.x, y: snake[0].y + nd.y };
-    const wouldCollide = testHead.x < 0 || testHead.x >= COLS || testHead.y < 0 || testHead.y >= ROWS ||
+    const wouldCollide = testHead.x < 0 || testHead.x >= getGridCols() || testHead.y < 0 || testHead.y >= getGridRows() ||
       snake.some(s => s.x === testHead.x && s.y === testHead.y);
     if (wouldCollide) return;
 
@@ -2262,6 +2816,7 @@ document.addEventListener('keydown', e => {
     // Hide menu UI during gameplay (keep cam-indicator visible)
     document.getElementById('map-badge').style.display = 'none';
     document.getElementById('cheat-bar').style.display = 'none';
+    document.getElementById('mode-selector').style.display = 'none';
     syncScene();
     return;
   }
@@ -2314,9 +2869,861 @@ cheatInput.addEventListener('keydown', e => {
       cheatMsg.textContent = 'Invalid code';
     }
     cheatMsg.className = success ? 'cheat-success' : 'cheat-fail';
+    if (success) { updateHUD(); saveGame(); }
     setTimeout(() => { cheatMsg.textContent = ''; cheatMsg.className = ''; }, 2500);
   }
 });
+
+// ===== LOGIN EVENT LISTENERS =====
+document.getElementById('login-submit').addEventListener('click', () => {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = loginUser(u, p);
+  if (err) { document.getElementById('login-error').textContent = err; return; }
+  doLogin(u);
+  buildEnvironment(currentMap); updateSnakeMaterials(); init(); updateHUD();
+  if (!tutorialDone) { tutorialDone = true; startTutorial(); }
+});
+document.getElementById('reg-submit').addEventListener('click', () => {
+  const u = document.getElementById('reg-user').value.trim();
+  const p = document.getElementById('reg-pass').value;
+  const p2 = document.getElementById('reg-pass2').value;
+  if (p !== p2) { document.getElementById('reg-error').textContent = 'Passwords don\'t match'; return; }
+  const err = registerUser(u, p);
+  if (err) { document.getElementById('reg-error').textContent = err; return; }
+  doLogin(u);
+  buildEnvironment(currentMap); updateSnakeMaterials(); init(); updateHUD();
+  startTutorial();
+});
+document.getElementById('show-register').addEventListener('click', () => {
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('register-form').style.display = '';
+});
+document.getElementById('show-login').addEventListener('click', () => {
+  document.getElementById('register-form').style.display = 'none';
+  document.getElementById('login-form').style.display = '';
+});
+document.getElementById('guest-btn').addEventListener('click', () => playAsGuest());
+document.getElementById('logout-btn').addEventListener('click', () => doLogout());
+// Enter key in login/register fields
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') { e.stopPropagation(); document.getElementById('login-submit').click(); }});
+document.getElementById('login-user').addEventListener('keydown', e => e.stopPropagation());
+document.getElementById('reg-user').addEventListener('keydown', e => e.stopPropagation());
+document.getElementById('reg-pass').addEventListener('keydown', e => e.stopPropagation());
+document.getElementById('reg-pass2').addEventListener('keydown', e => { if (e.key==='Enter') { e.stopPropagation(); document.getElementById('reg-submit').click(); } else e.stopPropagation(); });
+
+// ===== POWER-UPS =====
+const POWERUP_TYPES = [
+  { id:'shield', name:'Shield',  emoji:'🛡️', color:0x3498db, duration:0,     desc:'Survive 1 crash' },
+  { id:'magnet', name:'Magnet',  emoji:'🧲', color:0xe74c3c, duration:5000,  desc:'Food comes to you' },
+  { id:'ghost',  name:'Ghost',   emoji:'👻', color:0x9b59b6, duration:5000,  desc:'Pass through walls' },
+  { id:'double', name:'2x Coins',emoji:'💰', color:0xf1c40f, duration:10000, desc:'Double coins' },
+];
+let activePowerups = {}; // { id: { expiresAt: timestamp } }
+let spawnedPowerup = null; // { type, x, y }
+let powerupMesh = null;
+let shieldActive = false;
+let collectedPowerupTypes = new Set();
+
+function createPowerupMesh(type) {
+  if (powerupMesh) { scene.remove(powerupMesh); powerupMesh = null; }
+  const g = new THREE.Group();
+  const geo = new THREE.IcosahedronGeometry(CELL * 0.35, 1);
+  const mat = new THREE.MeshStandardMaterial({ color:type.color, emissive:type.color, emissiveIntensity:0.5, roughness:0.2, metalness:0.3 });
+  const m = new THREE.Mesh(geo, mat); m.castShadow = true; g.add(m);
+  const glow = new THREE.PointLight(type.color, 2, 4); glow.position.y = 0.2; g.add(glow);
+  scene.add(g); powerupMesh = g;
+}
+
+function clearPowerupMesh() { if (powerupMesh) { scene.remove(powerupMesh); powerupMesh = null; } }
+
+function spawnPowerup() {
+  const cols = getGridCols(), rows = getGridRows();
+  let attempts = 0;
+  while (attempts++ < 50) {
+    const x = Math.floor(Math.random() * cols), y = Math.floor(Math.random() * rows);
+    if (snake.some(s => s.x === x && s.y === y)) continue;
+    if (food.x === x && food.y === y) continue;
+    const type = POWERUP_TYPES[Math.floor(Math.random() * POWERUP_TYPES.length)];
+    spawnedPowerup = { type, x, y };
+    createPowerupMesh(type);
+    const half = getGridHalf();
+    powerupMesh.position.set((x - half + 0.5) * CELL, CELL * 0.5, (y - half + 0.5) * CELL);
+    return;
+  }
+}
+
+function activatePowerup(type) {
+  collectedPowerupTypes.add(type.id);
+  if (type.id === 'shield') {
+    shieldActive = true;
+    spawnFloatingText('🛡️ Shield!', '#3498db', gridToWorld(snake[0].x, snake[0].y));
+  } else {
+    activePowerups[type.id] = { expiresAt: Date.now() + type.duration };
+    spawnFloatingText(`${type.emoji} ${type.name}!`, '#fff', gridToWorld(snake[0].x, snake[0].y));
+  }
+  clearPowerupMesh(); spawnedPowerup = null;
+}
+
+function isPowerupActive(id) {
+  if (!activePowerups[id]) return false;
+  if (Date.now() > activePowerups[id].expiresAt) { delete activePowerups[id]; return false; }
+  return true;
+}
+
+function renderPowerupBar() {
+  const bar = document.getElementById('powerup-bar');
+  let html = '';
+  if (shieldActive) html += '<span class="powerup-pill" style="border-color:#3498db;">🛡️ Shield</span>';
+  for (const [id, data] of Object.entries(activePowerups)) {
+    const remaining = Math.max(0, Math.ceil((data.expiresAt - Date.now()) / 1000));
+    if (remaining <= 0) { delete activePowerups[id]; continue; }
+    const type = POWERUP_TYPES.find(t => t.id === id);
+    html += `<span class="powerup-pill" style="border-color:#${new THREE.Color(type.color).getHexString()};">${type.emoji} ${remaining}s</span>`;
+  }
+  bar.innerHTML = html;
+}
+
+// ===== GAME MODE =====
+let gameMode = 'classic'; // 'classic' or 'royale'
+const ROYALE_COLS = 40, ROYALE_ROWS = 40;
+function getGridCols() { return gameMode === 'royale' ? ROYALE_COLS : COLS; }
+function getGridRows() { return gameMode === 'royale' ? ROYALE_ROWS : ROWS; }
+function getGridHalf() { return getGridCols() / 2; }
+
+// ===== SNAKE ROYALE =====
+const MAX_BOTS = 25;
+let botSnakes = [];
+let royaleFoods = [];
+const ROYALE_FOOD_COUNT = 20;
+let royaleKills = 0;
+let royaleAlive = 0;
+let royalePlacement = 0;
+let royaleActive = false;
+
+const BOT_NAMES = ['Cobra','Viper','Mamba','Python','Boa','Rattler','Sidewinder','Adder',
+  'Taipan','Copperhead','Kingsnake','Anaconda','Asp','Krait','Indigo','Racer',
+  'Coral','Garter','Milk','Bull','Hognose','Corn','Pine','Ring','Timber'];
+
+// Bot mesh pool
+const botBodyPool = [];
+const botHeadPool = [];
+let botBodyGeo, botHeadGeo;
+
+function createBotSnake(id) {
+  const cols = getGridCols(), rows = getGridRows();
+  const startX = 2 + Math.floor(Math.random() * (cols - 4));
+  const startY = 2 + Math.floor(Math.random() * (rows - 4));
+  const hue = Math.random();
+  return {
+    id, name: BOT_NAMES[id % BOT_NAMES.length],
+    snake: [{ x:startX, y:startY }, { x:startX-1, y:startY }, { x:startX-2, y:startY }],
+    dir: { x:1, y:0 }, alive: true,
+    color: new THREE.Color().setHSL(hue, 0.7, 0.5),
+    speed: 140 + Math.random() * 80, // 140-220ms
+    lastTick: 0,
+    meshes: [], headMesh: null,
+  };
+}
+
+function isOccupiedRoyale(x, y, excludeId) {
+  if (snake.some(s => s.x === x && s.y === y)) return true;
+  for (const bot of botSnakes) {
+    if (!bot.alive || bot.id === excludeId) continue;
+    if (bot.snake.some(s => s.x === x && s.y === y)) return true;
+  }
+  return false;
+}
+
+function findNearestRoyaleFood(x, y) {
+  let best = null, bestDist = Infinity;
+  for (const f of royaleFoods) {
+    const d = Math.abs(x - f.x) + Math.abs(y - f.y);
+    if (d < bestDist) { bestDist = d; best = f; }
+  }
+  return best;
+}
+
+function botDecide(bot) {
+  const head = bot.snake[0];
+  const cols = getGridCols(), rows = getGridRows();
+  const possible = [
+    {x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}
+  ].filter(d => {
+    if (d.x + bot.dir.x === 0 && d.y + bot.dir.y === 0) return false;
+    const nx = head.x + d.x, ny = head.y + d.y;
+    if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) return false;
+    if (isOccupiedRoyale(nx, ny, bot.id)) return false;
+    return true;
+  });
+  if (possible.length === 0) return null; // will die
+  let bestDir = possible[0], bestScore = -Infinity;
+  for (const d of possible) {
+    let score = 0;
+    const nx = head.x + d.x, ny = head.y + d.y;
+    // Food attraction
+    const nearFood = findNearestRoyaleFood(nx, ny);
+    if (nearFood) {
+      const distNow = Math.abs(head.x - nearFood.x) + Math.abs(head.y - nearFood.y);
+      const distNew = Math.abs(nx - nearFood.x) + Math.abs(ny - nearFood.y);
+      score += (distNow - distNew) * 10;
+    }
+    // Avoid other snake heads
+    const allSnakes = [...botSnakes.filter(b => b.alive && b.id !== bot.id), { snake, alive: !gameOver, id:'player' }];
+    for (const other of allSnakes) {
+      if (!other.alive || other.snake.length === 0) continue;
+      const oh = other.snake[0];
+      const dist = Math.abs(nx - oh.x) + Math.abs(ny - oh.y);
+      if (dist < 4) score -= (4 - dist) * 5;
+    }
+    // Wall avoidance (penalize being close to edges)
+    if (nx <= 1 || nx >= cols-2 || ny <= 1 || ny >= rows-2) score -= 3;
+    // Momentum
+    if (d.x === bot.dir.x && d.y === bot.dir.y) score += 2;
+    // Randomness for variety
+    score += Math.random() * 4;
+    if (score > bestScore) { bestScore = score; bestDir = d; }
+  }
+  return bestDir;
+}
+
+function killBot(bot, killerName) {
+  bot.alive = false;
+  royaleAlive--;
+  // Drop food along body
+  for (let i = 0; i < bot.snake.length; i += 2) {
+    const seg = bot.snake[i];
+    const ft = FOOD_TYPES[Math.floor(Math.random() * 3)]; // basic food
+    royaleFoods.push({ x:seg.x, y:seg.y, type:ft });
+  }
+  // Kill feed
+  addKillFeed(`${killerName} eliminated ${bot.name}`);
+  // Clear meshes
+  for (const m of bot.meshes) { m.visible = false; botBodyPool.push(m); }
+  bot.meshes = [];
+  if (bot.headMesh) { bot.headMesh.visible = false; botHeadPool.push(bot.headMesh); bot.headMesh = null; }
+}
+
+function addKillFeed(text) {
+  const el = document.createElement('div');
+  el.className = 'kill-feed-item'; el.textContent = text;
+  killFeedEl.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+function tickBot(bot, now) {
+  if (!bot.alive || now - bot.lastTick < bot.speed) return;
+  bot.lastTick = now;
+  const newDir = botDecide(bot);
+  if (!newDir) { killBot(bot, 'Wall'); return; }
+  bot.dir = newDir;
+  const head = { x: bot.snake[0].x + bot.dir.x, y: bot.snake[0].y + bot.dir.y };
+  const cols = getGridCols(), rows = getGridRows();
+  // Collision check
+  if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || isOccupiedRoyale(head.x, head.y, bot.id)) {
+    killBot(bot, 'Collision'); return;
+  }
+  bot.snake.unshift(head);
+  // Check food
+  let ate = false;
+  for (let i = royaleFoods.length - 1; i >= 0; i--) {
+    if (royaleFoods[i].x === head.x && royaleFoods[i].y === head.y) {
+      royaleFoods.splice(i, 1); ate = true; break;
+    }
+  }
+  if (!ate) bot.snake.pop();
+}
+
+function initRoyale() {
+  gameMode = 'royale'; royaleActive = true;
+  royaleKills = 0;
+  botSnakes = [];
+  royaleFoods = [];
+  for (let i = 0; i < MAX_BOTS; i++) botSnakes.push(createBotSnake(i));
+  royaleAlive = MAX_BOTS + 1; // bots + player
+  // Place initial food
+  for (let i = 0; i < ROYALE_FOOD_COUNT; i++) spawnRoyaleFood();
+  // Reset player at center
+  const half = getGridHalf();
+  snake = [{ x:half, y:half }, { x:half-1, y:half }, { x:half-2, y:half }];
+  prevSnake = snake.map(s => ({ ...s }));
+  tickProgress = 1;
+  dir = { x:1, y:0 }; nextDir = { x:0, y:0 }; inputQueue = [];
+  score = 0; running = false; gameOver = false;
+  speed = getStartSpeed(); lastTickTime = 0;
+  runCoins = 0; runFoodCounts = {};
+  FOOD_TYPES.forEach(ft => runFoodCounts[ft.name] = 0);
+  runFoodTotal = 0; runMaxLength = snake.length;
+  runStartTime = null; extraLivesLeft = upgradeLevels.life;
+  activePowerups = {}; shieldActive = false; spawnedPowerup = null; clearPowerupMesh();
+  // Build environment with larger grid
+  buildRoyaleEnvironment();
+  // Update HUD
+  document.getElementById('royale-hud').classList.add('visible');
+  document.getElementById('alive-pill').textContent = `👥 ${royaleAlive} Alive`;
+  document.getElementById('kills-pill').textContent = `💀 0 Kills`;
+  updateHUD();
+  msgEl.textContent = 'Press any arrow key to start!';
+  syncRoyaleScene();
+}
+
+function spawnRoyaleFood() {
+  const cols = getGridCols(), rows = getGridRows();
+  let attempts = 0;
+  while (attempts++ < 50) {
+    const x = Math.floor(Math.random() * cols), y = Math.floor(Math.random() * rows);
+    if (isOccupiedRoyale(x, y, -1)) continue;
+    const ft = FOOD_TYPES[Math.floor(Math.random() * FOOD_TYPES.length)];
+    royaleFoods.push({ x, y, type: ft });
+    return;
+  }
+}
+
+function buildRoyaleEnvironment() {
+  clearEnvironment();
+  const theme = MAP_THEMES[currentMap];
+  scene.background = new THREE.Color(theme.skyColor);
+  scene.fog = new THREE.Fog(theme.fogColor, 40, 80);
+  renderer.setClearColor(theme.skyColor);
+  // Ground - larger
+  const half = ROYALE_COLS / 2;
+  const tex = createCheckerboardTexture(theme.grassLight, theme.grassDark);
+  tex.repeat.set(2, 2); tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  const groundMat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9, metalness: 0.05 });
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(ROYALE_COLS, ROYALE_ROWS), groundMat);
+  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true;
+  addEnv(ground);
+  // Fence for 40x40
+  const fPostGeo = new THREE.CylinderGeometry(0.06, 0.08, 0.7, 6);
+  const fRailGeo = new THREE.BoxGeometry(1, 0.06, 0.04);
+  const fMat = new THREE.MeshStandardMaterial({ color: theme.fenceColor, roughness: 0.8 });
+  const rMat = new THREE.MeshStandardMaterial({ color: theme.railColor, roughness: 0.7 });
+  for (let i = 0; i <= ROYALE_COLS; i += 2) { // every other post for performance
+    const p = i - half;
+    for (const [x, z] of [[p, -half-0.3], [p, half+0.3], [-half-0.3, p], [half+0.3, p]]) {
+      const post = addEnv(new THREE.Mesh(fPostGeo, fMat));
+      post.position.set(x, 0.35, z);
+    }
+  }
+  // Adjust camera for larger map
+  camera.position.set(0, 28, 24);
+  orbitControls.maxDistance = 70;
+  orbitControls.update();
+  // Adjust shadow camera
+  const sc2 = dirLight.shadow.camera;
+  sc2.left = -25; sc2.right = 25; sc2.top = 25; sc2.bottom = -25;
+  sc2.updateProjectionMatrix();
+}
+
+// Royale food meshes pool
+const royaleFoodMeshes = [];
+function getRoyaleFoodMesh(idx) {
+  if (idx < royaleFoodMeshes.length) { royaleFoodMeshes[idx].visible = true; return royaleFoodMeshes[idx]; }
+  const mat = new THREE.MeshStandardMaterial({ color: 0xff3b30, roughness: 0.3, emissive: 0xaa1100, emissiveIntensity: 0.4 });
+  const m = new THREE.Mesh(new THREE.SphereGeometry(CELL * 0.25, 8, 8), mat);
+  m.castShadow = true; scene.add(m); royaleFoodMeshes.push(m);
+  return m;
+}
+
+function getBotBodyMesh() {
+  if (botBodyPool.length > 0) { const m = botBodyPool.pop(); m.visible = true; return m; }
+  if (!botBodyGeo) botBodyGeo = new THREE.SphereGeometry(CELL * 0.38, 8, 6);
+  const mat = new THREE.MeshStandardMaterial({ roughness: 0.4, metalness: 0.1 });
+  const m = new THREE.Mesh(botBodyGeo, mat);
+  m.castShadow = true; scene.add(m); return m;
+}
+
+function getBotHeadMesh() {
+  if (botHeadPool.length > 0) { const m = botHeadPool.pop(); m.visible = true; return m; }
+  if (!botHeadGeo) botHeadGeo = new THREE.SphereGeometry(CELL * 0.42, 8, 6);
+  const mat = new THREE.MeshStandardMaterial({ roughness: 0.35, metalness: 0.1 });
+  const m = new THREE.Mesh(botHeadGeo, mat);
+  m.castShadow = true; m.scale.set(1.1, 0.8, 1.1); scene.add(m); return m;
+}
+
+function syncRoyaleScene() {
+  const half = getGridHalf();
+  // Player snake (reuse existing syncScene logic via syncScene())
+  syncScene();
+  // Bot snakes
+  for (const bot of botSnakes) {
+    if (!bot.alive) continue;
+    // Head
+    if (!bot.headMesh) bot.headMesh = getBotHeadMesh();
+    bot.headMesh.visible = true;
+    const bh = bot.snake[0];
+    bot.headMesh.position.set((bh.x - half + 0.5) * CELL, CELL * 0.3, (bh.y - half + 0.5) * CELL);
+    bot.headMesh.material.color.copy(bot.color);
+    // Body
+    while (bot.meshes.length < bot.snake.length - 1) bot.meshes.push(getBotBodyMesh());
+    for (let i = 1; i < bot.snake.length; i++) {
+      const m = bot.meshes[i - 1];
+      m.visible = true;
+      const s = bot.snake[i];
+      m.position.set((s.x - half + 0.5) * CELL, CELL * 0.3, (s.y - half + 0.5) * CELL);
+      m.material.color.copy(bot.color);
+      m.scale.set(0.95, 0.65, 0.95);
+    }
+    for (let i = bot.snake.length - 1; i < bot.meshes.length; i++) {
+      bot.meshes[i].visible = false;
+    }
+  }
+  // Royale foods
+  for (let i = 0; i < royaleFoods.length; i++) {
+    const m = getRoyaleFoodMesh(i);
+    const f = royaleFoods[i];
+    m.position.set((f.x - half + 0.5) * CELL, CELL * 0.3, (f.y - half + 0.5) * CELL);
+    m.material.color.set(f.type.color);
+    m.material.emissive.set(f.type.emissive);
+  }
+  for (let i = royaleFoods.length; i < royaleFoodMeshes.length; i++) royaleFoodMeshes[i].visible = false;
+}
+
+function royaleTick(now) {
+  // Player tick (same as classic but with royale grid)
+  while (inputQueue.length > 0) {
+    const nd = inputQueue.shift();
+    if (nd.x !== 0 || nd.y !== 0) {
+      if (!(dir.x + nd.x === 0 && dir.y + nd.y === 0)) { dir = { ...nd }; break; }
+    }
+  }
+  const cols = getGridCols(), rows = getGridRows();
+  const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+  const ghostActive = isPowerupActive('ghost');
+  let coll;
+  if (ghostActive) {
+    // Wrap around walls
+    head.x = (head.x + cols) % cols;
+    head.y = (head.y + rows) % rows;
+    coll = snake.some(s => s.x === head.x && s.y === head.y) ||
+           botSnakes.some(b => b.alive && b.snake.some(s => s.x === head.x && s.y === head.y));
+  } else {
+    coll = head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows ||
+           snake.some(s => s.x === head.x && s.y === head.y) ||
+           botSnakes.some(b => b.alive && b.snake.some(s => s.x === head.x && s.y === head.y));
+  }
+  if (coll) {
+    if (shieldActive) { shieldActive = false; renderPowerupBar(); spawnFloatingText('🛡️ Saved!', '#3498db', gridToWorld(snake[0].x, snake[0].y)); return; }
+    if (extraLivesLeft > 0) { extraLivesLeft--; renderUpgradeBadges(); return; }
+    // Player died in royale
+    royalePlacement = royaleAlive;
+    royaleAlive--;
+    handleRoyaleDeath(); return;
+  }
+  prevSnake = snake.map(s => ({ ...s }));
+  tickProgress = 0;
+  snake.unshift(head);
+  // Check royale food
+  let ate = false;
+  for (let i = royaleFoods.length - 1; i >= 0; i--) {
+    if (royaleFoods[i].x === head.x && royaleFoods[i].y === head.y) {
+      const ft = royaleFoods[i].type;
+      const coinMult = isPowerupActive('double') ? 2 : 1;
+      const cg = (ft.coins + getCoinBonus()) * coinMult;
+      const sg = Math.round(ft.score * getScoreMult());
+      score += sg; runCoins += cg; runFoodTotal++;
+      spawnFloatingText(`${ft.emoji} +${sg}`, '#fff', gridToWorld(head.x, head.y));
+      royaleFoods.splice(i, 1); ate = true; break;
+    }
+  }
+  if (!ate) snake.pop();
+  // Check powerup
+  if (spawnedPowerup && head.x === spawnedPowerup.x && head.y === spawnedPowerup.y) {
+    activatePowerup(spawnedPowerup.type);
+  }
+  // Magnet: move nearest food toward player
+  if (isPowerupActive('magnet') && royaleFoods.length > 0) {
+    const nf = findNearestRoyaleFood(head.x, head.y);
+    if (nf) {
+      if (nf.x < head.x) nf.x++; else if (nf.x > head.x) nf.x--;
+      if (nf.y < head.y) nf.y++; else if (nf.y > head.y) nf.y--;
+    }
+  }
+  // Check if player killed a bot (head-on)
+  for (const bot of botSnakes) {
+    if (!bot.alive) continue;
+    if (bot.snake[0].x === head.x && bot.snake[0].y === head.y) {
+      killBot(bot, 'You'); royaleKills++;
+      document.getElementById('kills-pill').textContent = `💀 ${royaleKills} Kills`;
+    }
+  }
+  // Bot ticks
+  for (const bot of botSnakes) {
+    if (!bot.alive) continue;
+    tickBot(bot, now);
+    // Check if bot killed player
+    if (bot.snake[0].x === snake[0].x && bot.snake[0].y === snake[0].y) {
+      if (shieldActive) { shieldActive = false; continue; }
+      royalePlacement = royaleAlive; royaleAlive--;
+      handleRoyaleDeath(); return;
+    }
+  }
+  // Replenish food
+  while (royaleFoods.length < ROYALE_FOOD_COUNT) spawnRoyaleFood();
+  // Spawn powerup occasionally
+  if (!spawnedPowerup && Math.random() < 0.05) spawnPowerup();
+  // Check win
+  royaleAlive = botSnakes.filter(b => b.alive).length + 1;
+  document.getElementById('alive-pill').textContent = `👥 ${royaleAlive} Alive`;
+  if (royaleAlive <= 1 && !gameOver) {
+    royalePlacement = 1;
+    handleRoyaleWin();
+    return;
+  }
+  runMaxLength = Math.max(runMaxLength, snake.length);
+  updateHUD();
+}
+
+function handleRoyaleDeath() {
+  gameOver = true; running = false;
+  const runTime = runStartTime ? ((Date.now() - runStartTime) / 1000) : 0;
+  wallet += runCoins;
+  gameStats.royaleGames++;
+  gameStats.royaleKills += royaleKills;
+  gameStats.totalCoins += runCoins;
+  gameStats.totalGames++;
+  updateHUD();
+  showRoyaleGameOver(runTime, false);
+}
+
+function handleRoyaleWin() {
+  gameOver = true; running = false;
+  const runTime = runStartTime ? ((Date.now() - runStartTime) / 1000) : 0;
+  const winBonus = 200;
+  runCoins += winBonus;
+  wallet += runCoins;
+  gameStats.royaleWins++;
+  gameStats.royaleGames++;
+  gameStats.royaleKills += royaleKills;
+  gameStats.totalCoins += runCoins;
+  gameStats.totalGames++;
+  updateHUD();
+  showRoyaleGameOver(runTime, true);
+  checkAchievement('royale_win');
+  if (gameStats.royaleWins >= 5) checkAchievement('royale_5_wins');
+}
+
+function showRoyaleGameOver(runTime, won) {
+  msgEl.textContent = '';
+  starsRow.innerHTML = '';
+  const s1 = document.createElement('span'); s1.className = 'star-icon'; s1.textContent = '⭐'; starsRow.appendChild(s1);
+  if (royalePlacement <= 5) { const s2 = document.createElement('span'); s2.className = 'star-icon'; s2.textContent = '⭐'; starsRow.appendChild(s2); }
+  if (won) { const s3 = document.createElement('span'); s3.className = 'star-icon'; s3.textContent = '⭐'; starsRow.appendChild(s3); }
+  document.querySelector('.go-banner').textContent = won ? 'VICTORY ROYALE!' : 'ELIMINATED';
+  goScore.textContent = `#${royalePlacement} of ${MAX_BOTS + 1}`;
+  goRewards.innerHTML = '';
+  const ar = (e, v) => { const p = document.createElement('span'); p.className = 'reward-pill'; p.innerHTML = `<span style="font-size:20px">${e}</span> ${v}`; goRewards.appendChild(p); };
+  ar('💀', `${royaleKills} kills`);
+  ar('🪙', runCoins);
+  ar('📏', snake.length);
+  const m = Math.floor(runTime / 60), sec = Math.floor(runTime % 60);
+  ar('⏱️', m > 0 ? `${m}m ${sec}s` : `${sec}s`);
+  gameoverOverlay.classList.add('visible');
+  addHighscore(score, snake.length, runTime, currentMap + ' (Royale)');
+  saveGame();
+}
+
+function cleanupRoyale() {
+  // Return all bot meshes to pool
+  for (const bot of botSnakes) {
+    for (const m of bot.meshes) { m.visible = false; botBodyPool.push(m); }
+    if (bot.headMesh) { bot.headMesh.visible = false; botHeadPool.push(bot.headMesh); }
+  }
+  botSnakes = [];
+  // Hide royale food meshes
+  for (const m of royaleFoodMeshes) m.visible = false;
+  royaleFoods = [];
+  royaleActive = false;
+  document.getElementById('royale-hud').classList.remove('visible');
+  clearPowerupMesh(); spawnedPowerup = null;
+}
+
+// ===== COIN SHOP =====
+const COIN_PACKS = [
+  { id:'pack1', coins:500,   price:'$0.99', emoji:'🪙', gradient:'linear-gradient(135deg,#cd7f32,#b8860b)' },
+  { id:'pack2', coins:2000,  price:'$2.99', emoji:'💰', gradient:'linear-gradient(135deg,#c0c0c0,#a8a8a8)' },
+  { id:'pack3', coins:5000,  price:'$4.99', emoji:'💎', gradient:'linear-gradient(135deg,#ffd700,#ffaa00)' },
+  { id:'pack4', coins:15000, price:'$9.99', emoji:'👑', gradient:'linear-gradient(135deg,#e8783a,#ff4500)' },
+];
+
+function openCoinShop() {
+  gameoverOverlay.classList.remove('visible');
+  renderCoinShop();
+  coinShopOverlay.classList.add('visible');
+}
+function closeCoinShop() {
+  coinShopOverlay.classList.remove('visible');
+  if (gameOver) gameoverOverlay.classList.add('visible');
+}
+function renderCoinShop() {
+  document.getElementById('coinshop-wallet').textContent = `🏦 $${wallet}`;
+  const grid = document.getElementById('coinshop-grid');
+  grid.innerHTML = '';
+  for (const pack of COIN_PACKS) {
+    const card = document.createElement('div');
+    card.className = 'coinpack-card';
+    card.innerHTML = `<div class="coinpack-info"><span class="coinpack-coins">${pack.emoji} ${pack.coins.toLocaleString()} Coins</span></div>`;
+    const btn = document.createElement('button');
+    btn.className = 'coinpack-price'; btn.style.background = pack.gradient;
+    btn.textContent = pack.price;
+    btn.addEventListener('click', () => {
+      wallet += pack.coins;
+      spawnFloatingText(`+${pack.coins.toLocaleString()} 🪙`, '#ffd700', { x:0, z:0 });
+      updateHUD(); renderCoinShop(); saveGame();
+    });
+    card.appendChild(btn);
+    grid.appendChild(card);
+  }
+}
+document.getElementById('coinshop-close').addEventListener('click', closeCoinShop);
+
+// ===== LEADERBOARD =====
+function openLeaderboard() {
+  gameoverOverlay.classList.remove('visible');
+  renderLeaderboard();
+  leaderboardOverlay.classList.add('visible');
+}
+function closeLeaderboard() {
+  leaderboardOverlay.classList.remove('visible');
+  if (gameOver) gameoverOverlay.classList.add('visible');
+}
+function addHighscore(sc, len, time, map) {
+  highscores.push({ score: sc, length: len, time: Math.round(time * 10) / 10, map, date: new Date().toLocaleDateString() });
+  highscores.sort((a, b) => b.score - a.score);
+  if (highscores.length > 10) highscores.length = 10;
+}
+function renderLeaderboard() {
+  const body = document.getElementById('leaderboard-body');
+  body.innerHTML = '';
+  if (highscores.length === 0) {
+    body.innerHTML = '<tr><td colspan="5" style="padding:20px;color:#8d6e3f;">No runs yet! Play to set records.</td></tr>';
+    return;
+  }
+  highscores.forEach((h, i) => {
+    const tr = document.createElement('tr');
+    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
+    tr.innerHTML = `<td class="${rankClass}">${medal}</td><td>${h.score}</td><td>${h.length}</td><td>${h.time}s</td><td>${h.map}</td>`;
+    body.appendChild(tr);
+  });
+}
+document.getElementById('leaderboard-close').addEventListener('click', closeLeaderboard);
+
+// ===== DAILY CHALLENGES =====
+const CHALLENGE_TEMPLATES = [
+  { id:'eat_fruits',   text:'Eat {n} fruits',            range:[20,50],  reward:[50,150] },
+  { id:'reach_score',  text:'Reach score {n}',           range:[100,300],reward:[80,200] },
+  { id:'survive_time', text:'Survive {n} seconds',       range:[30,90],  reward:[60,150] },
+  { id:'reach_length', text:'Reach length {n}',          range:[15,40],  reward:[70,180] },
+  { id:'earn_coins',   text:'Earn {n} coins in 1 run',   range:[50,200], reward:[60,150] },
+  { id:'eat_mango',    text:'Eat {n} mangos',            range:[2,8],    reward:[80,200] },
+];
+let sessionProgress = { fruitsEaten:0, score:0, survivalTime:0, length:0, coinsEarned:0, mangosEaten:0 };
+
+function getDailySeed() {
+  const d = new Date();
+  return d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+}
+
+function seededRandom(seed) {
+  let s = seed;
+  return function() { s = (s * 1664525 + 1013904223) & 0xFFFFFFFF; return (s >>> 0) / 0xFFFFFFFF; };
+}
+
+function getTodayString() { return new Date().toISOString().split('T')[0]; }
+
+function generateDailyChallenges() {
+  const today = getTodayString();
+  if (dailyChallengeData.date === today && dailyChallengeData.challenges.length === 3) return;
+  const rng = seededRandom(getDailySeed());
+  const challenges = [];
+  const used = new Set();
+  for (let i = 0; i < 3; i++) {
+    let idx;
+    do { idx = Math.floor(rng() * CHALLENGE_TEMPLATES.length); } while (used.has(idx));
+    used.add(idx);
+    const tmpl = CHALLENGE_TEMPLATES[idx];
+    const target = Math.floor(tmpl.range[0] + rng() * (tmpl.range[1] - tmpl.range[0]));
+    const reward = Math.floor(tmpl.reward[0] + rng() * (tmpl.reward[1] - tmpl.reward[0]));
+    challenges.push({ templateId: tmpl.id, target, reward, text: tmpl.text.replace('{n}', target) });
+  }
+  dailyChallengeData = { date: today, challenges, progress: [0, 0, 0], claimed: [false, false, false] };
+}
+
+function getChallengeProgress(challenge) {
+  switch (challenge.templateId) {
+    case 'eat_fruits': return sessionProgress.fruitsEaten;
+    case 'reach_score': return sessionProgress.score;
+    case 'survive_time': return Math.floor(sessionProgress.survivalTime);
+    case 'reach_length': return sessionProgress.length;
+    case 'earn_coins': return sessionProgress.coinsEarned;
+    case 'eat_mango': return sessionProgress.mangosEaten;
+    default: return 0;
+  }
+}
+
+function updateChallengeProgress() {
+  if (!dailyChallengeData.challenges.length) return;
+  for (let i = 0; i < 3; i++) {
+    const prog = getChallengeProgress(dailyChallengeData.challenges[i]);
+    dailyChallengeData.progress[i] = Math.max(dailyChallengeData.progress[i], prog);
+  }
+}
+
+function openChallenges() {
+  gameoverOverlay.classList.remove('visible');
+  generateDailyChallenges();
+  renderChallenges();
+  challengesOverlay.classList.add('visible');
+}
+function closeChallenges() {
+  challengesOverlay.classList.remove('visible');
+  if (gameOver) gameoverOverlay.classList.add('visible');
+}
+function renderChallenges() {
+  document.getElementById('challenges-date').textContent = `📅 ${getTodayString()}`;
+  const grid = document.getElementById('challenges-grid');
+  grid.innerHTML = '';
+  dailyChallengeData.challenges.forEach((ch, i) => {
+    const prog = dailyChallengeData.progress[i];
+    const pct = Math.min(100, (prog / ch.target) * 100);
+    const done = prog >= ch.target;
+    const claimed = dailyChallengeData.claimed[i];
+    const card = document.createElement('div');
+    card.className = 'challenge-card' + (claimed ? ' completed' : '');
+    card.innerHTML = `<div class="challenge-text">${ch.text}</div>` +
+      `<div class="challenge-reward">Reward: 🪙 ${ch.reward}</div>` +
+      `<div class="challenge-bar-bg"><div class="challenge-bar-fill" style="width:${pct}%"></div></div>` +
+      `<div style="font-size:11px;color:#8d6e3f;">${Math.min(prog, ch.target)} / ${ch.target}</div>`;
+    if (done && !claimed) {
+      const btn = document.createElement('button');
+      btn.className = 'challenge-claim';
+      btn.textContent = 'Claim Reward';
+      btn.addEventListener('click', () => {
+        dailyChallengeData.claimed[i] = true;
+        wallet += ch.reward;
+        spawnFloatingText(`+${ch.reward} 🪙`, '#ffd700', { x:0, z:0 });
+        updateHUD(); renderChallenges(); saveGame();
+        // Check all-challenges achievement
+        if (dailyChallengeData.claimed.every(c => c)) checkAchievement('all_challenges');
+      });
+      card.appendChild(btn);
+    } else if (claimed) {
+      card.innerHTML += '<div style="font-size:12px;color:#00b894;font-weight:700;margin-top:4px;">✅ Claimed!</div>';
+    }
+    grid.appendChild(card);
+  });
+}
+document.getElementById('challenges-close').addEventListener('click', closeChallenges);
+
+// ===== ACHIEVEMENTS =====
+const ACHIEVEMENTS = [
+  { id:'first_game',    name:'First Blood',    icon:'🎮', desc:'Play your first game' },
+  { id:'score_100',     name:'Centurion',       icon:'💯', desc:'Score 100 in a single run' },
+  { id:'score_500',     name:'High Roller',     icon:'🎰', desc:'Score 500 in a single run' },
+  { id:'coins_1000',    name:'Coin Collector',  icon:'🪙', desc:'Earn 1,000 total coins' },
+  { id:'coins_10000',   name:'Moneybags',       icon:'💰', desc:'Earn 10,000 total coins' },
+  { id:'survive_60',    name:'Survivor',        icon:'⏱️', desc:'Survive 60 seconds' },
+  { id:'survive_120',   name:'Marathoner',      icon:'🏃', desc:'Survive 120 seconds' },
+  { id:'length_30',     name:'Long Boi',        icon:'📏', desc:'Reach snake length 30' },
+  { id:'length_50',     name:'Snake King',      icon:'👑', desc:'Reach snake length 50' },
+  { id:'own_5_skins',   name:'Fashionista',     icon:'👗', desc:'Own 5 paid skins' },
+  { id:'own_all_maps',  name:'Explorer',        icon:'🗺️', desc:'Own all maps' },
+  { id:'max_upgrades',  name:'Maxed Out',       icon:'⚡', desc:'Max all upgrades' },
+  { id:'royale_win',    name:'Battle Royale',   icon:'🏆', desc:'Win a Snake Royale match' },
+  { id:'royale_5_wins', name:'Royale Legend',    icon:'🌟', desc:'Win 5 Royale matches' },
+  { id:'all_challenges',name:'Daily Grinder',   icon:'📋', desc:'Complete all 3 daily challenges' },
+  { id:'powerup_all',   name:'Power Player',    icon:'⚡', desc:'Collect all 4 power-up types' },
+];
+
+function checkAchievement(id) {
+  if (unlockedAchievements[id]) return;
+  unlockedAchievements[id] = Date.now();
+  const def = ACHIEVEMENTS.find(a => a.id === id);
+  if (!def) return;
+  // Show popup
+  achievementPopup.textContent = `🏅 ${def.icon} ${def.name} Unlocked!`;
+  achievementPopup.classList.add('show');
+  setTimeout(() => achievementPopup.classList.remove('show'), 3000);
+  saveGame();
+}
+
+function checkStatAchievements() {
+  if (gameStats.totalGames >= 1) checkAchievement('first_game');
+  if (gameStats.totalCoins >= 1000) checkAchievement('coins_1000');
+  if (gameStats.totalCoins >= 10000) checkAchievement('coins_10000');
+  if (SKIN_DEFS.filter(s => s.owned && s.cost > 0).length >= 5) checkAchievement('own_5_skins');
+  if (MAP_DEFS.every(m => m.owned)) checkAchievement('own_all_maps');
+  if (UPGRADE_DEFS.every(d => upgradeLevels[d.id] >= d.maxLevel)) checkAchievement('max_upgrades');
+  if (collectedPowerupTypes.size >= 4) checkAchievement('powerup_all');
+}
+
+function openAchievements() {
+  gameoverOverlay.classList.remove('visible');
+  renderAchievements();
+  achievementsOverlay.classList.add('visible');
+}
+function closeAchievements() {
+  achievementsOverlay.classList.remove('visible');
+  if (gameOver) gameoverOverlay.classList.add('visible');
+}
+function renderAchievements() {
+  const total = ACHIEVEMENTS.length;
+  const unlocked = Object.keys(unlockedAchievements).length;
+  document.getElementById('achievements-count').textContent = `${unlocked} / ${total} Unlocked`;
+  const grid = document.getElementById('achievements-grid');
+  grid.innerHTML = '';
+  for (const ach of ACHIEVEMENTS) {
+    const isUnlocked = !!unlockedAchievements[ach.id];
+    const card = document.createElement('div');
+    card.className = 'achievement-card ' + (isUnlocked ? 'unlocked' : 'locked');
+    card.innerHTML = `<div class="achievement-icon">${ach.icon}</div><div class="achievement-name">${ach.name}</div><div class="achievement-desc">${ach.desc}</div>`;
+    grid.appendChild(card);
+  }
+}
+document.getElementById('achievements-close').addEventListener('click', closeAchievements);
+
+// ===== TUTORIAL =====
+const TUTORIAL_STEPS = [
+  { title:'Welcome!', text:'Welcome to Snake 3D! Let\'s learn the basics in a quick tour.' },
+  { title:'Moving', text:'Use Arrow Keys or WASD to move your snake. Don\'t hit the walls or yourself!' },
+  { title:'Eating', text:'Eat fruits to grow longer, earn points, and collect coins. Rarer fruits give more!' },
+  { title:'HUD', text:'Top bar shows your Score, Coins earned this run, and your Wallet balance.' },
+  { title:'Camera', text:'Press C to switch camera views (Orbit / Snake Eyes). Press P for Retro pixel mode.' },
+  { title:'Shops', text:'Open Map Shop (M), Skin Shop (K), Upgrade Shop, or Coin Store from the buttons.' },
+  { title:'Power-Ups', text:'Glowing pickups spawn on the field: Shield 🛡️, Magnet 🧲, Ghost 👻, 2x Coins 💰' },
+  { title:'Game Modes', text:'Choose Classic mode or Snake Royale — battle 25 bot snakes, last one standing wins!' },
+  { title:'Challenges', text:'Check Daily Challenges for bonus coins. Earn Achievements for milestones!' },
+  { title:'Ready!', text:'You\'re all set! Have fun playing Snake 3D! 🐍' },
+];
+let tutorialStep = 0;
+
+function startTutorial() {
+  tutorialStep = 0;
+  tutorialOverlay.classList.add('visible');
+  showTutorialStep();
+}
+function showTutorialStep() {
+  const step = TUTORIAL_STEPS[tutorialStep];
+  const box = document.getElementById('tutorial-box');
+  box.innerHTML = `<h3>${step.title}</h3><p>${step.text}</p>` +
+    `<div class="tutorial-step">Step ${tutorialStep + 1} of ${TUTORIAL_STEPS.length}</div>` +
+    `<div class="tutorial-btns">` +
+    `<button class="tutorial-skip" id="tut-skip">Skip</button>` +
+    `<button class="tutorial-next" id="tut-next">${tutorialStep === TUTORIAL_STEPS.length - 1 ? 'Finish' : 'Next'}</button>` +
+    `</div>`;
+  document.getElementById('tut-next').addEventListener('click', () => {
+    tutorialStep++;
+    if (tutorialStep >= TUTORIAL_STEPS.length) endTutorial();
+    else showTutorialStep();
+  });
+  document.getElementById('tut-skip').addEventListener('click', endTutorial);
+}
+function endTutorial() {
+  tutorialOverlay.classList.remove('visible');
+  tutorialDone = true;
+  saveGame();
+}
 
 // ===== ANIMATION =====
 const clock = new THREE.Clock();
@@ -2325,20 +3732,39 @@ function animate(now) {
   requestAnimationFrame(animate);
   const t = clock.getElapsedTime();
 
-  if (running && !gameOver && now - lastTickTime >= speed) {
-    lastTickTime = now;
-    gameTick();
+  if (running && !gameOver) {
+    if (gameMode === 'royale') {
+      if (now - lastTickTime >= speed) { lastTickTime = now; royaleTick(now); }
+    } else {
+      if (now - lastTickTime >= speed) { lastTickTime = now; gameTick(); }
+    }
+    // Track survival time for challenges
+    if (runStartTime) sessionProgress.survivalTime = (Date.now() - runStartTime) / 1000;
   }
 
   if (running && !gameOver && speed > 0) {
     tickProgress = Math.min((now - lastTickTime) / speed, 1);
   }
-  syncScene();
 
-  if (foodGroup) {
+  if (gameMode === 'royale' && royaleActive) {
+    syncRoyaleScene();
+  } else {
+    syncScene();
+  }
+
+  if (foodGroup && gameMode !== 'royale') {
     foodGroup.position.y = CELL * 0.4 + Math.sin(t * 3) * 0.15;
     foodGroup.rotation.y = t * 2;
   }
+
+  // Powerup animation
+  if (powerupMesh) {
+    powerupMesh.rotation.y = t * 3;
+    powerupMesh.position.y = CELL * 0.5 + Math.sin(t * 4) * 0.2;
+  }
+
+  // Update powerup bar
+  if (running && !gameOver) renderPowerupBar();
 
   if (pixelMode) {
     updateFPVCamera();
@@ -2371,7 +3797,20 @@ window.addEventListener('resize', () => {
 
 buildEnvironment(currentMap);
 init();
+generateDailyChallenges();
 requestAnimationFrame(animate);
+
+// Auto-login or show login screen
+const savedUser = localStorage.getItem('snakeGame_currentUser');
+if (savedUser && localStorage.getItem('snakeGame_user_' + savedUser)) {
+  doLogin(savedUser);
+  buildEnvironment(currentMap);
+  updateSnakeMaterials();
+  init();
+  updateHUD();
+} else {
+  showLoginScreen();
+}
 </script>
 </body>
 </html>
