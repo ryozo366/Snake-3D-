@@ -449,7 +449,7 @@
     display: none;
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 200;
+    z-index: 300;
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(8px);
@@ -638,9 +638,7 @@
 
 <!-- Game Over -->
 <div id="gameover-overlay">
-  <div class="ad-banner-side left" id="go-ad-left">
-    <ins class="adsbygoogle" style="display:inline-block;width:140px;height:360px" data-ad-client="ca-pub-1899513491544813" data-ad-slot="auto" data-ad-format="vertical"></ins>
-  </div>
+  <div class="ad-banner-side left" id="go-ad-left"></div>
   <div id="gameover-panel">
     <div class="go-banner">GAME OVER</div>
     <div class="stars-row" id="stars-row"></div>
@@ -657,9 +655,7 @@
       <button class="candy-btn btn-skins-go" id="btn-open-skins-go">Skins</button>
     </div>
   </div>
-  <div class="ad-banner-side right" id="go-ad-right">
-    <ins class="adsbygoogle" style="display:inline-block;width:140px;height:360px" data-ad-client="ca-pub-1899513491544813" data-ad-slot="auto" data-ad-format="vertical"></ins>
-  </div>
+  <div class="ad-banner-side right" id="go-ad-right"></div>
 </div>
 
 <!-- Shop -->
@@ -2009,12 +2005,24 @@ function showRewardedAd(callback) {
   }, { once: true });
 }
 
-let goAdsLoaded = false;
 function renderGameOverAds() {
-  if (goAdsLoaded || location.protocol === 'file:') return;
-  goAdsLoaded = true;
-  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  const leftEl = document.getElementById('go-ad-left');
+  const rightEl = document.getElementById('go-ad-right');
+  const pickAd = () => FAKE_ADS[Math.floor(Math.random() * FAKE_ADS.length)];
+  const adL = pickAd();
+  let adR = pickAd();
+  while (adR === adL && FAKE_ADS.length > 1) adR = pickAd();
+
+  const renderBanner = (ad) =>
+    `<div class="ad-banner-inner" style="background:${ad.gradient}">` +
+      `<div class="ab-label">Ad</div>` +
+      `<div class="ab-emoji">${ad.emoji}</div>` +
+      `<div class="ab-title">${ad.title}</div>` +
+      `<div class="ab-tagline">${ad.tagline}</div>` +
+      `<div class="ab-cta">Learn More</div>` +
+    `</div>`;
+  leftEl.innerHTML = renderBanner(adL);
+  rightEl.innerHTML = renderBanner(adR);
 }
 
 // ===== MAIN MENU ADS =====
