@@ -2184,8 +2184,11 @@ function getCoinBonus() { return upgradeLevels.magnet; }
 function getScoreMult() { return 1 + upgradeLevels.mult * 0.5; }
 
 function init() {
-  if (royaleActive) cleanupRoyale();
+  // ALWAYS clean up royale if any royale state exists
+  cleanupRoyale();
   gameMode = 'classic';
+  // ALWAYS rebuild classic environment (fixes royale→classic ground/fence bug)
+  buildEnvironment(currentMap);
   snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
   prevSnake = snake.map(s => ({ ...s }));
   tickProgress = 1;
@@ -2812,7 +2815,6 @@ document.getElementById('btn-open-ach-go').addEventListener('click', () => openA
 document.getElementById('go-mode-classic').addEventListener('click', () => {
   document.getElementById('btn-classic').classList.add('mode-active');
   document.getElementById('btn-royale').classList.remove('mode-active');
-  if (royaleActive) { cleanupRoyale(); buildEnvironment(currentMap); }
   init();
 });
 document.getElementById('go-mode-royale').addEventListener('click', () => {
@@ -2836,7 +2838,6 @@ document.getElementById('skin-btn').addEventListener('click', () => {
 document.getElementById('btn-classic').addEventListener('click', () => {
   document.getElementById('btn-classic').classList.add('mode-active');
   document.getElementById('btn-royale').classList.remove('mode-active');
-  if (royaleActive) { cleanupRoyale(); buildEnvironment(currentMap); }
   init();
 });
 document.getElementById('btn-royale').addEventListener('click', () => {
@@ -2972,6 +2973,21 @@ cheatInput.addEventListener('keydown', e => {
       SKIN_DEFS.forEach(s => s.owned = true);
       MAP_DEFS.forEach(m => m.owned = true);
       cheatMsg.textContent = 'HACKED! Everything unlocked!';
+      success = true;
+    } else if (code === 'reset') {
+      wallet = 0;
+      upgradeLevels = { speed:0, life:0, magnet:0, mult:0, powerDur:0, fruit:0 };
+      SKIN_DEFS.forEach(s => s.owned = s.cost === 0);
+      MAP_DEFS.forEach(m => m.owned = m.cost === 0);
+      currentMap = 'classic'; currentSkin = 'blue';
+      gameStats = { totalGames:0, totalScore:0, totalCoins:0, totalFoodEaten:0,
+        totalTimePlayed:0, bestScore:0, bestLength:0, longestSurvival:0,
+        royaleWins:0, royaleGames:0, royaleKills:0, powerupsCollected:{} };
+      highscores = [];
+      Object.keys(unlockedAchievements).forEach(k => delete unlockedAchievements[k]);
+      dailyChallengeData.challenges = []; dailyChallengeData.progress = [0,0,0]; dailyChallengeData.claimed = [false,false,false];
+      buildEnvironment(currentMap); updateSnakeMaterials();
+      cheatMsg.textContent = 'All progress reset!';
       success = true;
     } else {
       cheatMsg.textContent = 'Invalid code';
@@ -3201,8 +3217,14 @@ function createBotSnake(id) {
 function isOccupiedRoyale(x, y, excludeId) {
   if (snake.some(s => s.x === x && s.y === y)) return true;
   for (const bot of botSnakes) {
-    if (!bot.alive || bot.id === excludeId) continue;
-    if (bot.snake.some(s => s.x === x && s.y === y)) return true;
+    if (!bot.alive) continue;
+    // Check ALL bots including self (self-collision matters!)
+    if (bot.id === excludeId) {
+      // Skip head (index 0) for self-collision check, but check body
+      if (bot.snake.slice(1).some(s => s.x === x && s.y === y)) return true;
+    } else {
+      if (bot.snake.some(s => s.x === x && s.y === y)) return true;
+    }
   }
   return false;
 }
@@ -3229,10 +3251,16 @@ function botDecide(bot) {
     return true;
   });
   if (possible.length === 0) return null; // will die
+  // 8% chance to make a random move (bots make mistakes)
+  if (Math.random() < 0.08) {
+    return possible[Math.floor(Math.random() * possible.length)];
+  }
   let bestDir = possible[0], bestScore = -Infinity;
   for (const d of possible) {
     let score = 0;
     const nx = head.x + d.x, ny = head.y + d.y;
+    // Self-body avoidance (look 2 steps ahead)
+    if (bot.snake.some(s => Math.abs(nx - s.x) + Math.abs(ny - s.y) <= 1)) score -= 5;
     // Food attraction
     const nearFood = findNearestRoyaleFood(nx, ny);
     if (nearFood) {
@@ -3240,7 +3268,7 @@ function botDecide(bot) {
       const distNew = Math.abs(nx - nearFood.x) + Math.abs(ny - nearFood.y);
       score += (distNow - distNew) * 10;
     }
-    // Avoid other snake heads
+    // Avoid other snake heads AND bodies
     const allSnakes = [...botSnakes.filter(b => b.alive && b.id !== bot.id), { snake, alive: !gameOver, id:'player' }];
     for (const other of allSnakes) {
       if (!other.alive || other.snake.length === 0) continue;
@@ -3253,7 +3281,7 @@ function botDecide(bot) {
     // Momentum
     if (d.x === bot.dir.x && d.y === bot.dir.y) score += 2;
     // Randomness for variety
-    score += Math.random() * 4;
+    score += Math.random() * 6;
     if (score > bestScore) { bestScore = score; bestDir = d; }
   }
   return bestDir;
@@ -3309,8 +3337,8 @@ function tickBot(bot, now) {
 }
 
 function initRoyale() {
-  // Clean up previous royale state first (fixes restart bug)
-  if (royaleActive) cleanupRoyale();
+  // Always clean up any previous state
+  cleanupRoyale();
   clearAllClassicFood();
   gameMode = 'royale'; royaleActive = true;
   royaleKills = 0;
