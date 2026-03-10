@@ -524,39 +524,13 @@
   .ad-banner-side {
     position: absolute;
     top: 50%; transform: translateY(-50%);
-    width: 140px;
-    border-radius: 12px;
+    width: 160px;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    font-family: 'Baloo 2', sans-serif;
-    text-align: center;
-    color: #fff;
     pointer-events: auto;
   }
-  .ad-banner-side.left { left: calc(50% - 340px); }
-  .ad-banner-side.right { right: calc(50% - 340px); }
-  .ad-banner-inner {
-    padding: 16px 10px;
-  }
-  .ad-banner-inner .ab-label {
-    font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
-    text-transform: uppercase; opacity: 0.6; margin-bottom: 6px;
-  }
-  .ad-banner-inner .ab-emoji { font-size: 36px; margin: 8px 0; }
-  .ad-banner-inner .ab-title {
-    font-size: 14px; font-weight: 800; line-height: 1.2;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  }
-  .ad-banner-inner .ab-tagline {
-    font-size: 11px; font-weight: 600; margin-top: 6px; opacity: 0.85;
-  }
-  .ad-banner-inner .ab-cta {
-    display: inline-block; margin-top: 10px;
-    padding: 5px 14px; border-radius: 20px;
-    background: rgba(255,255,255,0.25);
-    font-size: 11px; font-weight: 700;
-    backdrop-filter: blur(4px);
-  }
+  .ad-banner-side.left { left: calc(50% - 360px); }
+  .ad-banner-side.right { right: calc(50% - 360px); }
   @media (max-width: 900px) {
     .ad-banner-side { display: none; }
   }
@@ -618,7 +592,10 @@
 
 <!-- Game Over -->
 <div id="gameover-overlay">
-  <div class="ad-banner-side left" id="go-ad-left"></div>
+  <div class="ad-banner-side left" id="go-ad-left">
+    <script>atOptions={'key':'3306d19d042fdaa38a6dfac27962817e','format':'iframe','height':300,'width':160,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js"></script>
+  </div>
   <div id="gameover-panel">
     <div class="go-banner">GAME OVER</div>
     <div class="stars-row" id="stars-row"></div>
@@ -635,7 +612,10 @@
       <button class="candy-btn btn-skins-go" id="btn-open-skins-go">Skins</button>
     </div>
   </div>
-  <div class="ad-banner-side right" id="go-ad-right"></div>
+  <div class="ad-banner-side right" id="go-ad-right">
+    <script>atOptions={'key':'3306d19d042fdaa38a6dfac27962817e','format':'iframe','height':300,'width':160,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js"></script>
+  </div>
 </div>
 
 <!-- Shop -->
@@ -1927,33 +1907,18 @@ function showGameOver(runTime) {
   const m = Math.floor(runTime / 60), s = Math.floor(runTime % 60);
   ar('⏱️', m > 0 ? `${m}m ${s}s` : `${s}s`);
   for (const ft of FOOD_TYPES) { const c = runFoodCounts[ft.name]; if (c > 0) ar(ft.emoji, c); }
-  renderGameOverAds();
   gameoverOverlay.classList.add('visible');
 }
 
 // ===== AD SYSTEM =====
-const FAKE_ADS = [
-  { title: 'Snake Pro Premium', tagline: 'Unlock unlimited power-ups!', emoji: '🐍', gradient: 'linear-gradient(135deg, #6c5ce7, #a29bfe)' },
-  { title: 'Get 1000 Coins!', tagline: 'Download our partner app today', emoji: '🪙', gradient: 'linear-gradient(135deg, #fdcb6e, #f0932b)' },
-  { title: 'Jungle Map Pack', tagline: 'Explore exotic new worlds', emoji: '🌴', gradient: 'linear-gradient(135deg, #00b894, #55efc4)' },
-  { title: 'Rainbow Skin Bundle', tagline: 'Stand out from the crowd!', emoji: '🌈', gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
-  { title: 'Speed Boost DLC', tagline: 'Go faster than ever before', emoji: '⚡', gradient: 'linear-gradient(135deg, #0984e3, #74b9ff)' },
-  { title: 'Play Snake Royale!', tagline: '100 players, 1 winner', emoji: '👑', gradient: 'linear-gradient(135deg, #e17055, #fab1a0)' },
-  { title: 'Snake Tournament', tagline: 'Compete for real prizes!', emoji: '🏆', gradient: 'linear-gradient(135deg, #00cec9, #81ecec)' },
-  { title: 'Mega Coin Pack', tagline: 'Best value — 5000 coins!', emoji: '💎', gradient: 'linear-gradient(135deg, #6c5ce7, #fd79a8)' },
-];
-
 const adOverlay = document.getElementById('ad-overlay');
 const adCard = document.getElementById('ad-card');
 
 function showRewardedAd(callback) {
-  // Load real Monetag Vignette ad
   adCard.innerHTML =
-    `<div class="ad-card-top" style="background:linear-gradient(135deg,#667eea,#764ba2);min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;">` +
-      `<div class="ad-label">Loading Ad...</div>` +
-      `<div class="ad-emoji">📺</div>` +
-      `<div class="ad-title">Watching Ad</div>` +
-      `<div class="ad-tagline">Please wait for your reward</div>` +
+    `<div class="ad-card-top" style="background:linear-gradient(135deg,#667eea,#764ba2);padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;">` +
+      `<div class="ad-label">Sponsored Ad</div>` +
+      `<div id="rewarded-ad-slot" style="margin:10px 0;min-height:300px;min-width:160px;background:rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;"></div>` +
     `</div>` +
     `<div class="ad-card-bottom">` +
       `<div id="ad-countdown">Reward in <b>5</b>s...</div>` +
@@ -1961,7 +1926,16 @@ function showRewardedAd(callback) {
     `</div>`;
   adOverlay.classList.add('visible');
 
-  // Trigger real Monetag Vignette
+  // Load real Adsterra banner into the slot
+  try {
+    const slot = document.getElementById('rewarded-ad-slot');
+    window.atOptions = { key: '3306d19d042fdaa38a6dfac27962817e', format: 'iframe', height: 300, width: 160, params: {} };
+    const adScript = document.createElement('script');
+    adScript.src = 'https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js';
+    slot.appendChild(adScript);
+  } catch(e) {}
+
+  // Also trigger Monetag Vignette
   try {
     const s = document.createElement('script');
     s.dataset.zone = '10710460';
@@ -1987,26 +1961,6 @@ function showRewardedAd(callback) {
     adOverlay.classList.remove('visible');
     if (callback) callback();
   }, { once: true });
-}
-
-function renderGameOverAds() {
-  const leftEl = document.getElementById('go-ad-left');
-  const rightEl = document.getElementById('go-ad-right');
-  const pickAd = () => FAKE_ADS[Math.floor(Math.random() * FAKE_ADS.length)];
-  const adL = pickAd();
-  let adR = pickAd();
-  while (adR === adL && FAKE_ADS.length > 1) adR = pickAd();
-
-  const renderBanner = (ad) =>
-    `<div class="ad-banner-inner" style="background:${ad.gradient}">` +
-      `<div class="ab-label">Ad</div>` +
-      `<div class="ab-emoji">${ad.emoji}</div>` +
-      `<div class="ab-title">${ad.title}</div>` +
-      `<div class="ab-tagline">${ad.tagline}</div>` +
-      `<div class="ab-cta">Learn More</div>` +
-    `</div>`;
-  leftEl.innerHTML = renderBanner(adL);
-  rightEl.innerHTML = renderBanner(adR);
 }
 
 // ===== UPGRADE SHOP =====
