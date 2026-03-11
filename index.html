@@ -2642,16 +2642,16 @@ function renderShop() {
       btn.addEventListener('click', () => { if (wallet >= cost) { wallet -= cost; upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); checkStatAchievements(); } });
     }
     card.appendChild(btn);
-    // Watch Ad button for all non-maxed upgrades
-    if (!maxed) {
-      const adBtn = document.createElement('button');
-      adBtn.className = 'watch-ad-btn';
-      adBtn.textContent = '▶ Watch Ad';
-      adBtn.addEventListener('click', () => {
-        showRewardedAd(() => { upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); });
-      });
-      card.appendChild(adBtn);
-    }
+    // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - Watch Ad button for upgrades
+    // if (!maxed) {
+    //   const adBtn = document.createElement('button');
+    //   adBtn.className = 'watch-ad-btn';
+    //   adBtn.textContent = '▶ Watch Ad';
+    //   adBtn.addEventListener('click', () => {
+    //     showRewardedAd(() => { upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); });
+    //   });
+    //   card.appendChild(adBtn);
+    // }
     shopGrid.appendChild(card);
   }
 }
@@ -2708,8 +2708,8 @@ function renderMapShop() {
       });
     }
     card.appendChild(btn);
-    // Watch Ad button for locked maps
-    if (!def.owned) {
+    // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - Watch Ad button for maps
+    /* if (!def.owned) {
       const adBtn = document.createElement('button');
       adBtn.className = 'watch-ad-btn';
       adBtn.textContent = '▶ Watch Ad';
@@ -2724,7 +2724,7 @@ function renderMapShop() {
         });
       });
       card.appendChild(adBtn);
-    }
+    } */
     mapShopGrid.appendChild(card);
   }
 }
@@ -2814,8 +2814,8 @@ function renderSkinShop() {
       });
     }
     card.appendChild(btn);
-    // Watch Ad button for locked paid skins
-    if (!skin.owned) {
+    // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - Watch Ad button for skins
+    /* if (!skin.owned) {
       const adBtn = document.createElement('button');
       adBtn.className = 'watch-ad-btn';
       adBtn.textContent = '▶ Watch Ad';
@@ -2829,7 +2829,7 @@ function renderSkinShop() {
         });
       });
       card.appendChild(adBtn);
-    }
+    } */
     paidGrid.appendChild(card);
   }
   skinShopContent.appendChild(paidGrid);
@@ -3010,12 +3010,12 @@ cheatInput.addEventListener('keydown', e => {
       MAP_DEFS.forEach(m => m.owned = true);
       cheatMsg.textContent = 'All maps unlocked!';
       success = true;
-    } else if (code === 'hack') {
+    } else if (code === 'god') {
       wallet = 999999;
       walletEl.textContent = wallet;
       SKIN_DEFS.forEach(s => s.owned = true);
       MAP_DEFS.forEach(m => m.owned = true);
-      cheatMsg.textContent = 'HACKED! Everything unlocked!';
+      cheatMsg.textContent = 'GOD MODE! Everything unlocked!';
       success = true;
     } else if (code === 'reset') {
       wallet = 0;
