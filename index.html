@@ -640,6 +640,36 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     font-size:14px; font-weight:700; min-height:20px; margin-top:8px;
   }
 
+  /* ===== NIGHT MODE ===== */
+  body.night-mode { background:#1a1a2e !important; }
+  .night-mode .hud-pill {
+    background:rgba(30,30,60,0.85); color:#e0e0ff;
+    border-color:rgba(100,100,200,0.4);
+  }
+  .night-mode #hud-title { color:#c0c0ff; text-shadow:0 3px 0 #5050a0, 0 0 15px rgba(100,100,255,0.5); }
+  .night-mode #message { color:#ff79c6; }
+  .night-mode .candy-btn { background:linear-gradient(135deg,#2a2a5e,#3a3a7e) !important; color:#e0e0ff !important; border-color:rgba(100,100,200,0.5) !important; }
+  .night-mode .mode-active { box-shadow:0 0 12px rgba(100,100,255,0.6) !important; border-color:#6666cc !important; }
+
+  /* ===== PARTICLE EFFECTS ===== */
+  .particle {
+    position:fixed; pointer-events:none; z-index:20; border-radius:50%;
+    animation:particleFly 0.8s ease-out forwards;
+  }
+  @keyframes particleFly {
+    0% { opacity:1; transform:translate(0,0) scale(1); }
+    100% { opacity:0; transform:translate(var(--px), var(--py)) scale(0); }
+  }
+  .particle-burst {
+    position:fixed; pointer-events:none; z-index:20;
+    font-size:20px;
+    animation:particleBurst 1s ease-out forwards;
+  }
+  @keyframes particleBurst {
+    0% { opacity:1; transform:translate(0,0) scale(1) rotate(0deg); }
+    100% { opacity:0; transform:translate(var(--px), var(--py)) scale(0.3) rotate(var(--rot)); }
+  }
+
   /* ===== PROFILE BAR ===== */
   #profile-bar {
     position:fixed; top:8px; right:12px; display:flex; gap:6px;
@@ -863,6 +893,7 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="pixel-btn">🎮 Retro (P)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="map-btn">🗺️ Maps (M)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="skin-btn">🐍 Skins (K)</span>
+    <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="night-btn">🌙 Night (N)</span>
   </div>
   <div id="powerup-bar"></div>
   <div id="royale-hud">
@@ -873,10 +904,15 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     <button class="candy-btn btn-retry mode-active" id="btn-classic">🐍 Classic</button>
     <button class="candy-btn btn-shop-go" id="btn-royale">⚔️ Snake Royale</button>
     <button class="candy-btn btn-maps-go" id="btn-cube">🧊 Cube</button>
+    <button class="candy-btn btn-skins-go" id="btn-endless">♾️ Endless</button>
+    <button class="candy-btn btn-shop-go" id="btn-speedrun">⏱️ Speed Run</button>
   </div>
   <div id="map-badge" style="margin-top:4px;"><span class="hud-pill" style="font-size:12px;padding:2px 10px;">🌿 Classic Meadow</span></div>
   <div id="cube-back-bar" style="display:none;margin-top:4px;pointer-events:auto;">
     <button class="candy-btn btn-retry" id="btn-cube-back" style="font-size:13px;padding:5px 16px;">⬅ Back to Menu</button>
+  </div>
+  <div id="speedrun-hud" style="display:none;margin-top:4px;">
+    <span class="hud-pill" id="speedrun-timer" style="font-size:16px;padding:4px 16px;background:rgba(255,80,80,0.9);color:#fff;border-color:rgba(255,120,120,0.9);">⏱️ 60s</span>
   </div>
   <div id="message">Press any arrow key to start</div>
   <div id="cheat-bar" style="margin-top:8px;pointer-events:auto;">
@@ -912,11 +948,18 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
       <button class="candy-btn btn-maps-go" id="btn-open-lb-go" style="font-size:12px;">🏆 Scores</button>
       <button class="candy-btn btn-skins-go" id="btn-open-ch-go" style="font-size:12px;">📋 Challenges</button>
       <button class="candy-btn btn-retry" id="btn-open-ach-go" style="font-size:12px;">🏅 Badges</button>
+      <button class="candy-btn btn-shop-go" id="btn-share-score" style="font-size:12px;">📤 Share</button>
+      <button class="candy-btn btn-maps-go" id="btn-replay" style="font-size:12px;">🔁 Replay</button>
     </div>
     <div style="display:flex;gap:8px;margin-top:8px;justify-content:center;">
       <button class="candy-btn btn-retry" id="go-mode-classic" style="font-size:13px;">🐍 Play Classic</button>
       <button class="candy-btn btn-shop-go" id="go-mode-royale" style="font-size:13px;">⚔️ Play Royale</button>
       <button class="candy-btn btn-maps-go" id="go-mode-cube" style="font-size:13px;">🧊 Play Cube</button>
+      <button class="candy-btn btn-skins-go" id="go-mode-endless" style="font-size:13px;">♾️ Endless</button>
+      <button class="candy-btn btn-shop-go" id="go-mode-speedrun" style="font-size:13px;">⏱️ Speed Run</button>
+    </div>
+    <div style="margin-top:6px;">
+      <button class="candy-btn btn-retry" id="btn-open-daily" style="font-size:12px;">📅 Today's Best</button>
     </div>
   </div>
   <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION: Adsterra right banner ad -->
@@ -1037,6 +1080,16 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     <div id="achievements-count" style="font-size:13px;color:#8d6e3f;margin-bottom:8px;"></div>
     <div class="achievement-grid" id="achievements-grid"></div>
     <button class="shop-close-btn" id="achievements-close">Close</button>
+  </div>
+</div>
+
+<!-- Daily High Scores -->
+<div id="daily-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;justify-content:center;align-items:center;backdrop-filter:blur(6px);">
+  <div style="background:linear-gradient(145deg,#fff8ee,#ffecd2);border-radius:20px;padding:24px 28px;min-width:340px;max-width:440px;box-shadow:0 8px 30px rgba(0,0,0,0.25);text-align:center;border:3px solid #f9ca24;">
+    <h2 style="font-size:22px;color:#e8783a;text-shadow:0 2px 0 #c45a20;">📅 TODAY'S BEST</h2>
+    <div id="daily-date" style="font-size:12px;color:#8d6e3f;margin-bottom:8px;"></div>
+    <div id="daily-scores" style="margin:8px 0;"></div>
+    <button class="shop-close-btn" id="daily-close">Close</button>
   </div>
 </div>
 
@@ -2177,6 +2230,14 @@ function buildEnvironment(mapId) {
   // Update map badge
   const def = MAP_DEFS.find(m => m.id === mapId);
   mapBadge.innerHTML = `<span class="hud-pill" style="font-size:12px;padding:2px 10px;">${def.icon} ${def.name}</span>`;
+  // Re-apply night mode if active
+  if (nightMode) {
+    scene.background = new THREE.Color(0x0a0a2e);
+    scene.fog = new THREE.Fog(0x0a0a2e, 25, 55);
+    renderer.setClearColor(0x0a0a2e);
+    ambientLight.color.set(0x2020aa); ambientLight.intensity = 0.3;
+    dirLight.color.set(0x4444ff); dirLight.intensity = 0.6;
+  }
 }
 
 // ===== SNAKE — Google Snake style =====
@@ -2281,6 +2342,13 @@ function getBodyMesh(poolIdx) {
 }
 
 // ===== GAME STATE =====
+// New feature state (declared early to avoid TDZ issues)
+let nightMode = false;
+let isRecording = false;
+let replayData = [];
+let speedrunTimer = 0;
+let speedrunInterval = null;
+
 let snake, dir, nextDir, food, foodType, score, running, gameOver, speed;
 let runCoins, runFoodCounts, runStartTime, runMaxLength, runFoodTotal, extraLivesLeft;
 let lastTickTime = 0;
@@ -2413,6 +2481,13 @@ function spawnFloatingText(text, color, worldPos) {
 
 function handleDeath() {
   gameOver = true; running = false;
+  isRecording = false;
+  // Daily high score
+  addDailyScore(score, gameMode);
+  // Game over particles
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  spawnParticles(cx, cy, ['#ff4444','#ff6644','#ff8844','#ffaa44'], 25);
+  spawnEmojiParticles(cx, cy, ['💀','💥','😵','⭐'], 6);
   const runTime = runStartTime ? ((Date.now() - runStartTime) / 1000) : 0;
   wallet += runCoins;
   // Update stats
@@ -2454,8 +2529,9 @@ function gameTick() {
   }
   const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
   const ghostActive = isPowerupActive('ghost');
+  const wrapMode = ghostActive || gameMode === 'endless';
   let coll;
-  if (ghostActive) {
+  if (wrapMode) {
     head.x = (head.x + COLS) % COLS;
     head.y = (head.y + ROWS) % ROWS;
     coll = snake.some(s => s.x === head.x && s.y === head.y);
@@ -2498,6 +2574,15 @@ function gameTick() {
       runMaxLength = Math.max(runMaxLength, snake.length);
       sessionProgress.length = runMaxLength;
       spawnFloatingText(`${ft.emoji} +${sg}  🪙${cg}`, '#fff', gridToWorld(head.x, head.y));
+      // Fruit particles
+      {
+        const wp = gridToWorld(head.x, head.y);
+        const v = new THREE.Vector3(wp.x, 0.5, wp.z);
+        v.project(fpvMode ? fpvCamera : camera);
+        const sx = (v.x * 0.5 + 0.5) * window.innerWidth;
+        const sy = (-v.y * 0.5 + 0.5) * window.innerHeight;
+        spawnParticles(sx, sy, ['#ffee44','#ff69b4','#44ff44','#44ddff','#ff8844'], 12);
+      }
       // Remove eaten food
       if (cf.mesh) scene.remove(cf.mesh);
       classicFoods.splice(fi, 1);
@@ -2536,6 +2621,8 @@ function gameTick() {
     }
   }
   updateHUD();
+  // Record frame for replay
+  recordFrame();
 }
 
 // ===== CAMERA =====
@@ -2950,6 +3037,20 @@ document.getElementById('go-mode-cube').addEventListener('click', () => {
   gameoverOverlay.classList.remove('visible');
   initCube();
 });
+document.getElementById('go-mode-endless').addEventListener('click', () => {
+  document.querySelectorAll('#mode-selector .candy-btn').forEach(b => b.classList.remove('mode-active'));
+  document.getElementById('btn-endless').classList.add('mode-active');
+  initEndless();
+});
+document.getElementById('go-mode-speedrun').addEventListener('click', () => {
+  document.querySelectorAll('#mode-selector .candy-btn').forEach(b => b.classList.remove('mode-active'));
+  document.getElementById('btn-speedrun').classList.add('mode-active');
+  initSpeedrun();
+});
+document.getElementById('btn-open-daily').addEventListener('click', () => {
+  gameoverOverlay.classList.remove('visible');
+  openDailyScores();
+});
 document.getElementById('shop-close').addEventListener('click', () => closeShop());
 document.getElementById('mapshop-close').addEventListener('click', () => closeMapShop());
 document.getElementById('skinshop-close').addEventListener('click', () => closeSkinShop());
@@ -3065,8 +3166,14 @@ document.addEventListener('keydown', e => {
       cubeDir = { dlx: nd.x, dly: -nd.y };
     } else {
       const testHead = { x: snake[0].x + nd.x, y: snake[0].y + nd.y };
-      const wouldCollide = testHead.x < 0 || testHead.x >= getGridCols() || testHead.y < 0 || testHead.y >= getGridRows() ||
-        snake.some(s => s.x === testHead.x && s.y === testHead.y);
+      if (gameMode === 'endless') {
+        testHead.x = (testHead.x + getGridCols()) % getGridCols();
+        testHead.y = (testHead.y + getGridRows()) % getGridRows();
+      }
+      const wouldCollide = gameMode === 'endless'
+        ? snake.some(s => s.x === testHead.x && s.y === testHead.y)
+        : (testHead.x < 0 || testHead.x >= getGridCols() || testHead.y < 0 || testHead.y >= getGridRows() ||
+           snake.some(s => s.x === testHead.x && s.y === testHead.y));
       if (wouldCollide) return;
     }
 
@@ -3076,6 +3183,10 @@ document.addEventListener('keydown', e => {
     runStartTime = Date.now();
     lastTickTime = performance.now();
     msgEl.textContent = '';
+    // Start recording for replay
+    isRecording = true; replayData = [];
+    // Start speedrun timer
+    if (gameMode === 'speedrun') startSpeedrunTimer();
     // Hide menu UI during gameplay (keep cam-indicator visible)
     document.getElementById('map-badge').style.display = 'none';
     document.getElementById('cheat-bar').style.display = 'none';
@@ -4766,6 +4877,285 @@ if (savedUser && localStorage.getItem('snakeGame_user_' + savedUser)) {
   // Temporarily skip login, play as guest automatically
   playAsGuest();
 }
+
+// ===== ENDLESS MODE =====
+function initEndless() {
+  cleanupRoyale();
+  if (cubeActive) cleanupCubeMode();
+  gameMode = 'endless';
+  buildEnvironment(currentMap);
+  snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+  prevSnake = snake.map(s => ({ ...s }));
+  tickProgress = 1;
+  dir = { x: 1, y: 0 }; nextDir = { x: 0, y: 0 }; inputQueue = [];
+  score = 0; running = false; gameOver = false;
+  speed = getStartSpeed(); lastTickTime = 0;
+  runCoins = 0; runFoodCounts = {}; FOOD_TYPES.forEach(ft => runFoodCounts[ft.name] = 0);
+  runFoodTotal = 0; runMaxLength = snake.length;
+  runStartTime = null; extraLivesLeft = upgradeLevels.life;
+  lastFoodTypeIndex = -1;
+  activePowerups = {}; shieldActive = false;
+  clearPowerupMesh(); spawnedPowerup = null;
+  powerupLifeTimer = 0; powerupSpawnTimer = 0; renderPowerupBar();
+  clearAllClassicFood();
+  sessionProgress = { fruitsEaten:0, score:0, survivalTime:0, length:0, coinsEarned:0, mangosEaten:0 };
+  collectedPowerupTypes = new Set();
+  document.querySelector('.go-banner').textContent = 'GAME OVER';
+  document.getElementById('speedrun-hud').style.display = 'none';
+  updateHUD(); msgEl.textContent = '♾️ Endless — Walls wrap! Press arrow to start';
+  gameoverOverlay.classList.remove('visible');
+  document.getElementById('map-badge').style.display = '';
+  document.getElementById('cheat-bar').style.display = '';
+  document.getElementById('mode-selector').style.display = '';
+  document.getElementById('cube-back-bar').style.display = 'none';
+  camera.position.set(0, 16, 14); camera.up.set(0, 1, 0);
+  orbitControls.maxDistance = 45;
+  const sc2 = dirLight.shadow.camera;
+  sc2.left = -18; sc2.right = 18; sc2.top = 18; sc2.bottom = -18; sc2.updateProjectionMatrix();
+  placeFood(); syncScene();
+}
+
+document.getElementById('btn-endless').addEventListener('click', () => {
+  document.querySelectorAll('#mode-selector .candy-btn').forEach(b => b.classList.remove('mode-active'));
+  document.getElementById('btn-endless').classList.add('mode-active');
+  initEndless();
+});
+
+// ===== SPEED RUN MODE =====
+const SPEEDRUN_DURATION = 60; // seconds
+
+function initSpeedrun() {
+  cleanupRoyale();
+  if (cubeActive) cleanupCubeMode();
+  gameMode = 'speedrun';
+  buildEnvironment(currentMap);
+  snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+  prevSnake = snake.map(s => ({ ...s }));
+  tickProgress = 1;
+  dir = { x: 1, y: 0 }; nextDir = { x: 0, y: 0 }; inputQueue = [];
+  score = 0; running = false; gameOver = false;
+  speed = getStartSpeed(); lastTickTime = 0;
+  runCoins = 0; runFoodCounts = {}; FOOD_TYPES.forEach(ft => runFoodCounts[ft.name] = 0);
+  runFoodTotal = 0; runMaxLength = snake.length;
+  runStartTime = null; extraLivesLeft = upgradeLevels.life;
+  lastFoodTypeIndex = -1;
+  activePowerups = {}; shieldActive = false;
+  clearPowerupMesh(); spawnedPowerup = null;
+  powerupLifeTimer = 0; powerupSpawnTimer = 0; renderPowerupBar();
+  clearAllClassicFood();
+  sessionProgress = { fruitsEaten:0, score:0, survivalTime:0, length:0, coinsEarned:0, mangosEaten:0 };
+  collectedPowerupTypes = new Set();
+  document.querySelector('.go-banner').textContent = 'GAME OVER';
+  speedrunTimer = SPEEDRUN_DURATION;
+  document.getElementById('speedrun-hud').style.display = '';
+  document.getElementById('speedrun-timer').textContent = '⏱️ ' + SPEEDRUN_DURATION + 's';
+  if (speedrunInterval) clearInterval(speedrunInterval);
+  updateHUD(); msgEl.textContent = '⏱️ Speed Run — Score max in 60s! Press arrow to start';
+  gameoverOverlay.classList.remove('visible');
+  document.getElementById('map-badge').style.display = '';
+  document.getElementById('cheat-bar').style.display = '';
+  document.getElementById('mode-selector').style.display = '';
+  document.getElementById('cube-back-bar').style.display = 'none';
+  camera.position.set(0, 16, 14); camera.up.set(0, 1, 0);
+  orbitControls.maxDistance = 45;
+  const sc2 = dirLight.shadow.camera;
+  sc2.left = -18; sc2.right = 18; sc2.top = 18; sc2.bottom = -18; sc2.updateProjectionMatrix();
+  placeFood(); syncScene();
+}
+
+function startSpeedrunTimer() {
+  if (speedrunInterval) clearInterval(speedrunInterval);
+  speedrunInterval = setInterval(() => {
+    if (!running || gameOver || gameMode !== 'speedrun') { clearInterval(speedrunInterval); return; }
+    speedrunTimer--;
+    const el = document.getElementById('speedrun-timer');
+    el.textContent = '⏱️ ' + speedrunTimer + 's';
+    if (speedrunTimer <= 10) el.style.background = 'rgba(255,40,40,0.95)';
+    if (speedrunTimer <= 0) {
+      clearInterval(speedrunInterval);
+      document.querySelector('.go-banner').textContent = "TIME'S UP!";
+      handleDeath();
+    }
+  }, 1000);
+}
+
+document.getElementById('btn-speedrun').addEventListener('click', () => {
+  document.querySelectorAll('#mode-selector .candy-btn').forEach(b => b.classList.remove('mode-active'));
+  document.getElementById('btn-speedrun').classList.add('mode-active');
+  initSpeedrun();
+});
+
+// ===== DAILY HIGH SCORES =====
+function getDailyKey() {
+  const d = new Date();
+  return 'daily_' + d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function addDailyScore(sc, mode) {
+  const key = getDailyKey();
+  const data = JSON.parse(localStorage.getItem(key) || '[]');
+  data.push({ score: sc, mode: mode, time: Date.now() });
+  data.sort((a, b) => b.score - a.score);
+  if (data.length > 10) data.length = 10;
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function openDailyScores() {
+  const key = getDailyKey();
+  const data = JSON.parse(localStorage.getItem(key) || '[]');
+  const overlay = document.getElementById('daily-overlay');
+  document.getElementById('daily-date').textContent = new Date().toLocaleDateString('de-DE', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const container = document.getElementById('daily-scores');
+  if (data.length === 0) {
+    container.innerHTML = '<div style="padding:12px;color:#8d6e3f;">Noch keine Scores heute!</div>';
+  } else {
+    container.innerHTML = data.map((d, i) =>
+      `<div style="display:flex;justify-content:space-between;padding:6px 12px;background:${i%2?'rgba(255,255,255,0.3)':'rgba(255,255,255,0.6)'};border-radius:8px;margin:3px 0;font-weight:700;font-size:14px;">
+        <span>${i===0?'👑':i===1?'🥈':i===2?'🥉':'#'+(i+1)} ${d.score.toLocaleString()} pts</span>
+        <span style="color:#8d6e3f;font-size:12px;">${d.mode}</span>
+      </div>`
+    ).join('');
+  }
+  overlay.style.display = 'flex';
+}
+
+document.getElementById('daily-close').addEventListener('click', () => {
+  document.getElementById('daily-overlay').style.display = 'none';
+});
+
+// ===== SHARE SCORE =====
+document.getElementById('btn-share-score').addEventListener('click', () => {
+  const text = `🐍 Snake 3D — I scored ${score.toLocaleString()} points in ${gameMode} mode! Can you beat me?\n🎮 Play at snake3d.online`;
+  if (navigator.share) {
+    navigator.share({ title: 'Snake 3D Score', text: text, url: 'https://snake3d.online' }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('btn-share-score');
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => { btn.textContent = '📤 Share'; }, 2000);
+    }).catch(() => {});
+  }
+});
+
+// ===== REPLAY SYSTEM =====
+let isReplaying = false;
+
+function recordFrame() {
+  if (!isRecording || isReplaying) return;
+  replayData.push({
+    snake: snake.map(s => ({ ...s })),
+    dir: { ...dir },
+    score: score
+  });
+}
+
+function startReplay() {
+  if (replayData.length === 0) return;
+  isReplaying = true;
+  gameoverOverlay.classList.remove('visible');
+  msgEl.textContent = '🔁 Replaying...';
+  let frame = 0;
+  const replaySpeed = Math.max(30, 1000 / (replayData.length / 10));
+  const interval = setInterval(() => {
+    if (frame >= replayData.length) {
+      clearInterval(interval);
+      isReplaying = false;
+      msgEl.textContent = '🔁 Replay done!';
+      setTimeout(() => { gameoverOverlay.classList.add('visible'); }, 1000);
+      return;
+    }
+    const f = replayData[frame];
+    snake = f.snake;
+    dir = f.dir;
+    scoreEl.textContent = '🏆 ' + f.score;
+    syncScene();
+    frame++;
+  }, replaySpeed);
+}
+
+document.getElementById('btn-replay').addEventListener('click', startReplay);
+
+// ===== NIGHT MODE =====
+const nightBtn = document.getElementById('night-btn');
+
+// Store original lighting values
+const originalLighting = {
+  ambientColor: 0xfff5e0, ambientIntensity: 0.75,
+  dirColor: 0xffffff, dirIntensity: 1.3
+};
+
+function toggleNightMode() {
+  nightMode = !nightMode;
+  document.body.classList.toggle('night-mode', nightMode);
+  nightBtn.textContent = nightMode ? '☀️ Day (N)' : '🌙 Night (N)';
+
+  if (nightMode) {
+    scene.background = new THREE.Color(0x0a0a2e);
+    scene.fog = new THREE.Fog(0x0a0a2e, 25, 55);
+    renderer.setClearColor(0x0a0a2e);
+    ambientLight.color.set(0x2020aa); ambientLight.intensity = 0.3;
+    dirLight.color.set(0x4444ff); dirLight.intensity = 0.6;
+    // Neon snake glow
+    bodyMat.emissive.set(0x4444ff);
+    bodyMat.emissiveIntensity = 0.8;
+  } else {
+    // Restore based on current map
+    buildEnvironment(currentMap);
+    updateSnakeMaterials();
+  }
+}
+
+nightBtn.addEventListener('click', toggleNightMode);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'n' || e.key === 'N') {
+    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+    toggleNightMode();
+  }
+});
+
+// ===== PARTICLE EFFECTS =====
+function spawnParticles(screenX, screenY, colors, count) {
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    const size = 4 + Math.random() * 8;
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 40 + Math.random() * 80;
+    el.style.cssText = `left:${screenX}px;top:${screenY}px;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};--px:${Math.cos(angle)*dist}px;--py:${Math.sin(angle)*dist}px;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 800);
+  }
+}
+
+function spawnEmojiParticles(screenX, screenY, emojis, count) {
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'particle-burst';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 50 + Math.random() * 100;
+    const rot = (Math.random() - 0.5) * 360;
+    el.style.cssText = `left:${screenX}px;top:${screenY}px;--px:${Math.cos(angle)*dist}px;--py:${Math.sin(angle)*dist}px;--rot:${rot}deg;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+}
+
+function getScreenPos(worldX, worldZ) {
+  const v = new THREE.Vector3(worldX, 0.5, worldZ);
+  v.project(fpvMode ? fpvCamera : camera);
+  return {
+    x: (v.x * 0.5 + 0.5) * window.innerWidth,
+    y: (-v.y * 0.5 + 0.5) * window.innerHeight
+  };
+}
+
+
+// Handle play-again for new modes
+document.getElementById('btn-play-again').addEventListener('click', () => {
+  if (gameMode === 'endless') { initEndless(); return; }
+  if (gameMode === 'speedrun') { initSpeedrun(); return; }
+}, true);
 
 // ===== BUG REPORT TOOL =====
 // Setup: Create a free form at https://formspree.io, then replace YOUR_FORM_ID below with your form ID.
