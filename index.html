@@ -12,9 +12,9 @@
 <title>Snake 3D - Free Online 3D Snake Game | snake3d.online</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1899513491544813" crossorigin="anonymous"></script>
 <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION
-<script src="https://5gvci.com/act/files/tag.min.js?z=10710453" data-cfasync="false" async></script>
-<script>(function(s){s.dataset.zone='10710458',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<script src="https://pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73ddcf3f97353491f.js"></script>
+Monetag Push: 5gvci.com/act/files/tag.min.js?z=10710453
+Monetag In-Page: nap5k.com/tag.min.js zone=10710458
+Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73ddcf3f97353491f.js
 -->
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap');
@@ -849,12 +849,7 @@
 
 <!-- Game Over -->
 <div id="gameover-overlay">
-  <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION
-  <div class="ad-banner-side left" id="go-ad-left">
-    <script>atOptions={'key':'3306d19d042fdaa38a6dfac27962817e','format':'iframe','height':300,'width':160,'params':{}};</script>
-    <script src="https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js"></script>
-  </div>
-  -->
+  <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION: Adsterra left banner ad -->
   <div id="gameover-panel">
     <div class="go-banner">GAME OVER</div>
     <div class="stars-row" id="stars-row"></div>
@@ -879,12 +874,7 @@
       <button class="candy-btn btn-shop-go" id="go-mode-royale" style="font-size:13px;">⚔️ Play Royale</button>
     </div>
   </div>
-  <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION
-  <div class="ad-banner-side right" id="go-ad-right">
-    <script>atOptions={'key':'3306d19d042fdaa38a6dfac27962817e','format':'iframe','height':300,'width':160,'params':{}};</script>
-    <script src="https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js"></script>
-  </div>
-  -->
+  <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION: Adsterra right banner ad -->
 </div>
 
 <!-- Shop -->
@@ -2594,22 +2584,23 @@ function showRewardedAd(callback) {
     `</div>`;
   adOverlay.classList.add('visible');
 
+  // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION
   // Load real Adsterra banner into the slot
-  try {
-    const slot = document.getElementById('rewarded-ad-slot');
-    window.atOptions = { key: '3306d19d042fdaa38a6dfac27962817e', format: 'iframe', height: 300, width: 160, params: {} };
-    const adScript = document.createElement('script');
-    adScript.src = 'https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js';
-    slot.appendChild(adScript);
-  } catch(e) {}
+  // try {
+  //   const slot = document.getElementById('rewarded-ad-slot');
+  //   window.atOptions = { key: '3306d19d042fdaa38a6dfac27962817e', format: 'iframe', height: 300, width: 160, params: {} };
+  //   const adScript = document.createElement('script');
+  //   adScript.src = 'https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js';
+  //   slot.appendChild(adScript);
+  // } catch(e) {}
 
   // Also trigger Monetag Vignette
-  try {
-    const s = document.createElement('script');
-    s.dataset.zone = '10710460';
-    s.src = 'https://gizokraijaw.net/vignette.min.js';
-    document.body.appendChild(s);
-  } catch(e) {}
+  // try {
+  //   const s = document.createElement('script');
+  //   s.dataset.zone = '10710460';
+  //   s.src = 'https://gizokraijaw.net/vignette.min.js';
+  //   document.body.appendChild(s);
+  // } catch(e) {}
 
   const countdownEl = document.getElementById('ad-countdown');
   const closeBtn = document.getElementById('ad-close-btn');
