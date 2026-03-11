@@ -601,6 +601,45 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
   .login-toggle span { color:#e8783a; font-weight:700; text-decoration:underline; }
   .login-error { color:#ff4444; font-size:13px; font-weight:700; min-height:18px; margin:4px 0; }
 
+  /* ===== BUG REPORT BUTTON ===== */
+  #bugreport-btn {
+    position:fixed; bottom:14px; left:14px; z-index:15; pointer-events:auto;
+    background:rgba(255,255,255,0.85); border:2px solid rgba(255,255,255,0.9);
+    border-radius:20px; padding:4px 14px; font-size:16px; font-weight:700;
+    font-family:'Baloo 2',sans-serif; color:#5a3a1a; cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,0.12); transition:transform 0.15s,box-shadow 0.15s;
+  }
+  #bugreport-btn:hover { transform:scale(1.08); background:rgba(255,255,255,1); }
+
+  /* ===== BUG REPORT OVERLAY ===== */
+  #bugreport-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
+    z-index:500; justify-content:center; align-items:center; backdrop-filter:blur(8px);
+  }
+  #bugreport-overlay.visible { display:flex; animation:fadeIn 0.4s ease; }
+  #bugreport-panel {
+    background:linear-gradient(145deg,#fff8ee,#ffecd2);
+    border-radius:24px; padding:32px 36px; min-width:320px; max-width:400px; width:90%;
+    box-shadow:0 12px 40px rgba(0,0,0,0.3); text-align:center; border:3px solid #f9ca24;
+  }
+  #bugreport-panel h2 { font-size:24px; color:#e8783a; margin-bottom:4px;
+    text-shadow:0 2px 0 #c45a20; }
+  #bugreport-panel .br-subtitle { font-size:13px; color:#8d6e3f; margin-bottom:16px; }
+  #bugreport-panel select,
+  #bugreport-panel textarea {
+    display:block; width:100%; padding:10px 14px; margin:8px 0; border-radius:14px;
+    border:2px solid #e0c89a; background:#fff; font-family:'Baloo 2',sans-serif;
+    font-size:15px; font-weight:600; color:#5a3a1a; outline:none;
+  }
+  #bugreport-panel select:focus,
+  #bugreport-panel textarea:focus { border-color:#f9ca24; box-shadow:0 0 8px rgba(249,202,36,0.3); }
+  #bugreport-panel textarea { resize:vertical; min-height:100px; }
+  .br-buttons { display:flex; gap:8px; margin-top:12px; }
+  .br-buttons button { flex:1; }
+  #bugreport-status {
+    font-size:14px; font-weight:700; min-height:20px; margin-top:8px;
+  }
+
   /* ===== PROFILE BAR ===== */
   #profile-bar {
     position:fixed; top:8px; right:12px; display:flex; gap:6px;
@@ -807,7 +846,8 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
 <!-- Profile Bar -->
 <div id="profile-bar">
   <span class="hud-pill" id="profile-pill">👤 Guest</span>
-  <span class="hud-pill" id="logout-btn">🚪</span>
+  <span class="hud-pill" id="login-btn" style="cursor:pointer;background:linear-gradient(135deg,rgba(249,202,36,0.9),rgba(232,120,58,0.9));color:#fff;font-weight:700;">🔑 Log in to save</span>
+  <span class="hud-pill" id="logout-btn" style="display:none;">🚪</span>
 </div>
 
 <div id="hud">
@@ -832,8 +872,12 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
   <div id="mode-selector">
     <button class="candy-btn btn-retry mode-active" id="btn-classic">🐍 Classic</button>
     <button class="candy-btn btn-shop-go" id="btn-royale">⚔️ Snake Royale</button>
+    <button class="candy-btn btn-maps-go" id="btn-cube">🧊 Cube</button>
   </div>
   <div id="map-badge" style="margin-top:4px;"><span class="hud-pill" style="font-size:12px;padding:2px 10px;">🌿 Classic Meadow</span></div>
+  <div id="cube-back-bar" style="display:none;margin-top:4px;pointer-events:auto;">
+    <button class="candy-btn btn-retry" id="btn-cube-back" style="font-size:13px;padding:5px 16px;">⬅ Back to Menu</button>
+  </div>
   <div id="message">Press any arrow key to start</div>
   <div id="cheat-bar" style="margin-top:8px;pointer-events:auto;">
     <input type="text" id="cheat-input" placeholder="Enter code..." spellcheck="false" autocomplete="off"
@@ -872,6 +916,7 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     <div style="display:flex;gap:8px;margin-top:8px;justify-content:center;">
       <button class="candy-btn btn-retry" id="go-mode-classic" style="font-size:13px;">🐍 Play Classic</button>
       <button class="candy-btn btn-shop-go" id="go-mode-royale" style="font-size:13px;">⚔️ Play Royale</button>
+      <button class="candy-btn btn-maps-go" id="go-mode-cube" style="font-size:13px;">🧊 Play Cube</button>
     </div>
   </div>
   <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION: Adsterra right banner ad -->
@@ -928,6 +973,28 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
       <div class="login-toggle">Have an account? <span id="show-login">Login</span></div>
     </div>
     <button class="login-btn guest" id="guest-btn">Play as Guest</button>
+  </div>
+</div>
+
+<!-- Bug Report Button -->
+<div id="bugreport-btn" title="Bug melden">🐛 Report Bug</div>
+
+<!-- Bug Report Overlay -->
+<div id="bugreport-overlay">
+  <div id="bugreport-panel">
+    <h2>🐛 Bug Report</h2>
+    <div class="br-subtitle">Hilf uns, das Spiel zu verbessern!</div>
+    <select id="br-type">
+      <option value="Bug">Bug</option>
+      <option value="Vorschlag">Vorschlag</option>
+      <option value="Sonstiges">Sonstiges</option>
+    </select>
+    <textarea id="br-description" placeholder="Beschreibe das Problem oder deinen Vorschlag..." required></textarea>
+    <div class="br-buttons">
+      <button class="login-btn primary" id="br-submit">Senden</button>
+      <button class="login-btn secondary" id="br-cancel">Abbrechen</button>
+    </div>
+    <div id="bugreport-status"></div>
   </div>
 </div>
 
@@ -1135,6 +1202,9 @@ function doLogin(username) {
   loadGame(username);
   profilePill.textContent = '👤 ' + username;
   loginOverlay.classList.remove('visible');
+  // Show logout, hide login button
+  document.getElementById('login-btn').style.display = 'none';
+  document.getElementById('logout-btn').style.display = '';
 }
 
 function doLogout() {
@@ -1151,7 +1221,9 @@ function doLogout() {
   dailyChallengeData = { ...getDefaultSaveData('').dailyChallenges };
   tutorialDone = false;
   profilePill.textContent = '👤 Guest';
-  showLoginScreen();
+  // Show login button, hide logout
+  document.getElementById('login-btn').style.display = '';
+  document.getElementById('logout-btn').style.display = 'none';
 }
 
 function showLoginScreen() {
@@ -2226,8 +2298,9 @@ function getCoinBonus() { return upgradeLevels.magnet; }
 function getScoreMult() { return 1 + upgradeLevels.mult * 0.5; }
 
 function init() {
-  // ALWAYS clean up royale if any royale state exists
+  // ALWAYS clean up other modes
   cleanupRoyale();
+  if (cubeActive) cleanupCubeMode();
   gameMode = 'classic';
   // ALWAYS rebuild classic environment (fixes royale→classic ground/fence bug)
   buildEnvironment(currentMap);
@@ -2263,8 +2336,10 @@ function init() {
   document.getElementById('map-badge').style.display = '';
   document.getElementById('cheat-bar').style.display = '';
   document.getElementById('mode-selector').style.display = '';
+  document.getElementById('cube-back-bar').style.display = 'none';
   // Reset camera for classic
   camera.position.set(0, 16, 14);
+  camera.up.set(0, 1, 0);
   orbitControls.maxDistance = 45;
   const sc2 = dirLight.shadow.camera;
   sc2.left = -18; sc2.right = 18; sc2.top = 18; sc2.bottom = -18;
@@ -2518,7 +2593,7 @@ function syncScene() {
     const hp = lerpGridPos(0, t);
     headGroup.position.set(hp.x, CELL * 0.3, hp.z);
     const d = getHeadDir3D();
-    headGroup.rotation.y = Math.atan2(d.dx, d.dz) + Math.PI;
+    headGroup.rotation.set(0, Math.atan2(d.dx, d.dz) + Math.PI, 0);
     // Update head color from skin
     const headElapsed = clock ? clock.getElapsedTime() : 0;
     const headCol = getSkinColor(0, total, headElapsed);
@@ -2846,7 +2921,7 @@ function closeAllOverlays() {
 }
 
 document.getElementById('btn-play-again').addEventListener('click', () => {
-  if (gameMode === 'royale') { initRoyale(); } else { init(); }
+  if (gameMode === 'royale') { initRoyale(); } else if (gameMode === 'cube') { initCube(); } else { init(); }
 });
 document.getElementById('btn-open-shop').addEventListener('click', () => openShop());
 document.getElementById('btn-open-maps-go').addEventListener('click', () => openMapShop());
@@ -2856,16 +2931,24 @@ document.getElementById('btn-open-lb-go').addEventListener('click', () => openLe
 document.getElementById('btn-open-ch-go').addEventListener('click', () => openChallenges());
 document.getElementById('btn-open-ach-go').addEventListener('click', () => openAchievements());
 document.getElementById('go-mode-classic').addEventListener('click', () => {
+  cleanupCubeMode();
   document.getElementById('btn-classic').classList.add('mode-active');
   document.getElementById('btn-royale').classList.remove('mode-active');
+  document.getElementById('btn-cube').classList.remove('mode-active');
   init();
 });
 document.getElementById('go-mode-royale').addEventListener('click', () => {
+  cleanupCubeMode();
   document.getElementById('btn-royale').classList.add('mode-active');
   document.getElementById('btn-classic').classList.remove('mode-active');
+  document.getElementById('btn-cube').classList.remove('mode-active');
   clearAllClassicFood();
   gameoverOverlay.classList.remove('visible');
   initRoyale();
+});
+document.getElementById('go-mode-cube').addEventListener('click', () => {
+  gameoverOverlay.classList.remove('visible');
+  initCube();
 });
 document.getElementById('shop-close').addEventListener('click', () => closeShop());
 document.getElementById('mapshop-close').addEventListener('click', () => closeMapShop());
@@ -2879,15 +2962,30 @@ document.getElementById('skin-btn').addEventListener('click', () => {
 
 // Mode selector
 document.getElementById('btn-classic').addEventListener('click', () => {
+  cleanupCubeMode();
   document.getElementById('btn-classic').classList.add('mode-active');
   document.getElementById('btn-royale').classList.remove('mode-active');
+  document.getElementById('btn-cube').classList.remove('mode-active');
   init();
 });
 document.getElementById('btn-royale').addEventListener('click', () => {
+  cleanupCubeMode();
   document.getElementById('btn-royale').classList.add('mode-active');
   document.getElementById('btn-classic').classList.remove('mode-active');
+  document.getElementById('btn-cube').classList.remove('mode-active');
   clearAllClassicFood();
   initRoyale();
+});
+document.getElementById('btn-cube').addEventListener('click', () => {
+  initCube();
+});
+document.getElementById('btn-cube-back').addEventListener('click', () => {
+  cleanupCubeMode();
+  document.getElementById('btn-classic').classList.add('mode-active');
+  document.getElementById('btn-royale').classList.remove('mode-active');
+  document.getElementById('btn-cube').classList.remove('mode-active');
+  document.getElementById('cube-back-bar').style.display = 'none';
+  init();
 });
 
 // ===== INPUT =====
@@ -2954,10 +3052,23 @@ document.addEventListener('keydown', e => {
   if (running && effDir.x + nd.x === 0 && effDir.y + nd.y === 0) return;
 
   if (!running && !gameOver) {
-    const testHead = { x: snake[0].x + nd.x, y: snake[0].y + nd.y };
-    const wouldCollide = testHead.x < 0 || testHead.x >= getGridCols() || testHead.y < 0 || testHead.y >= getGridRows() ||
-      snake.some(s => s.x === testHead.x && s.y === testHead.y);
-    if (wouldCollide) return;
+    if (gameMode === 'cube') {
+      // Cube mode: no wall collision possible (wraps faces), just check self
+      const head = cubeSnake[0];
+      let nlx = head.lx + nd.x, nly = head.ly + nd.y;
+      let nface = head.face;
+      if (nlx < 0 || nlx >= CUBE_FACE_SIZE || nly < 0 || nly >= CUBE_FACE_SIZE) {
+        const r = cubeFaceTransition(head.face, nlx, nly, nd.x, nd.y);
+        nface = r.face; nlx = r.lx; nly = r.ly;
+      }
+      if (cubeSnake.some(s => s.face === nface && s.lx === nlx && s.ly === nly)) return;
+      cubeDir = { dlx: nd.x, dly: -nd.y };
+    } else {
+      const testHead = { x: snake[0].x + nd.x, y: snake[0].y + nd.y };
+      const wouldCollide = testHead.x < 0 || testHead.x >= getGridCols() || testHead.y < 0 || testHead.y >= getGridRows() ||
+        snake.some(s => s.x === testHead.x && s.y === testHead.y);
+      if (wouldCollide) return;
+    }
 
     running = true;
     dir = { ...nd };
@@ -2969,7 +3080,7 @@ document.addEventListener('keydown', e => {
     document.getElementById('map-badge').style.display = 'none';
     document.getElementById('cheat-bar').style.display = 'none';
     document.getElementById('mode-selector').style.display = 'none';
-    syncScene();
+    if (gameMode === 'cube') syncCubeScene(); else syncScene();
     return;
   }
 
@@ -3071,6 +3182,8 @@ document.getElementById('show-login').addEventListener('click', () => {
   document.getElementById('login-form').style.display = '';
 });
 document.getElementById('guest-btn').addEventListener('click', () => playAsGuest());
+document.getElementById('login-btn').addEventListener('click', () => showLoginScreen());
+document.getElementById('logout-btn').addEventListener('click', () => doLogout());
 document.getElementById('logout-btn').addEventListener('click', () => doLogout());
 // Enter key in login/register fields
 document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') { e.stopPropagation(); document.getElementById('login-submit').click(); }});
@@ -3757,6 +3870,498 @@ function cleanupRoyale() {
   clearPowerupMesh(); spawnedPowerup = null;
 }
 
+// ===== CUBE MODE =====
+const CUBE_FACE_SIZE = 10;
+const CUBE_CELL = 1;
+const CUBE_H = (CUBE_FACE_SIZE * CUBE_CELL) / 2;
+const CUBE_N = CUBE_FACE_SIZE - 1;
+
+// Face definitions: origin (center of face in 3D), right axis, up axis
+// Face 0: Top(+Y), Face 1: Front(+Z), Face 2: Right(+X), Face 3: Back(-Z), Face 4: Left(-X), Face 5: Bottom(-Y)
+const CUBE_FACE_3D = [
+  { origin: [0, CUBE_H, 0],  right: [1,0,0],  up: [0,0,-1] },
+  { origin: [0, 0, CUBE_H],  right: [1,0,0],  up: [0,1,0]  },
+  { origin: [CUBE_H, 0, 0],  right: [0,0,-1], up: [0,1,0]  },
+  { origin: [0, 0, -CUBE_H], right: [-1,0,0], up: [0,1,0]  },
+  { origin: [-CUBE_H, 0, 0], right: [0,0,1],  up: [0,1,0]  },
+  { origin: [0, -CUBE_H, 0], right: [1,0,0],  up: [0,0,1]  },
+];
+
+const CUBE_FACE_COLORS = [0x88ccff, 0x88ff88, 0xff8888, 0xffff88, 0xff88ff, 0xffcc88];
+
+// Face adjacency: edge 0=up(ly>=N), 1=right(lx>=N), 2=down(ly<0), 3=left(lx<0)
+const N = CUBE_N;
+const CUBE_ADJ = [
+  // Face 0: Top  (right=[1,0,0], up=[0,0,-1])
+  [ { t:3, f:(lx,ly,dlx,dly)=>({lx:N-lx,ly:N,dlx:-dlx,dly:-dly}) },
+    { t:2, f:(lx,ly,dlx,dly)=>({lx:ly,ly:N,dlx:dly,dly:-dlx}) },
+    { t:1, f:(lx,ly,dlx,dly)=>({lx,ly:N,dlx,dly}) },
+    { t:4, f:(lx,ly,dlx,dly)=>({lx:N-ly,ly:N,dlx:-dly,dly:dlx}) } ],
+  // Face 1: Front  (right=[1,0,0], up=[0,1,0])
+  [ { t:0, f:(lx,ly,dlx,dly)=>({lx,ly:0,dlx,dly}) },
+    { t:2, f:(lx,ly,dlx,dly)=>({lx:0,ly,dlx,dly}) },
+    { t:5, f:(lx,ly,dlx,dly)=>({lx,ly:N,dlx,dly}) },
+    { t:4, f:(lx,ly,dlx,dly)=>({lx:N,ly,dlx,dly}) } ],
+  // Face 2: Right  (right=[0,0,-1], up=[0,1,0])
+  [ { t:0, f:(lx,ly,dlx,dly)=>({lx:N,ly:lx,dlx:-dly,dly:dlx}) },
+    { t:3, f:(lx,ly,dlx,dly)=>({lx:0,ly,dlx,dly}) },
+    { t:5, f:(lx,ly,dlx,dly)=>({lx:N,ly:N-lx,dlx:dly,dly:-dlx}) },
+    { t:1, f:(lx,ly,dlx,dly)=>({lx:N,ly,dlx,dly}) } ],
+  // Face 3: Back  (right=[-1,0,0], up=[0,1,0])
+  [ { t:0, f:(lx,ly,dlx,dly)=>({lx:N-lx,ly:N,dlx:-dlx,dly:-dly}) },
+    { t:4, f:(lx,ly,dlx,dly)=>({lx:0,ly,dlx,dly}) },
+    { t:5, f:(lx,ly,dlx,dly)=>({lx:N-lx,ly:0,dlx:-dlx,dly:-dly}) },
+    { t:2, f:(lx,ly,dlx,dly)=>({lx:N,ly,dlx,dly}) } ],
+  // Face 4: Left  (right=[0,0,1], up=[0,1,0])
+  [ { t:0, f:(lx,ly,dlx,dly)=>({lx:0,ly:N-lx,dlx:dly,dly:-dlx}) },
+    { t:1, f:(lx,ly,dlx,dly)=>({lx:0,ly,dlx,dly}) },
+    { t:5, f:(lx,ly,dlx,dly)=>({lx:0,ly:lx,dlx:-dly,dly:dlx}) },
+    { t:3, f:(lx,ly,dlx,dly)=>({lx:N,ly,dlx,dly}) } ],
+  // Face 5: Bottom  (right=[1,0,0], up=[0,0,1])
+  [ { t:1, f:(lx,ly,dlx,dly)=>({lx,ly:0,dlx,dly}) },
+    { t:2, f:(lx,ly,dlx,dly)=>({lx:N-ly,ly:0,dlx:-dly,dly:dlx}) },
+    { t:3, f:(lx,ly,dlx,dly)=>({lx:N-lx,ly:0,dlx:-dlx,dly:-dly}) },
+    { t:4, f:(lx,ly,dlx,dly)=>({lx:ly,ly:0,dlx:dly,dly:-dlx}) } ],
+];
+
+function cubeGridToWorld(face, lx, ly) {
+  const f = CUBE_FACE_3D[face];
+  const cx = (lx - (CUBE_FACE_SIZE - 1) / 2) * CUBE_CELL;
+  const cy = (ly - (CUBE_FACE_SIZE - 1) / 2) * CUBE_CELL;
+  return new THREE.Vector3(
+    f.origin[0] + cx * f.right[0] + cy * f.up[0],
+    f.origin[1] + cx * f.right[1] + cy * f.up[1],
+    f.origin[2] + cx * f.right[2] + cy * f.up[2]
+  );
+}
+
+function cubeFaceNormal(face) {
+  const o = CUBE_FACE_3D[face].origin;
+  return new THREE.Vector3(o[0], o[1], o[2]).normalize();
+}
+
+// Cube mode state
+let cubeSnake = [];
+let cubeDir = { dlx: 1, dly: 0 };
+let cubePrevSnake = [];
+let cubePrevDir = null;
+let cubeFoods = [];
+let cubeGroup = null;
+let cubeFoodMeshes = [];
+let cubeActive = false;
+let cubeCameraTarget = new THREE.Vector3(0, 0, CUBE_H * 3);
+let cubeCameraUp = new THREE.Vector3(0, 1, 0);
+let cubeSavedBg = null;
+
+function cubeFaceTransition(face, lx, ly, dlx, dly) {
+  let edge = -1;
+  if (ly >= CUBE_FACE_SIZE) edge = 0;
+  else if (lx >= CUBE_FACE_SIZE) edge = 1;
+  else if (ly < 0) edge = 2;
+  else if (lx < 0) edge = 3;
+  if (edge === -1) return { face, lx, ly, dlx, dly };
+  const adj = CUBE_ADJ[face][edge];
+  const r = adj.f(lx < 0 ? 0 : lx >= CUBE_FACE_SIZE ? N : lx, ly < 0 ? 0 : ly >= CUBE_FACE_SIZE ? N : ly, dlx, dly);
+  return { face: adj.t, lx: r.lx, ly: r.ly, dlx: r.dlx, dly: r.dly };
+}
+
+function isCubeCellOccupied(face, lx, ly) {
+  for (const s of cubeSnake) if (s.face === face && s.lx === lx && s.ly === ly) return true;
+  for (const f of cubeFoods) if (f.face === face && f.lx === lx && f.ly === ly) return true;
+  return false;
+}
+
+function spawnCubeFood() {
+  let attempts = 0;
+  while (attempts++ < 200) {
+    const face = Math.floor(Math.random() * 6);
+    const lx = Math.floor(Math.random() * CUBE_FACE_SIZE);
+    const ly = Math.floor(Math.random() * CUBE_FACE_SIZE);
+    if (!isCubeCellOccupied(face, lx, ly)) {
+      const ft = pickFoodType();
+      cubeFoods.push({ face, lx, ly, type: ft });
+      return;
+    }
+  }
+}
+
+function buildCubeScene() {
+  // Clean previous cube
+  if (cubeGroup) { scene.remove(cubeGroup); cubeGroup = null; }
+  for (const m of cubeFoodMeshes) { scene.remove(m); }
+  cubeFoodMeshes = [];
+
+  cubeGroup = new THREE.Group();
+
+  for (let face = 0; face < 6; face++) {
+    const f = CUBE_FACE_3D[face];
+    const normal = cubeFaceNormal(face);
+    const right = new THREE.Vector3(...f.right);
+    const up = new THREE.Vector3(...f.up);
+
+    // Semi-transparent face
+    const planeGeo = new THREE.PlaneGeometry(CUBE_FACE_SIZE * CUBE_CELL, CUBE_FACE_SIZE * CUBE_CELL);
+    const planeMat = new THREE.MeshStandardMaterial({
+      color: CUBE_FACE_COLORS[face], transparent: true, opacity: 0.12,
+      side: THREE.DoubleSide, roughness: 0.8, depthWrite: false,
+    });
+    const plane = new THREE.Mesh(planeGeo, planeMat);
+    plane.position.set(...f.origin);
+    const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+    plane.quaternion.copy(quat);
+    cubeGroup.add(plane);
+
+    // Grid lines
+    const lineMat = new THREE.LineBasicMaterial({ color: 0x445566, transparent: true, opacity: 0.4 });
+    const pts = [];
+    const hf = CUBE_FACE_SIZE / 2;
+    for (let i = 0; i <= CUBE_FACE_SIZE; i++) {
+      const off = (i - hf) * CUBE_CELL;
+      const hStart = new THREE.Vector3(...f.origin).add(right.clone().multiplyScalar(-hf * CUBE_CELL)).add(up.clone().multiplyScalar(off));
+      const hEnd = hStart.clone().add(right.clone().multiplyScalar(CUBE_FACE_SIZE * CUBE_CELL));
+      pts.push(hStart, hEnd);
+      const vStart = new THREE.Vector3(...f.origin).add(up.clone().multiplyScalar(-hf * CUBE_CELL)).add(right.clone().multiplyScalar(off));
+      const vEnd = vStart.clone().add(up.clone().multiplyScalar(CUBE_FACE_SIZE * CUBE_CELL));
+      pts.push(vStart, vEnd);
+    }
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+    cubeGroup.add(new THREE.LineSegments(lineGeo, lineMat));
+
+    // Subtle edge outlines for the cube
+    const edgePts = [];
+    const corners = [
+      new THREE.Vector3(...f.origin).add(right.clone().multiplyScalar(-hf)).add(up.clone().multiplyScalar(-hf)),
+      new THREE.Vector3(...f.origin).add(right.clone().multiplyScalar(hf)).add(up.clone().multiplyScalar(-hf)),
+      new THREE.Vector3(...f.origin).add(right.clone().multiplyScalar(hf)).add(up.clone().multiplyScalar(hf)),
+      new THREE.Vector3(...f.origin).add(right.clone().multiplyScalar(-hf)).add(up.clone().multiplyScalar(hf)),
+    ];
+    for (let i = 0; i < 4; i++) { edgePts.push(corners[i], corners[(i+1) % 4]); }
+    const edgeGeo = new THREE.BufferGeometry().setFromPoints(edgePts);
+    cubeGroup.add(new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({ color: 0x667788, opacity: 0.7, transparent: true })));
+  }
+
+  scene.add(cubeGroup);
+}
+
+function clearCubeScene() {
+  if (cubeGroup) { scene.remove(cubeGroup); cubeGroup = null; }
+  for (const m of cubeFoodMeshes) scene.remove(m);
+  cubeFoodMeshes = [];
+  cubeActive = false;
+}
+
+function getCubeFoodMesh(idx) {
+  if (idx < cubeFoodMeshes.length) { cubeFoodMeshes[idx].visible = true; return cubeFoodMeshes[idx]; }
+  const geo = new THREE.SphereGeometry(CUBE_CELL * 0.35, 10, 8);
+  const mat = new THREE.MeshStandardMaterial({ color: 0xff3b30, roughness: 0.25, metalness: 0.2, emissive: 0xaa1100, emissiveIntensity: 0.4 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.castShadow = true;
+  scene.add(mesh);
+  cubeFoodMeshes.push(mesh);
+  return mesh;
+}
+
+function initCube() {
+  // Cleanup other modes
+  cleanupRoyale();
+  clearAllClassicFood();
+  clearCubeScene();
+  clearEnvironment();
+
+  gameMode = 'cube';
+  cubeActive = true;
+
+  // Save and change background
+  cubeSavedBg = scene.background ? scene.background.clone() : null;
+  scene.background = new THREE.Color(0x1a1a2e);
+  scene.fog = null;
+
+  // Place snake on face 1 (front), center
+  const mid = Math.floor(CUBE_FACE_SIZE / 2);
+  cubeSnake = [];
+  for (let i = 0; i < 3; i++) cubeSnake.push({ face: 1, lx: mid - i, ly: mid });
+  cubePrevSnake = cubeSnake.map(s => ({ ...s }));
+  cubeDir = { dlx: 1, dly: 0 };
+  cubePrevDir = { ...cubeDir };
+
+  cubeFoods = [];
+  spawnCubeFood();
+  spawnCubeFood();
+
+  buildCubeScene();
+
+  // Reset game state
+  snake = [{ x: mid, y: mid }, { x: mid-1, y: mid }, { x: mid-2, y: mid }];
+  prevSnake = snake.map(s => ({ ...s }));
+  dir = { x: 1, y: 0 };
+  inputQueue = [];
+  score = 0; running = false; gameOver = false;
+  speed = getStartSpeed(); lastTickTime = 0;
+  runCoins = 0; runFoodCounts = {};
+  FOOD_TYPES.forEach(ft => runFoodCounts[ft.name] = 0);
+  runFoodTotal = 0; runMaxLength = 3;
+  runStartTime = null; extraLivesLeft = upgradeLevels.life;
+  activePowerups = {}; shieldActive = false;
+  clearPowerupMesh(); spawnedPowerup = null;
+  sessionProgress = { fruitsEaten:0, score:0, survivalTime:0, length:0, coinsEarned:0, mangosEaten:0 };
+  collectedPowerupTypes = new Set();
+  tickProgress = 1;
+
+  // Camera setup for cube
+  const faceNorm = cubeFaceNormal(cubeSnake[0].face);
+  cubeCameraTarget = faceNorm.clone().multiplyScalar(CUBE_FACE_SIZE * 2.5);
+  cubeCameraUp = new THREE.Vector3(...CUBE_FACE_3D[cubeSnake[0].face].up);
+  camera.position.copy(cubeCameraTarget);
+  camera.up.copy(cubeCameraUp);
+  camera.lookAt(0, 0, 0);
+  orbitControls.enabled = false;
+  fpvMode = false;
+
+  // Lighting adjustments
+  ambientLight.intensity = 0.9;
+  dirLight.intensity = 1.0;
+
+  // UI
+  document.querySelector('.go-banner').textContent = 'GAME OVER';
+  updateHUD();
+  msgEl.textContent = 'Press any arrow key to start';
+  gameoverOverlay.classList.remove('visible');
+  document.getElementById('map-badge').style.display = 'none';
+  document.getElementById('cheat-bar').style.display = '';
+  document.getElementById('mode-selector').style.display = '';
+  document.getElementById('royale-hud').classList.remove('visible');
+  document.getElementById('cube-back-bar').style.display = '';
+
+  // Mode buttons
+  document.getElementById('btn-classic').classList.remove('mode-active');
+  document.getElementById('btn-royale').classList.remove('mode-active');
+  document.getElementById('btn-cube').classList.add('mode-active');
+}
+
+function cubeTick() {
+  // Process input
+  if (inputQueue.length > 0) {
+    const next = inputQueue.shift();
+    if (!(next.x === -cubeDir.dlx && -next.y === -cubeDir.dly)) {
+      cubeDir = { dlx: next.x, dly: -next.y };
+    }
+  }
+
+  cubePrevSnake = cubeSnake.map(s => ({ ...s }));
+  cubePrevDir = { ...cubeDir };
+
+  // Compute new head
+  const head = cubeSnake[0];
+  let nlx = head.lx + cubeDir.dlx;
+  let nly = head.ly + cubeDir.dly;
+  let nface = head.face;
+
+  // Face transition
+  if (nlx < 0 || nlx >= CUBE_FACE_SIZE || nly < 0 || nly >= CUBE_FACE_SIZE) {
+    const result = cubeFaceTransition(head.face, nlx, nly, cubeDir.dlx, cubeDir.dly);
+    nface = result.face;
+    nlx = result.lx;
+    nly = result.ly;
+    cubeDir = { dlx: result.dlx, dly: result.dly };
+    inputQueue.length = 0; // Clear stale inputs — screen-space dirs no longer match after face change
+  }
+
+  // Self-collision
+  const coll = cubeSnake.some(s => s.face === nface && s.lx === nlx && s.ly === nly);
+  if (coll) {
+    if (extraLivesLeft > 0) {
+      extraLivesLeft--;
+      msgEl.textContent = 'Extra life used!';
+      return;
+    }
+    // Game over
+    running = false; gameOver = true;
+    const elapsed = runStartTime ? (Date.now() - runStartTime) / 1000 : 0;
+    gameStats.totalGames++;
+    gameStats.totalScore += score;
+    gameStats.totalCoins += runCoins;
+    gameStats.totalTimePlayed += elapsed;
+    if (score > gameStats.bestScore) gameStats.bestScore = score;
+    if (cubeSnake.length > gameStats.bestLength) gameStats.bestLength = cubeSnake.length;
+    if (elapsed > gameStats.longestSurvival) gameStats.longestSurvival = elapsed;
+    wallet += runCoins;
+    saveGame();
+    showGameOver(elapsed);
+    return;
+  }
+
+  // Move
+  cubeSnake.unshift({ face: nface, lx: nlx, ly: nly });
+
+  // Check food
+  let ate = false;
+  for (let i = 0; i < cubeFoods.length; i++) {
+    const fd = cubeFoods[i];
+    if (fd.face === nface && fd.lx === nlx && fd.ly === nly) {
+      ate = true;
+      const coinMult = isPowerupActive('double') ? 2 : 1;
+      const earned = (fd.type.coins + getCoinBonus()) * coinMult;
+      runCoins += earned;
+      score += Math.round(fd.type.score * getScoreMult());
+      runFoodCounts[fd.type.name] = (runFoodCounts[fd.type.name] || 0) + 1;
+      runFoodTotal++;
+      gameStats.totalFoodEaten++;
+      sessionProgress.fruitsEaten++;
+      sessionProgress.score = score;
+      if (fd.type.name === 'Mango') sessionProgress.mangosEaten++;
+      cubeFoods.splice(i, 1);
+      spawnCubeFood();
+      // Speed up
+      if (speed > 60) speed -= 1;
+      break;
+    }
+  }
+  if (!ate) cubeSnake.pop();
+
+  if (cubeSnake.length > runMaxLength) runMaxLength = cubeSnake.length;
+  sessionProgress.length = cubeSnake.length;
+  sessionProgress.coinsEarned = runCoins;
+
+  updateHUD();
+}
+
+// Orient a mesh to sit on a cube face, facing a movement direction
+function orientToCubeFace(obj, face, dlx, dly) {
+  const fData = CUBE_FACE_3D[face];
+  const normal = cubeFaceNormal(face);
+  const fRight = new THREE.Vector3(...fData.right);
+  const fUp = new THREE.Vector3(...fData.up);
+  // Forward direction (where the snake looks) = movement direction mapped to 3D
+  let forward = fRight.clone().multiplyScalar(dlx || 0).add(fUp.clone().multiplyScalar(dly || 0));
+  if (forward.lengthSq() < 0.001) forward = fRight.clone(); // fallback
+  forward.normalize();
+  // Build rotation matrix from basis: forward(-Z in mesh space), up(normal=+Y in mesh space), right
+  const right = new THREE.Vector3().crossVectors(forward, normal).normalize();
+  const m = new THREE.Matrix4().makeBasis(right, normal, forward.clone().negate());
+  obj.quaternion.setFromRotationMatrix(m);
+}
+
+function cubeInterpolatePos(curFace, curLx, curLy, prevFace, prevLx, prevLy, t) {
+  const cur = cubeGridToWorld(curFace, curLx, curLy);
+  if (t >= 1) return cur;
+  const prev = cubeGridToWorld(prevFace, prevLx, prevLy);
+  if (prevFace === curFace) {
+    return prev.lerp(cur, t);
+  } else {
+    const pos = prev.clone().lerp(cur, t);
+    const maxAx = Math.max(Math.abs(pos.x), Math.abs(pos.y), Math.abs(pos.z));
+    if (maxAx > 0.001) pos.multiplyScalar(CUBE_H / maxAx);
+    return pos;
+  }
+}
+
+function syncCubeScene() {
+  if (!cubeActive) return;
+  const total = cubeSnake.length;
+  const t = pixelMode ? 1 : tickProgress;
+
+  // Head
+  if (total > 0) {
+    if (!headGroup) headGroup = createHeadGroup();
+    headGroup.visible = true;
+    const seg = cubeSnake[0];
+    const normal = cubeFaceNormal(seg.face);
+    let pos;
+    if (cubePrevSnake.length > 0 && t < 1) {
+      pos = cubeInterpolatePos(seg.face, seg.lx, seg.ly, cubePrevSnake[0].face, cubePrevSnake[0].lx, cubePrevSnake[0].ly, t);
+    } else {
+      pos = cubeGridToWorld(seg.face, seg.lx, seg.ly);
+    }
+    pos.add(normal.clone().multiplyScalar(CUBE_CELL * 0.35));
+    headGroup.position.copy(pos);
+    orientToCubeFace(headGroup, seg.face, cubeDir.dlx, cubeDir.dly);
+  }
+
+  // Body segments
+  for (let i = 1; i < total; i++) {
+    const mesh = getBodyMesh(i - 1);
+    const seg = cubeSnake[i];
+    const normal = cubeFaceNormal(seg.face);
+    let pos;
+    if (i < cubePrevSnake.length && t < 1) {
+      pos = cubeInterpolatePos(seg.face, seg.lx, seg.ly, cubePrevSnake[i].face, cubePrevSnake[i].lx, cubePrevSnake[i].ly, t);
+    } else {
+      pos = cubeGridToWorld(seg.face, seg.lx, seg.ly);
+    }
+    pos.add(normal.clone().multiplyScalar(CUBE_CELL * 0.35));
+    mesh.position.copy(pos);
+
+    // Body direction: point toward the previous segment
+    const prevSeg = cubeSnake[i - 1];
+    const fData = CUBE_FACE_3D[seg.face];
+    const fRight = new THREE.Vector3(...fData.right);
+    const fUp = new THREE.Vector3(...fData.up);
+    let bdlx = 0, bdly = 0;
+    if (prevSeg.face === seg.face) {
+      bdlx = prevSeg.lx - seg.lx;
+      bdly = prevSeg.ly - seg.ly;
+    }
+    orientToCubeFace(mesh, seg.face, bdlx, bdly);
+
+    const skinCol = getSkinColor(i, total, clock.getElapsedTime());
+    mesh.material.color.copy(skinCol);
+    const skinProps = getSkinProps();
+    mesh.material.metalness = skinProps.metalness;
+    mesh.material.emissive.setHex(skinProps.emissive);
+    mesh.material.emissiveIntensity = skinProps.emissiveIntensity;
+  }
+
+  // Hide unused body meshes
+  for (let i = Math.max(total - 1, 0); i < snakeMeshes.length; i++) snakeMeshes[i].visible = false;
+
+  // Food meshes
+  for (let i = 0; i < cubeFoods.length; i++) {
+    const fd = cubeFoods[i];
+    const mesh = getCubeFoodMesh(i);
+    const pos = cubeGridToWorld(fd.face, fd.lx, fd.ly);
+    const normal = cubeFaceNormal(fd.face);
+    pos.add(normal.clone().multiplyScalar(CUBE_CELL * 0.4));
+    mesh.position.copy(pos);
+    mesh.material.color.setHex(fd.type.color);
+    mesh.material.emissive.setHex(fd.type.emissive);
+    // Animate
+    const tAnim = clock.getElapsedTime();
+    mesh.position.add(normal.clone().multiplyScalar(Math.sin(tAnim * 3) * 0.1));
+    mesh.rotation.y = tAnim * 2;
+  }
+  for (let i = cubeFoods.length; i < cubeFoodMeshes.length; i++) cubeFoodMeshes[i].visible = false;
+}
+
+function updateCubeCamera() {
+  if (!cubeActive || cubeSnake.length === 0) return;
+  const face = cubeSnake[0].face;
+  const normal = cubeFaceNormal(face);
+  const targetPos = normal.clone().multiplyScalar(CUBE_FACE_SIZE * 2.5);
+  const targetUp = new THREE.Vector3(...CUBE_FACE_3D[face].up);
+
+  cubeCameraTarget.lerp(targetPos, 0.06);
+  cubeCameraUp.lerp(targetUp, 0.06).normalize();
+
+  camera.position.copy(cubeCameraTarget);
+  camera.up.copy(cubeCameraUp);
+  camera.lookAt(0, 0, 0);
+}
+
+function cleanupCubeMode() {
+  clearCubeScene();
+  // Restore background
+  if (cubeSavedBg) {
+    scene.background = cubeSavedBg;
+    cubeSavedBg = null;
+  } else {
+    scene.background = new THREE.Color(0x87CEEB);
+  }
+  scene.fog = new THREE.Fog(0x87CEEB, 50, 100);
+  orbitControls.enabled = true;
+  ambientLight.intensity = 0.75;
+  dirLight.intensity = 1.3;
+}
+
 // ===== COIN SHOP =====
 const COIN_PACKS = [
   { id:'pack1', coins:500,   price:'$0.99', emoji:'🪙', gradient:'linear-gradient(135deg,#cd7f32,#b8860b)' },
@@ -4054,6 +4659,8 @@ function animate(now) {
   if (running && !gameOver) {
     if (gameMode === 'royale') {
       if (now - lastTickTime >= speed) { lastTickTime = now; royaleTick(now); }
+    } else if (gameMode === 'cube') {
+      if (now - lastTickTime >= speed) { lastTickTime = now; cubeTick(); }
     } else {
       if (now - lastTickTime >= speed) { lastTickTime = now; gameTick(); }
     }
@@ -4067,12 +4674,14 @@ function animate(now) {
 
   if (gameMode === 'royale' && royaleActive) {
     syncRoyaleScene();
+  } else if (gameMode === 'cube' && cubeActive) {
+    syncCubeScene();
   } else {
     syncScene();
   }
 
   // Animate all classic food meshes
-  if (gameMode !== 'royale') {
+  if (gameMode !== 'royale' && gameMode !== 'cube') {
     for (const cf of classicFoods) {
       if (cf.mesh) {
         cf.mesh.position.y = CELL * 0.4 + Math.sin(t * 3) * 0.15;
@@ -4105,21 +4714,24 @@ function animate(now) {
   // Update powerup bar
   if (running && !gameOver) renderPowerupBar();
 
+  // Cube camera update
+  if (gameMode === 'cube' && cubeActive) updateCubeCamera();
+
   if (pixelMode) {
     updateFPVCamera();
     const activeCam = fpvMode ? fpvCamera : camera;
-    if (!fpvMode) orbitControls.update();
+    if (!fpvMode && gameMode !== 'cube') orbitControls.update();
     renderer.setRenderTarget(retroTarget);
     renderer.render(scene, activeCam);
     renderer.setRenderTarget(null);
     retroQuadMat.map = retroTarget.texture;
     renderer.render(retroScene, retroCam);
   } else {
-    if (fpvMode) {
+    if (fpvMode && gameMode !== 'cube') {
       updateFPVCamera();
       renderer.render(scene, fpvCamera);
     } else {
-      orbitControls.update();
+      if (gameMode !== 'cube') orbitControls.update();
       renderer.render(scene, camera);
     }
   }
@@ -4154,6 +4766,77 @@ if (savedUser && localStorage.getItem('snakeGame_user_' + savedUser)) {
   // Temporarily skip login, play as guest automatically
   playAsGuest();
 }
+
+// ===== BUG REPORT TOOL =====
+// Setup: Create a free form at https://formspree.io, then replace YOUR_FORM_ID below with your form ID.
+(function() {
+  const FORMSPREE_URL = 'https://formspree.io/f/xpqydynw';
+  const brBtn = document.getElementById('bugreport-btn');
+  const brOverlay = document.getElementById('bugreport-overlay');
+  const brCancel = document.getElementById('br-cancel');
+  const brSubmit = document.getElementById('br-submit');
+  const brStatus = document.getElementById('bugreport-status');
+  const brType = document.getElementById('br-type');
+  const brDesc = document.getElementById('br-description');
+
+  function openBugReport() {
+    brDesc.value = '';
+    brType.value = 'Bug';
+    brStatus.textContent = '';
+    brStatus.style.color = '';
+    brSubmit.disabled = false;
+    brOverlay.classList.add('visible');
+  }
+
+  function closeBugReport() {
+    brOverlay.classList.remove('visible');
+  }
+
+  brBtn.addEventListener('click', openBugReport);
+  brCancel.addEventListener('click', closeBugReport);
+  brOverlay.addEventListener('click', function(e) {
+    if (e.target === brOverlay) closeBugReport();
+  });
+
+  brSubmit.addEventListener('click', async function() {
+    const description = brDesc.value.trim();
+    if (!description) {
+      brStatus.style.color = '#ff4444';
+      brStatus.textContent = 'Bitte Beschreibung eingeben!';
+      return;
+    }
+    brSubmit.disabled = true;
+    brStatus.style.color = '#8d6e3f';
+    brStatus.textContent = 'Wird gesendet...';
+
+    const formData = new FormData();
+    formData.append('type', brType.value);
+    formData.append('description', description);
+    formData.append('gameMode', typeof gameMode !== 'undefined' ? gameMode : 'unknown');
+    formData.append('score', typeof score !== 'undefined' ? score : 0);
+    formData.append('browser', navigator.userAgent);
+    formData.append('screen', window.innerWidth + 'x' + window.innerHeight);
+
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        brStatus.style.color = '#56ab2f';
+        brStatus.textContent = 'Danke! Report wurde gesendet.';
+        setTimeout(closeBugReport, 2000);
+      } else {
+        throw new Error('Response not ok');
+      }
+    } catch (err) {
+      brStatus.style.color = '#ff4444';
+      brStatus.textContent = 'Fehler beim Senden. Bitte versuche es später.';
+      brSubmit.disabled = false;
+    }
+  });
+})();
 </script>
 </body>
 </html>
