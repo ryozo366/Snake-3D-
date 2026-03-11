@@ -106,6 +106,18 @@ Back to:
 
 ---
 
+## 6. Re-enable Watch Ad Buttons
+
+Search for `TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - Watch Ad button` — there are 3 places (upgrades, maps, skins). Remove the `//` or `/* */` comment markers around the code blocks.
+
+---
+
+## 7. Rename Cheat Code Back (optional)
+
+The cheat code `hack` was renamed to `god`. If you want to change it back, find `code === 'god'` and change it to `code === 'hack'`, and change `GOD MODE!` back to `HACKED!`.
+
+---
+
 ## Optional: Remove SEO/Privacy additions
 
 You can keep these even after re-enabling everything (they help with SEO):
