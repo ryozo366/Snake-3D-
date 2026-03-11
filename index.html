@@ -1166,7 +1166,9 @@ function playAsGuest() {
   currentUser = null;
   profilePill.textContent = '👤 Guest';
   loginOverlay.classList.remove('visible');
-  if (!tutorialDone) { tutorialDone = true; startTutorial(); }
+  // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - tutorial was blocking content for crawlers
+  // if (!tutorialDone) { tutorialDone = true; startTutorial(); }
+  tutorialDone = true;
 }
 
 // Stats tracking
