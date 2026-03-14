@@ -895,6 +895,7 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="map-btn">🗺️ Maps (M)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="skin-btn">🐍 Skins (K)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="night-btn">🌙 Night (N)</span>
+    <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="sound-btn">🔊 Sound (S)</span>
   </div>
   <div id="powerup-bar"></div>
   <div id="royale-hud">
@@ -2483,6 +2484,8 @@ function spawnFloatingText(text, color, worldPos) {
 function handleDeath() {
   gameOver = true; running = false;
   isRecording = false;
+  playSound('death');
+  stopBGM();
   // Daily high score
   addDailyScore(score, gameMode);
   // Game over particles
@@ -2574,6 +2577,7 @@ function gameTick() {
       sessionProgress.coinsEarned = runCoins;
       runMaxLength = Math.max(runMaxLength, snake.length);
       sessionProgress.length = runMaxLength;
+      playSound('eat');
       spawnFloatingText(`${ft.emoji} +${sg}  🪙${cg}`, '#fff', gridToWorld(head.x, head.y));
       // Fruit particles
       {
@@ -2603,6 +2607,7 @@ function gameTick() {
   if (!ateFood) snake.pop();
   // Check powerup collection
   if (spawnedPowerup && head.x === spawnedPowerup.x && head.y === spawnedPowerup.y) {
+    playSound('powerup');
     activatePowerup(spawnedPowerup.type);
   }
   // Despawn powerup after 15s
@@ -3116,6 +3121,7 @@ document.addEventListener('keydown', e => {
   // Only handle shortcuts if not a movement key
   if (!ABS_DIRS[key]) {
     if (key === 'c' || key === 'C') { toggleCamera(); return; }
+    if (key === 's' || key === 'S') { toggleSound(); return; }
     if (key === 'p' || key === 'P') { togglePixelMode(); return; }
     if (key === 'm' || key === 'M') { if (!running || gameOver) openMapShop(); return; }
     if (key === 'k' || key === 'K') { if (!running || gameOver) openSkinShop(); return; }
@@ -3184,6 +3190,8 @@ document.addEventListener('keydown', e => {
     runStartTime = Date.now();
     lastTickTime = performance.now();
     msgEl.textContent = '';
+    // Start background music
+    startBGM();
     // Start recording for replay
     isRecording = true; replayData = [];
     // Start speedrun timer
@@ -3860,6 +3868,7 @@ function royaleTick(now) {
       const cg = (ft.coins + getCoinBonus()) * coinMult;
       const sg = Math.round(ft.score * getScoreMult());
       score += sg; runCoins += cg; runFoodTotal++;
+      playSound('eat');
       spawnFloatingText(`${ft.emoji} +${sg}`, '#fff', gridToWorld(head.x, head.y));
       royaleFoods.splice(i, 1); ate = true; break;
     }
@@ -4311,6 +4320,7 @@ function cubeTick() {
     const fd = cubeFoods[i];
     if (fd.face === nface && fd.lx === nlx && fd.ly === nly) {
       ate = true;
+      playSound('eat');
       const coinMult = isPowerupActive('double') ? 2 : 1;
       const earned = (fd.type.coins + getCoinBonus()) * coinMult;
       runCoins += earned;
@@ -5157,6 +5167,161 @@ document.getElementById('btn-play-again').addEventListener('click', () => {
   if (gameMode === 'endless') { initEndless(); return; }
   if (gameMode === 'speedrun') { initSpeedrun(); return; }
 }, true);
+
+// ===== AUDIO SYSTEM =====
+const sfxEat = new Audio('sounds/eat.wav');
+const sfxDeath = new Audio('sounds/death.wav');
+const sfxPowerup = new Audio('sounds/powerup.wav');
+sfxEat.volume = 0.5;
+sfxDeath.volume = 0.6;
+sfxPowerup.volume = 0.5;
+
+let audioMuted = localStorage.getItem('snake3d_muted') === 'true';
+let bgmContext = null;
+let bgmGain = null;
+let bgmPlaying = false;
+const soundBtn = document.getElementById('sound-btn');
+
+function updateSoundBtn() {
+  soundBtn.textContent = audioMuted ? '🔇 Muted (S)' : '🔊 Sound (S)';
+}
+updateSoundBtn();
+
+function toggleSound() {
+  audioMuted = !audioMuted;
+  localStorage.setItem('snake3d_muted', audioMuted);
+  updateSoundBtn();
+  if (audioMuted && bgmContext) {
+    bgmGain.gain.setValueAtTime(0, bgmContext.currentTime);
+  } else if (!audioMuted && bgmContext && bgmPlaying) {
+    bgmGain.gain.setValueAtTime(0.25, bgmContext.currentTime);
+  }
+}
+
+soundBtn.addEventListener('click', toggleSound);
+
+function playSound(type) {
+  if (audioMuted) return;
+  let sfx;
+  if (type === 'eat') sfx = sfxEat;
+  else if (type === 'death') sfx = sfxDeath;
+  else if (type === 'powerup') sfx = sfxPowerup;
+  if (sfx) {
+    sfx.currentTime = 0;
+    sfx.play().catch(() => {});
+  }
+}
+
+// === Chill Lo-Fi Background Music (Web Audio API synthesized) ===
+function startBGM() {
+  if (bgmPlaying) return;
+  if (!bgmContext) {
+    bgmContext = new (window.AudioContext || window.webkitAudioContext)();
+    bgmGain = bgmContext.createGain();
+    bgmGain.gain.value = audioMuted ? 0 : 0.25;
+    bgmGain.connect(bgmContext.destination);
+  }
+  if (bgmContext.state === 'suspended') bgmContext.resume();
+  bgmPlaying = true;
+  playLofiLoop();
+}
+
+function stopBGM() {
+  bgmPlaying = false;
+}
+
+function playLofiLoop() {
+  if (!bgmPlaying || !bgmContext) return;
+  // Chord progression: Am7 - Fmaj7 - Cmaj7 - G7
+  const chords = [
+    [220, 261.6, 329.6, 392],    // Am7
+    [174.6, 220, 277.2, 329.6],  // Fmaj7
+    [130.8, 164.8, 196, 246.9],  // Cmaj7
+    [196, 246.9, 293.7, 349.2],  // G7
+  ];
+  const bpm = 70;
+  const beatDur = 60 / bpm;
+  const barDur = beatDur * 4;
+  const loopDur = barDur * chords.length;
+  const now = bgmContext.currentTime;
+
+  // Pad chords
+  chords.forEach((notes, ci) => {
+    const startT = now + ci * barDur;
+    notes.forEach(freq => {
+      const osc = bgmContext.createOscillator();
+      const g = bgmContext.createGain();
+      const filt = bgmContext.createBiquadFilter();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      filt.type = 'lowpass';
+      filt.frequency.value = 800;
+      filt.Q.value = 1;
+      g.gain.setValueAtTime(0, startT);
+      g.gain.linearRampToValueAtTime(0.08, startT + 0.3);
+      g.gain.setValueAtTime(0.08, startT + barDur - 0.4);
+      g.gain.linearRampToValueAtTime(0, startT + barDur);
+      osc.connect(filt);
+      filt.connect(g);
+      g.connect(bgmGain);
+      osc.start(startT);
+      osc.stop(startT + barDur);
+    });
+  });
+
+  // Simple bass line
+  const bassNotes = [220, 174.6, 130.8, 196];
+  bassNotes.forEach((freq, ci) => {
+    const startT = now + ci * barDur;
+    for (let b = 0; b < 4; b++) {
+      const t = startT + b * beatDur;
+      const osc = bgmContext.createOscillator();
+      const g = bgmContext.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq / 2;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.12, t + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 0.8);
+      osc.connect(g);
+      g.connect(bgmGain);
+      osc.start(t);
+      osc.stop(t + beatDur);
+    }
+  });
+
+  // Melody — pentatonic over chords
+  const melodyNotes = [
+    523.3, 587.3, 659.3, 784, 880,  // C5 D5 E5 G5 A5
+    784, 659.3, 587.3, 523.3, 440,  // descending
+    523.3, 659.3, 784, 880, 1047,   // ascending high
+    880, 784, 659.3, 523.3, 440     // descending
+  ];
+  const melodyDur = loopDur / melodyNotes.length;
+  melodyNotes.forEach((freq, i) => {
+    if (Math.random() < 0.3) return; // skip some notes for lo-fi feel
+    const t = now + i * melodyDur;
+    const osc = bgmContext.createOscillator();
+    const g = bgmContext.createGain();
+    const filt = bgmContext.createBiquadFilter();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    filt.type = 'lowpass';
+    filt.frequency.value = 1200;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.06, t + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.001, t + melodyDur * 0.9);
+    osc.connect(filt);
+    filt.connect(g);
+    g.connect(bgmGain);
+    osc.start(t);
+    osc.stop(t + melodyDur);
+  });
+
+  // Schedule next loop
+  setTimeout(() => {
+    if (bgmPlaying) playLofiLoop();
+  }, loopDur * 1000 - 100);
+}
 
 // ===== BUG REPORT TOOL =====
 // Setup: Create a free form at https://formspree.io, then replace YOUR_FORM_ID below with your form ID.
