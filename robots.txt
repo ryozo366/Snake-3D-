@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://snake3d.online/sitemap.xml

@@ -5,17 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Play Snake 3D - a free online 3D snake game with multiple maps, skins, upgrades, power-ups, and Snake Royale mode. No download required!">
 <meta name="keywords" content="snake game, 3d snake, browser game, free online game, snake royale">
+<meta name="author" content="Snake 3D">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://snake3d.online/">
+<meta property="og:title" content="Snake 3D - Free Online 3D Snake Game">
+<meta property="og:description" content="Play Snake 3D - a free online 3D snake game with multiple maps, skins, upgrades, power-ups, and Snake Royale mode. No download required!">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://snake3d.online/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Snake 3D - Free Online 3D Snake Game">
+<meta name="twitter:description" content="Play Snake 3D - a free online 3D snake game with multiple maps, skins, upgrades, power-ups, and Snake Royale mode. No download required!">
 <meta name="google-adsense-account" content="ca-pub-1899513491544813">
-<!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION
-<meta name="monetag" content="42171f7af91f7e042d03227c2e4a2b55">
--->
 <title>Snake 3D - Free Online 3D Snake Game | snake3d.online</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1899513491544813" crossorigin="anonymous"></script>
-<!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION
-Monetag Push: 5gvci.com/act/files/tag.min.js?z=10710453
-Monetag In-Page: nap5k.com/tag.min.js zone=10710458
-Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73ddcf3f97353491f.js
--->
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -931,7 +933,6 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
 
 <!-- Game Over -->
 <div id="gameover-overlay">
-  <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION: Adsterra left banner ad -->
   <div id="gameover-panel">
     <div class="go-banner">GAME OVER</div>
     <div class="stars-row" id="stars-row"></div>
@@ -964,7 +965,6 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
       <button class="candy-btn btn-retry" id="btn-open-daily" style="padding:8px 14px;font-size:12px;">📅 Today's Best</button>
     </div>
   </div>
-  <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION: Adsterra right banner ad -->
 </div>
 
 <!-- Shop -->
@@ -1273,8 +1273,6 @@ function playAsGuest() {
   currentUser = null;
   profilePill.textContent = '👤 Guest';
   loginOverlay.classList.remove('visible');
-  // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - tutorial was blocking content for crawlers
-  // if (!tutorialDone) { tutorialDone = true; startTutorial(); }
   tutorialDone = true;
 }
 
@@ -2734,24 +2732,6 @@ function showRewardedAd(callback) {
     `</div>`;
   adOverlay.classList.add('visible');
 
-  // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION
-  // Load real Adsterra banner into the slot
-  // try {
-  //   const slot = document.getElementById('rewarded-ad-slot');
-  //   window.atOptions = { key: '3306d19d042fdaa38a6dfac27962817e', format: 'iframe', height: 300, width: 160, params: {} };
-  //   const adScript = document.createElement('script');
-  //   adScript.src = 'https://www.highperformanceformat.com/3306d19d042fdaa38a6dfac27962817e/invoke.js';
-  //   slot.appendChild(adScript);
-  // } catch(e) {}
-
-  // Also trigger Monetag Vignette
-  // try {
-  //   const s = document.createElement('script');
-  //   s.dataset.zone = '10710460';
-  //   s.src = 'https://gizokraijaw.net/vignette.min.js';
-  //   document.body.appendChild(s);
-  // } catch(e) {}
-
   const countdownEl = document.getElementById('ad-countdown');
   const closeBtn = document.getElementById('ad-close-btn');
   let remaining = 5;
@@ -2790,16 +2770,6 @@ function renderShop() {
       btn.addEventListener('click', () => { if (wallet >= cost) { wallet -= cost; upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); checkStatAchievements(); } });
     }
     card.appendChild(btn);
-    // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - Watch Ad button for upgrades
-    // if (!maxed) {
-    //   const adBtn = document.createElement('button');
-    //   adBtn.className = 'watch-ad-btn';
-    //   adBtn.textContent = '▶ Watch Ad';
-    //   adBtn.addEventListener('click', () => {
-    //     showRewardedAd(() => { upgradeLevels[def.id]++; renderShop(); updateHUD(); saveGame(); });
-    //   });
-    //   card.appendChild(adBtn);
-    // }
     shopGrid.appendChild(card);
   }
 }
@@ -2856,23 +2826,6 @@ function renderMapShop() {
       });
     }
     card.appendChild(btn);
-    // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - Watch Ad button for maps
-    /* if (!def.owned) {
-      const adBtn = document.createElement('button');
-      adBtn.className = 'watch-ad-btn';
-      adBtn.textContent = '▶ Watch Ad';
-      adBtn.addEventListener('click', () => {
-        showRewardedAd(() => {
-          def.owned = true;
-          currentMap = def.id;
-          buildEnvironment(currentMap);
-          init();
-          renderMapShop();
-          updateHUD();
-        });
-      });
-      card.appendChild(adBtn);
-    } */
     mapShopGrid.appendChild(card);
   }
 }
@@ -2962,22 +2915,6 @@ function renderSkinShop() {
       });
     }
     card.appendChild(btn);
-    // TEMPORARILY DISABLED FOR ADSENSE VERIFICATION - Watch Ad button for skins
-    /* if (!skin.owned) {
-      const adBtn = document.createElement('button');
-      adBtn.className = 'watch-ad-btn';
-      adBtn.textContent = '▶ Watch Ad';
-      adBtn.addEventListener('click', () => {
-        showRewardedAd(() => {
-          skin.owned = true;
-          currentSkin = skin.id;
-          updateSnakeMaterials();
-          renderSkinShop();
-          updateHUD();
-        });
-      });
-      card.appendChild(adBtn);
-    } */
     paidGrid.appendChild(card);
   }
   skinShopContent.appendChild(paidGrid);
@@ -4853,9 +4790,7 @@ init();
 generateDailyChallenges();
 requestAnimationFrame(animate);
 
-// Auto-login or show login screen
-// TEMPORARILY DISABLED LOGIN SCREEN FOR ADSENSE VERIFICATION
-// Login system is preserved - just auto-playing as guest for now
+// Auto-login or play as guest
 const savedUser = localStorage.getItem('snakeGame_currentUser');
 if (savedUser && localStorage.getItem('snakeGame_user_' + savedUser)) {
   doLogin(savedUser);
