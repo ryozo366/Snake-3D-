@@ -112,10 +112,11 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     padding: 0 0 28px 0;
     text-align: center;
     width: 380px;
+    max-height: 90vh;
+    overflow-y: auto;
     animation: bounceIn 0.6s ease;
     box-shadow: 0 8px 0 #c45a20, 0 20px 40px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.4);
     position: relative;
-    overflow: visible;
   }
 
   /* Banner ribbon */
@@ -939,27 +940,27 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     </div>
     <div class="go-rewards-label">Rewards</div>
     <div class="go-rewards-row" id="go-rewards"></div>
-    <div class="go-buttons" style="flex-wrap:wrap;">
-      <button class="candy-btn btn-retry" id="btn-play-again">Retry</button>
-      <button class="candy-btn btn-shop-go" id="btn-open-shop">Upgrades</button>
-      <button class="candy-btn btn-maps-go" id="btn-open-maps-go">Maps</button>
-      <button class="candy-btn btn-skins-go" id="btn-open-skins-go">Skins</button>
-      <button class="candy-btn btn-shop-go" id="btn-open-coins-go" style="font-size:12px;">💰 Coins</button>
-      <button class="candy-btn btn-maps-go" id="btn-open-lb-go" style="font-size:12px;">🏆 Scores</button>
-      <button class="candy-btn btn-skins-go" id="btn-open-ch-go" style="font-size:12px;">📋 Challenges</button>
-      <button class="candy-btn btn-retry" id="btn-open-ach-go" style="font-size:12px;">🏅 Badges</button>
-      <button class="candy-btn btn-shop-go" id="btn-share-score" style="font-size:12px;">📤 Share</button>
-      <button class="candy-btn btn-maps-go" id="btn-replay" style="font-size:12px;">🔁 Replay</button>
+    <div class="go-buttons" style="flex-wrap:wrap;gap:8px;margin:0 12px;">
+      <button class="candy-btn btn-retry" id="btn-play-again" style="padding:10px 22px;font-size:15px;">Retry</button>
+      <button class="candy-btn btn-shop-go" id="btn-open-shop" style="padding:10px 22px;font-size:15px;">Upgrades</button>
+      <button class="candy-btn btn-maps-go" id="btn-open-maps-go" style="padding:8px 14px;font-size:12px;">Maps</button>
+      <button class="candy-btn btn-skins-go" id="btn-open-skins-go" style="padding:8px 14px;font-size:12px;">Skins</button>
+      <button class="candy-btn btn-shop-go" id="btn-open-coins-go" style="padding:8px 14px;font-size:12px;">💰 Coins</button>
+      <button class="candy-btn btn-maps-go" id="btn-open-lb-go" style="padding:8px 14px;font-size:12px;">🏆 Scores</button>
+      <button class="candy-btn btn-skins-go" id="btn-open-ch-go" style="padding:8px 14px;font-size:12px;">📋 Challenges</button>
+      <button class="candy-btn btn-retry" id="btn-open-ach-go" style="padding:8px 14px;font-size:12px;">🏅 Badges</button>
+      <button class="candy-btn btn-shop-go" id="btn-share-score" style="padding:8px 14px;font-size:12px;">📤 Share</button>
+      <button class="candy-btn btn-maps-go" id="btn-replay" style="padding:8px 14px;font-size:12px;">🔁 Replay</button>
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px;justify-content:center;">
-      <button class="candy-btn btn-retry" id="go-mode-classic" style="font-size:13px;">🐍 Play Classic</button>
-      <button class="candy-btn btn-shop-go" id="go-mode-royale" style="font-size:13px;">⚔️ Play Royale</button>
-      <button class="candy-btn btn-maps-go" id="go-mode-cube" style="font-size:13px;">🧊 Play Cube</button>
-      <button class="candy-btn btn-skins-go" id="go-mode-endless" style="font-size:13px;">♾️ Endless</button>
-      <button class="candy-btn btn-shop-go" id="go-mode-speedrun" style="font-size:13px;">⏱️ Speed Run</button>
+    <div style="display:flex;gap:6px;margin:8px 12px 0 12px;justify-content:center;flex-wrap:wrap;">
+      <button class="candy-btn btn-retry" id="go-mode-classic" style="padding:8px 12px;font-size:11px;">🐍 Classic</button>
+      <button class="candy-btn btn-shop-go" id="go-mode-royale" style="padding:8px 12px;font-size:11px;">⚔️ Royale</button>
+      <button class="candy-btn btn-maps-go" id="go-mode-cube" style="padding:8px 12px;font-size:11px;">🧊 Cube</button>
+      <button class="candy-btn btn-skins-go" id="go-mode-endless" style="padding:8px 12px;font-size:11px;">♾️ Endless</button>
+      <button class="candy-btn btn-shop-go" id="go-mode-speedrun" style="padding:8px 12px;font-size:11px;">⏱️ Speed Run</button>
     </div>
     <div style="margin-top:6px;">
-      <button class="candy-btn btn-retry" id="btn-open-daily" style="font-size:12px;">📅 Today's Best</button>
+      <button class="candy-btn btn-retry" id="btn-open-daily" style="padding:8px 14px;font-size:12px;">📅 Today's Best</button>
     </div>
   </div>
   <!-- TEMPORARILY DISABLED FOR ADSENSE VERIFICATION: Adsterra right banner ad -->
