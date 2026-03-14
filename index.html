@@ -1100,26 +1100,6 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
   <div class="tutorial-box" id="tutorial-box"></div>
 </div>
 
-<!-- Privacy/Terms Footer for AdSense compliance -->
-<div id="site-footer" style="position:fixed;bottom:0;left:0;right:0;z-index:5;text-align:center;padding:4px 8px;font-size:10px;color:rgba(90,58,26,0.6);pointer-events:auto;font-family:'Baloo 2',sans-serif;">
-  <span id="footer-toggle" style="cursor:pointer;text-decoration:underline;">Privacy Policy & Terms</span> | &copy; 2025 snake3d.online
-  <div id="footer-content" style="display:none;background:rgba(255,255,255,0.95);border-radius:12px;padding:16px 20px;margin:8px auto;max-width:600px;text-align:left;font-size:11px;line-height:1.5;color:#5a3a1a;box-shadow:0 4px 16px rgba(0,0,0,0.15);max-height:50vh;overflow-y:auto;">
-    <h3 style="margin:0 0 8px;font-size:14px;">Privacy Policy</h3>
-    <p>This website uses cookies and local storage to save your game progress. We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a>.</p>
-    <p>We do not collect personal data beyond what is stored locally in your browser (game saves, preferences). No data is sent to external servers.</p>
-    <h3 style="margin:12px 0 8px;font-size:14px;">Terms of Use</h3>
-    <p>Snake 3D is a free browser game provided as-is. Virtual coins and items have no real-world monetary value. We reserve the right to modify the game at any time.</p>
-    <h3 style="margin:12px 0 8px;font-size:14px;">Contact</h3>
-    <p>For questions or concerns, reach us via our <a href="https://github.com/ryozo366/Snake-3D-" target="_blank" rel="noopener">GitHub repository</a>.</p>
-  </div>
-</div>
-<script>
-document.getElementById('footer-toggle').addEventListener('click', function() {
-  const c = document.getElementById('footer-content');
-  c.style.display = c.style.display === 'none' ? 'block' : 'none';
-});
-</script>
-
 <!-- Kill Feed -->
 <div class="kill-feed" id="kill-feed"></div>
 
@@ -5173,6 +5153,8 @@ let audioMuted = localStorage.getItem('snake3d_muted') === 'true';
 let audioCtx = null;
 let masterGain = null;
 let bgmPlaying = false;
+let bgmNodes = [];
+let bgmTimeout = null;
 const soundBtn = document.getElementById('sound-btn');
 
 function ensureAudioCtx() {
@@ -5199,8 +5181,8 @@ function toggleSound() {
 
 soundBtn.addEventListener('click', toggleSound);
 
-// Play a square-wave note (Mario style)
-function playNote(freq, startTime, duration, vol) {
+// Play a square-wave note (8-bit style)
+function playNote(freq, startTime, duration, vol, isBGM) {
   const osc = audioCtx.createOscillator();
   const g = audioCtx.createGain();
   osc.type = 'square';
@@ -5212,6 +5194,7 @@ function playNote(freq, startTime, duration, vol) {
   g.connect(masterGain);
   osc.start(startTime);
   osc.stop(startTime + duration);
+  if (isBGM) bgmNodes.push(osc);
 }
 
 // Mario coin sound
@@ -5253,11 +5236,16 @@ function startBGM() {
   playArcadeLoop();
 }
 
-function stopBGM() { bgmPlaying = false; }
+function stopBGM() {
+  bgmPlaying = false;
+  if (bgmTimeout) { clearTimeout(bgmTimeout); bgmTimeout = null; }
+  bgmNodes.forEach(osc => { try { osc.stop(); } catch(e) {} });
+  bgmNodes = [];
+}
 
 function playArcadeLoop() {
   if (!bgmPlaying || !audioCtx) return;
-  const bpm = 140;
+  const bpm = 170;
   const sixteenth = 60 / bpm / 4;
   const now = audioCtx.currentTime;
 
@@ -5296,7 +5284,7 @@ function playArcadeLoop() {
 
   let t = 0;
   melody.forEach(([freq, dur]) => {
-    if (freq > 0) playNote(freq, now + t * sixteenth, dur * sixteenth * 0.8, 0.08);
+    if (freq > 0) playNote(freq, now + t * sixteenth, dur * sixteenth * 0.8, 0.08, true);
     t += dur;
   });
 
@@ -5315,13 +5303,14 @@ function playArcadeLoop() {
       g.connect(masterGain);
       osc.start(st);
       osc.stop(st + dur * sixteenth);
+      bgmNodes.push(osc);
     }
     tb += dur;
   });
 
   const totalSixteenths = t;
   const loopMs = totalSixteenths * sixteenth * 1000;
-  setTimeout(() => { if (bgmPlaying) playArcadeLoop(); }, loopMs - 50);
+  bgmTimeout = setTimeout(() => { if (bgmPlaying) playArcadeLoop(); }, loopMs - 50);
 }
 
 // ===== BUG REPORT TOOL =====
