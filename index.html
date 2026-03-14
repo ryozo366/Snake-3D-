@@ -5168,19 +5168,22 @@ document.getElementById('btn-play-again').addEventListener('click', () => {
   if (gameMode === 'speedrun') { initSpeedrun(); return; }
 }, true);
 
-// ===== AUDIO SYSTEM =====
-const sfxEat = new Audio('sounds/eat.wav');
-const sfxDeath = new Audio('sounds/death.wav');
-const sfxPowerup = new Audio('sounds/powerup.wav');
-sfxEat.volume = 0.5;
-sfxDeath.volume = 0.6;
-sfxPowerup.volume = 0.5;
-
+// ===== AUDIO SYSTEM (Super Mario Style) =====
 let audioMuted = localStorage.getItem('snake3d_muted') === 'true';
-let bgmContext = null;
-let bgmGain = null;
+let audioCtx = null;
+let masterGain = null;
 let bgmPlaying = false;
 const soundBtn = document.getElementById('sound-btn');
+
+function ensureAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = audioMuted ? 0 : 0.12;
+    masterGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
 
 function updateSoundBtn() {
   soundBtn.textContent = audioMuted ? '🔇 Muted (S)' : '🔊 Sound (S)';
@@ -5191,136 +5194,139 @@ function toggleSound() {
   audioMuted = !audioMuted;
   localStorage.setItem('snake3d_muted', audioMuted);
   updateSoundBtn();
-  if (audioMuted && bgmContext) {
-    bgmGain.gain.setValueAtTime(0, bgmContext.currentTime);
-  } else if (!audioMuted && bgmContext && bgmPlaying) {
-    bgmGain.gain.setValueAtTime(0.25, bgmContext.currentTime);
-  }
+  if (masterGain) masterGain.gain.setValueAtTime(audioMuted ? 0 : 0.12, audioCtx.currentTime);
 }
 
 soundBtn.addEventListener('click', toggleSound);
 
+// Play a square-wave note (Mario style)
+function playNote(freq, startTime, duration, vol) {
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.type = 'square';
+  osc.frequency.value = freq;
+  g.gain.setValueAtTime(vol, startTime);
+  g.gain.setValueAtTime(vol, startTime + duration * 0.7);
+  g.gain.linearRampToValueAtTime(0, startTime + duration);
+  osc.connect(g);
+  g.connect(masterGain);
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+}
+
+// Mario coin sound
+function playCoinSFX() {
+  ensureAudioCtx();
+  const t = audioCtx.currentTime;
+  playNote(988, t, 0.08, 0.3);       // B5
+  playNote(1319, t + 0.08, 0.3, 0.3); // E6
+}
+
+// Mario death sound
+function playDeathSFX() {
+  ensureAudioCtx();
+  const t = audioCtx.currentTime;
+  const notes = [494, 523, 494, 440, 392, 330, 262, 196];
+  notes.forEach((f, i) => playNote(f, t + i * 0.12, 0.12, 0.25));
+}
+
+// Mario powerup sound
+function playPowerupSFX() {
+  ensureAudioCtx();
+  const t = audioCtx.currentTime;
+  const notes = [523, 659, 784, 1047, 1319, 1568, 2093];
+  notes.forEach((f, i) => playNote(f, t + i * 0.06, 0.08, 0.2));
+}
+
 function playSound(type) {
   if (audioMuted) return;
-  let sfx;
-  if (type === 'eat') sfx = sfxEat;
-  else if (type === 'death') sfx = sfxDeath;
-  else if (type === 'powerup') sfx = sfxPowerup;
-  if (sfx) {
-    sfx.currentTime = 0;
-    sfx.play().catch(() => {});
-  }
+  if (type === 'eat') playCoinSFX();
+  else if (type === 'death') playDeathSFX();
+  else if (type === 'powerup') playPowerupSFX();
 }
 
-// === Chill Lo-Fi Background Music (Web Audio API synthesized) ===
+// === Super Mario Style Background Music ===
 function startBGM() {
   if (bgmPlaying) return;
-  if (!bgmContext) {
-    bgmContext = new (window.AudioContext || window.webkitAudioContext)();
-    bgmGain = bgmContext.createGain();
-    bgmGain.gain.value = audioMuted ? 0 : 0.25;
-    bgmGain.connect(bgmContext.destination);
-  }
-  if (bgmContext.state === 'suspended') bgmContext.resume();
+  ensureAudioCtx();
   bgmPlaying = true;
-  playLofiLoop();
+  playMarioLoop();
 }
 
-function stopBGM() {
-  bgmPlaying = false;
-}
+function stopBGM() { bgmPlaying = false; }
 
-function playLofiLoop() {
-  if (!bgmPlaying || !bgmContext) return;
-  // Chord progression: Am7 - Fmaj7 - Cmaj7 - G7
-  const chords = [
-    [220, 261.6, 329.6, 392],    // Am7
-    [174.6, 220, 277.2, 329.6],  // Fmaj7
-    [130.8, 164.8, 196, 246.9],  // Cmaj7
-    [196, 246.9, 293.7, 349.2],  // G7
+function playMarioLoop() {
+  if (!bgmPlaying || !audioCtx) return;
+  const bpm = 200;
+  const eighth = 60 / bpm / 2;
+  const now = audioCtx.currentTime;
+
+  // Super Mario Bros overworld theme (main melody)
+  const melody = [
+    // Bar 1
+    [659,1],[659,1],[0,1],[659,1],[0,1],[523,1],[659,1],[0,1],
+    [784,1],[0,3],[392,1],[0,3],
+    // Bar 2
+    [523,2],[0,1],[392,2],[0,1],[330,2],[0,1],
+    [440,1],[0,1],[494,1],[0,1],[466,1],[440,1],[0,1],
+    // Bar 3
+    [392,1],[659,1],[784,1],[880,1],[0,1],[698,1],[784,1],[0,1],
+    [659,1],[0,1],[523,1],[587,1],[494,1],[0,2],
+    // Bar 4
+    [523,2],[0,1],[392,2],[0,1],[330,2],[0,1],
+    [440,1],[0,1],[494,1],[0,1],[466,1],[440,1],[0,1],
+    // Bar 5
+    [392,1],[659,1],[784,1],[880,1],[0,1],[698,1],[784,1],[0,1],
+    [659,1],[0,1],[523,1],[587,1],[494,1],[0,2],
   ];
-  const bpm = 70;
-  const beatDur = 60 / bpm;
-  const barDur = beatDur * 4;
-  const loopDur = barDur * chords.length;
-  const now = bgmContext.currentTime;
 
-  // Pad chords
-  chords.forEach((notes, ci) => {
-    const startT = now + ci * barDur;
-    notes.forEach(freq => {
-      const osc = bgmContext.createOscillator();
-      const g = bgmContext.createGain();
-      const filt = bgmContext.createBiquadFilter();
+  // Bass line
+  const bass = [
+    // Bar 1
+    [147,1],[147,1],[0,1],[147,1],[0,1],[147,1],[147,1],[0,1],
+    [196,1],[0,3],[98,1],[0,3],
+    // Bar 2
+    [131,2],[0,1],[98,2],[0,1],[110,2],[0,1],
+    [147,1],[0,1],[165,1],[0,1],[156,1],[147,1],[0,1],
+    // Bar 3
+    [131,1],[165,1],[196,1],[220,1],[0,1],[175,1],[196,1],[0,1],
+    [165,1],[0,1],[131,1],[147,1],[110,1],[0,2],
+    // Bar 4
+    [131,2],[0,1],[98,2],[0,1],[110,2],[0,1],
+    [147,1],[0,1],[165,1],[0,1],[156,1],[147,1],[0,1],
+    // Bar 5
+    [131,1],[165,1],[196,1],[220,1],[0,1],[175,1],[196,1],[0,1],
+    [165,1],[0,1],[131,1],[147,1],[110,1],[0,2],
+  ];
+
+  let t = 0;
+  melody.forEach(([freq, dur]) => {
+    if (freq > 0) playNote(freq, now + t * eighth, dur * eighth * 0.9, 0.15);
+    t += dur;
+  });
+
+  let tb = 0;
+  bass.forEach(([freq, dur]) => {
+    if (freq > 0) {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
       osc.type = 'triangle';
       osc.frequency.value = freq;
-      filt.type = 'lowpass';
-      filt.frequency.value = 800;
-      filt.Q.value = 1;
-      g.gain.setValueAtTime(0, startT);
-      g.gain.linearRampToValueAtTime(0.08, startT + 0.3);
-      g.gain.setValueAtTime(0.08, startT + barDur - 0.4);
-      g.gain.linearRampToValueAtTime(0, startT + barDur);
-      osc.connect(filt);
-      filt.connect(g);
-      g.connect(bgmGain);
-      osc.start(startT);
-      osc.stop(startT + barDur);
-    });
-  });
-
-  // Simple bass line
-  const bassNotes = [220, 174.6, 130.8, 196];
-  bassNotes.forEach((freq, ci) => {
-    const startT = now + ci * barDur;
-    for (let b = 0; b < 4; b++) {
-      const t = startT + b * beatDur;
-      const osc = bgmContext.createOscillator();
-      const g = bgmContext.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = freq / 2;
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.12, t + 0.05);
-      g.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 0.8);
+      const st = now + tb * eighth;
+      g.gain.setValueAtTime(0.1, st);
+      g.gain.setValueAtTime(0.1, st + dur * eighth * 0.6);
+      g.gain.linearRampToValueAtTime(0, st + dur * eighth * 0.9);
       osc.connect(g);
-      g.connect(bgmGain);
-      osc.start(t);
-      osc.stop(t + beatDur);
+      g.connect(masterGain);
+      osc.start(st);
+      osc.stop(st + dur * eighth);
     }
+    tb += dur;
   });
 
-  // Melody — pentatonic over chords
-  const melodyNotes = [
-    523.3, 587.3, 659.3, 784, 880,  // C5 D5 E5 G5 A5
-    784, 659.3, 587.3, 523.3, 440,  // descending
-    523.3, 659.3, 784, 880, 1047,   // ascending high
-    880, 784, 659.3, 523.3, 440     // descending
-  ];
-  const melodyDur = loopDur / melodyNotes.length;
-  melodyNotes.forEach((freq, i) => {
-    if (Math.random() < 0.3) return; // skip some notes for lo-fi feel
-    const t = now + i * melodyDur;
-    const osc = bgmContext.createOscillator();
-    const g = bgmContext.createGain();
-    const filt = bgmContext.createBiquadFilter();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    filt.type = 'lowpass';
-    filt.frequency.value = 1200;
-    g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(0.06, t + 0.05);
-    g.gain.exponentialRampToValueAtTime(0.001, t + melodyDur * 0.9);
-    osc.connect(filt);
-    filt.connect(g);
-    g.connect(bgmGain);
-    osc.start(t);
-    osc.stop(t + melodyDur);
-  });
-
-  // Schedule next loop
-  setTimeout(() => {
-    if (bgmPlaying) playLofiLoop();
-  }, loopDur * 1000 - 100);
+  const totalEighths = t;
+  const loopMs = totalEighths * eighth * 1000;
+  setTimeout(() => { if (bgmPlaying) playMarioLoop(); }, loopMs - 50);
 }
 
 // ===== BUG REPORT TOOL =====
