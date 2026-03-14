@@ -1020,22 +1020,22 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
 </div>
 
 <!-- Bug Report Button -->
-<div id="bugreport-btn" title="Bug melden">🐛 Report Bug</div>
+<div id="bugreport-btn" title="Report Bug">🐛 Report Bug</div>
 
 <!-- Bug Report Overlay -->
 <div id="bugreport-overlay">
   <div id="bugreport-panel">
     <h2>🐛 Bug Report</h2>
-    <div class="br-subtitle">Hilf uns, das Spiel zu verbessern!</div>
+    <div class="br-subtitle">Help us improve the game!</div>
     <select id="br-type">
       <option value="Bug">Bug</option>
-      <option value="Vorschlag">Vorschlag</option>
-      <option value="Sonstiges">Sonstiges</option>
+      <option value="Suggestion">Suggestion</option>
+      <option value="Other">Other</option>
     </select>
-    <textarea id="br-description" placeholder="Beschreibe das Problem oder deinen Vorschlag..." required></textarea>
+    <textarea id="br-description" placeholder="Describe the issue or your suggestion..." required></textarea>
     <div class="br-buttons">
-      <button class="login-btn primary" id="br-submit">Senden</button>
-      <button class="login-btn secondary" id="br-cancel">Abbrechen</button>
+      <button class="login-btn primary" id="br-submit">Send</button>
+      <button class="login-btn secondary" id="br-cancel">Cancel</button>
     </div>
     <div id="bugreport-status"></div>
   </div>
@@ -5004,10 +5004,10 @@ function openDailyScores() {
   const key = getDailyKey();
   const data = JSON.parse(localStorage.getItem(key) || '[]');
   const overlay = document.getElementById('daily-overlay');
-  document.getElementById('daily-date').textContent = new Date().toLocaleDateString('de-DE', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('daily-date').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   const container = document.getElementById('daily-scores');
   if (data.length === 0) {
-    container.innerHTML = '<div style="padding:12px;color:#8d6e3f;">Noch keine Scores heute!</div>';
+    container.innerHTML = '<div style="padding:12px;color:#8d6e3f;">No scores yet today!</div>';
   } else {
     container.innerHTML = data.map((d, i) =>
       `<div style="display:flex;justify-content:space-between;padding:6px 12px;background:${i%2?'rgba(255,255,255,0.3)':'rgba(255,255,255,0.6)'};border-radius:8px;margin:3px 0;font-weight:700;font-size:14px;">
@@ -5192,12 +5192,12 @@ document.getElementById('btn-play-again').addEventListener('click', () => {
     const description = brDesc.value.trim();
     if (!description) {
       brStatus.style.color = '#ff4444';
-      brStatus.textContent = 'Bitte Beschreibung eingeben!';
+      brStatus.textContent = 'Please enter a description!';
       return;
     }
     brSubmit.disabled = true;
     brStatus.style.color = '#8d6e3f';
-    brStatus.textContent = 'Wird gesendet...';
+    brStatus.textContent = 'Sending...';
 
     const formData = new FormData();
     formData.append('type', brType.value);
@@ -5215,18 +5215,26 @@ document.getElementById('btn-play-again').addEventListener('click', () => {
       });
       if (res.ok) {
         brStatus.style.color = '#56ab2f';
-        brStatus.textContent = 'Danke! Report wurde gesendet.';
+        brStatus.textContent = 'Thanks! Report has been sent.';
         setTimeout(closeBugReport, 2000);
       } else {
         throw new Error('Response not ok');
       }
     } catch (err) {
       brStatus.style.color = '#ff4444';
-      brStatus.textContent = 'Fehler beim Senden. Bitte versuche es später.';
+      brStatus.textContent = 'Error sending. Please try again later.';
       brSubmit.disabled = false;
     }
   });
 })();
 </script>
+
+<!-- Footer -->
+<div id="site-footer" style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:6px 12px;font-size:12px;font-weight:700;color:rgba(90,58,26,0.6);background:rgba(255,255,255,0.3);backdrop-filter:blur(4px);z-index:5;pointer-events:auto;">
+  <a href="privacy.html" style="color:#e8783a;text-decoration:none;margin:0 8px;">Privacy Policy</a> ·
+  <a href="about.html" style="color:#e8783a;text-decoration:none;margin:0 8px;">About & Contact</a> ·
+  &copy; 2026 snake3d.online
+</div>
+
 </body>
 </html>

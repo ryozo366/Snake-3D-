@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="About Snake 3D - A free online 3D snake game. Learn how to play and get in touch.">
+<meta name="google-adsense-account" content="ca-pub-1899513491544813">
+<title>About & Contact | Snake 3D - snake3d.online</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: linear-gradient(180deg, #87CEEB 0%, #b4e4ff 100%);
+    min-height: 100vh;
+    font-family: 'Baloo 2', 'Segoe UI', sans-serif;
+    color: #5a3a1a;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 24px 80px 24px;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 3px 0 #e8783a, 0 5px 0 #c45a20, 0 0 15px rgba(255,150,50,0.4);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border: 2px solid rgba(255,255,255,0.9);
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #e8783a;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #c45a20;
+    margin: 16px 0 8px 0;
+  }
+  p, li {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  ul { padding-left: 24px; }
+  a { color: #e8783a; text-decoration: none; font-weight: 700; }
+  a:hover { text-decoration: underline; }
+  .back-btn {
+    display: inline-block;
+    background: linear-gradient(180deg, #fdcb6e 0%, #f0932b 100%);
+    border: 3px solid #e17055;
+    border-radius: 30px;
+    padding: 10px 28px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 2px 0 #c45a20;
+    text-decoration: none;
+    box-shadow: 0 4px 0 #c45a20;
+    transition: transform 0.1s;
+  }
+  .back-btn:hover { transform: translateY(-2px); text-decoration: none; }
+  .back-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #c45a20; }
+  .top-bar { text-align: center; margin-bottom: 20px; }
+  .keys { display: inline-flex; gap: 4px; }
+  .key {
+    display: inline-block;
+    background: linear-gradient(180deg, #fff 0%, #e8e0d0 100%);
+    border: 2px solid #c4b89a;
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #5a3a1a;
+    box-shadow: 0 2px 0 #b0a080;
+  }
+  .mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .mode-card {
+    background: rgba(255,240,200,0.6);
+    border-radius: 14px;
+    padding: 14px;
+    border: 2px solid rgba(232,120,58,0.2);
+  }
+  .mode-card strong { color: #e8783a; }
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 14px;
+    color: #8d6e3f;
+  }
+  footer a { color: #e8783a; }
+  @media (max-width: 600px) {
+    .mode-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-bar"><a href="index.html" class="back-btn">🎮 Back to Game</a></div>
+  <h1>🐍 About Snake 3D</h1>
+
+  <div class="card">
+    <h2>What is Snake 3D?</h2>
+    <p>Snake 3D is a free online 3D snake game you can play directly in your browser — no download required. Built with Three.js, it brings the classic snake game into a colorful 3D world with multiple game modes, maps, skins, power-ups, and upgrades.</p>
+    <p>Whether you want a quick casual round or a competitive challenge, Snake 3D has something for everyone.</p>
+  </div>
+
+  <div class="card">
+    <h2>How to Play</h2>
+    <p>Control your snake and eat food to grow longer. Avoid hitting walls and your own tail!</p>
+
+    <h3>Controls</h3>
+    <ul>
+      <li><span class="keys"><span class="key">↑</span><span class="key">↓</span><span class="key">←</span><span class="key">→</span></span> or <span class="keys"><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span></span> — Move the snake</li>
+      <li><span class="key">P</span> — Pause the game</li>
+      <li><span class="key">N</span> — Toggle Night Mode</li>
+      <li><span class="key">M</span> — Mute / Unmute sound</li>
+    </ul>
+
+    <h3>Game Modes</h3>
+    <div class="mode-grid">
+      <div class="mode-card">
+        <strong>🟢 Classic</strong>
+        <p>The original snake experience. Eat, grow, survive.</p>
+      </div>
+      <div class="mode-card">
+        <strong>👑 Snake Royale</strong>
+        <p>Compete against AI snakes in a battle royale arena.</p>
+      </div>
+      <div class="mode-card">
+        <strong>🧊 Cube Mode</strong>
+        <p>Play on the surface of a 3D cube — snake wraps around edges.</p>
+      </div>
+      <div class="mode-card">
+        <strong>♾️ Endless</strong>
+        <p>No walls, no limits. The arena wraps around so you can play forever.</p>
+      </div>
+      <div class="mode-card">
+        <strong>⏱️ Speed Run</strong>
+        <p>Score as many points as possible in 60 seconds!</p>
+      </div>
+    </div>
+
+    <h3>Features</h3>
+    <ul>
+      <li><strong>Multiple Maps:</strong> Grass, Desert, Snow, Lava, Beach, Space, and more</li>
+      <li><strong>Skins:</strong> Customize your snake's appearance</li>
+      <li><strong>Upgrades:</strong> Earn coins and upgrade your snake's abilities</li>
+      <li><strong>Power-Ups:</strong> Collect special items during gameplay</li>
+      <li><strong>Night Mode:</strong> Toggle a beautiful night-time atmosphere</li>
+      <li><strong>Daily High Scores:</strong> Track your best runs each day</li>
+      <li><strong>Replay:</strong> Watch your last game back</li>
+      <li><strong>Share Score:</strong> Share your achievements with friends</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Contact</h2>
+    <p>Have a question, suggestion, or found a bug? We'd love to hear from you!</p>
+    <ul>
+      <li><strong>In-Game Bug Report:</strong> Click the 🐛 button in the game to submit feedback directly</li>
+      <li><strong>GitHub:</strong> <a href="https://github.com/ryozo366/Snake-3D-" target="_blank">github.com/ryozo366/Snake-3D-</a></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Credits</h2>
+    <ul>
+      <li><strong>Game Engine:</strong> <a href="https://threejs.org" target="_blank">Three.js</a></li>
+      <li><strong>Font:</strong> <a href="https://fonts.google.com/specimen/Baloo+2" target="_blank">Baloo 2</a> by Google Fonts</li>
+    </ul>
+    <p style="margin-top:12px;">Snake 3D is an indie project made with passion. Thanks for playing!</p>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html">Snake 3D</a> · <a href="privacy.html">Privacy Policy</a> · <a href="about.html">About & Contact</a>
+</footer>
+
+</body>
+</html>
