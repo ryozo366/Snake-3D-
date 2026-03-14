@@ -895,7 +895,7 @@ Adsterra Social Bar: pl28890807.effectivegatecpm.com/3e/5e/a5/3e5ea57d3a8c42c73d
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="map-btn">🗺️ Maps (M)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="skin-btn">🐍 Skins (K)</span>
     <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="night-btn">🌙 Night (N)</span>
-    <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="sound-btn">🔊 Sound (S)</span>
+    <span class="hud-pill" style="font-size:13px;padding:2px 12px;pointer-events:auto;cursor:pointer;margin-left:6px" id="sound-btn">🔊 Sound</span>
   </div>
   <div id="powerup-bar"></div>
   <div id="royale-hud">
@@ -3121,7 +3121,6 @@ document.addEventListener('keydown', e => {
   // Only handle shortcuts if not a movement key
   if (!ABS_DIRS[key]) {
     if (key === 'c' || key === 'C') { toggleCamera(); return; }
-    if (key === 's' || key === 'S') { toggleSound(); return; }
     if (key === 'p' || key === 'P') { togglePixelMode(); return; }
     if (key === 'm' || key === 'M') { if (!running || gameOver) openMapShop(); return; }
     if (key === 'k' || key === 'K') { if (!running || gameOver) openSkinShop(); return; }
@@ -5179,14 +5178,14 @@ function ensureAudioCtx() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = audioMuted ? 0 : 0.12;
+    masterGain.gain.value = audioMuted ? 0 : 0.05;
     masterGain.connect(audioCtx.destination);
   }
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
 function updateSoundBtn() {
-  soundBtn.textContent = audioMuted ? '🔇 Muted (S)' : '🔊 Sound (S)';
+  soundBtn.textContent = audioMuted ? '🔇 Muted' : '🔊 Sound';
 }
 updateSoundBtn();
 
@@ -5194,7 +5193,7 @@ function toggleSound() {
   audioMuted = !audioMuted;
   localStorage.setItem('snake3d_muted', audioMuted);
   updateSoundBtn();
-  if (masterGain) masterGain.gain.setValueAtTime(audioMuted ? 0 : 0.12, audioCtx.currentTime);
+  if (masterGain) masterGain.gain.setValueAtTime(audioMuted ? 0 : 0.05, audioCtx.currentTime);
 }
 
 soundBtn.addEventListener('click', toggleSound);
