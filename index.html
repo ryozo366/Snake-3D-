@@ -1584,15 +1584,18 @@ scene.background = new THREE.Color(0x87CEEB);
 scene.fog = new THREE.Fog(0x87CEEB, 50, 100);
 
 const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 200);
-camera.position.set(0, 16, 14);
+camera.position.set(0, 20, 14);
 
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 orbitControls.target.set(0, 0, 0);
 orbitControls.enableDamping = true;
 orbitControls.dampingFactor = 0.08;
-orbitControls.maxPolarAngle = Math.PI / 2.1;
-orbitControls.minDistance = 10;
-orbitControls.maxDistance = 45;
+orbitControls.minPolarAngle = Math.PI / 6;
+orbitControls.maxPolarAngle = Math.PI / 2.3;
+orbitControls.minAzimuthAngle = -Math.PI / 4;
+orbitControls.maxAzimuthAngle = Math.PI / 4;
+orbitControls.minDistance = 12;
+orbitControls.maxDistance = 40;
 orbitControls.update();
 
 // ===== LIGHTING =====
@@ -2434,7 +2437,7 @@ function init() {
   document.getElementById('mode-selector').style.display = '';
   document.getElementById('cube-back-bar').style.display = 'none';
   // Reset camera for classic
-  camera.position.set(0, 16, 14);
+  camera.position.set(0, 20, 14);
   camera.up.set(0, 1, 0);
   orbitControls.maxDistance = 45;
   const sc2 = dirLight.shadow.camera;
@@ -3528,9 +3531,54 @@ function botDecide(bot) {
   return bestDir;
 }
 
+// ===== DEATH PARTICLE SYSTEM =====
+const deathParticles = [];
+const particleGeo = new THREE.BoxGeometry(0.25, 0.25, 0.25);
+
+function spawnDeathParticles(worldX, worldZ, color) {
+  const count = 12 + Math.floor(Math.random() * 8);
+  for (let i = 0; i < count; i++) {
+    const mat = new THREE.MeshStandardMaterial({ color: color.clone(), emissive: color.clone(), emissiveIntensity: 0.4, transparent: true, opacity: 1 });
+    const mesh = new THREE.Mesh(particleGeo, mat);
+    mesh.position.set(worldX + (Math.random() - 0.5) * 0.5, 0.4, worldZ + (Math.random() - 0.5) * 0.5);
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2 + Math.random() * 4;
+    scene.add(mesh);
+    deathParticles.push({
+      mesh, life: 1,
+      vx: Math.cos(angle) * speed,
+      vy: 3 + Math.random() * 5,
+      vz: Math.sin(angle) * speed
+    });
+  }
+}
+
+function updateDeathParticles(dt) {
+  for (let i = deathParticles.length - 1; i >= 0; i--) {
+    const p = deathParticles[i];
+    p.life -= dt * 1.5;
+    p.vy -= 15 * dt; // gravity
+    p.mesh.position.x += p.vx * dt;
+    p.mesh.position.y += p.vy * dt;
+    p.mesh.position.z += p.vz * dt;
+    p.mesh.rotation.x += dt * 8;
+    p.mesh.rotation.z += dt * 6;
+    p.mesh.material.opacity = Math.max(0, p.life);
+    p.mesh.scale.setScalar(Math.max(0.1, p.life));
+    if (p.life <= 0) {
+      scene.remove(p.mesh);
+      p.mesh.material.dispose();
+      deathParticles.splice(i, 1);
+    }
+  }
+}
+
 function killBot(bot, killerName) {
   bot.alive = false;
   royaleAlive--;
+  // Spawn particles at head position
+  const headPos = gridToWorld(bot.snake[0].x, bot.snake[0].y);
+  spawnDeathParticles(headPos.x, headPos.z, bot.color);
   // Drop food along body
   for (let i = 0; i < bot.snake.length; i += 2) {
     const seg = bot.snake[i];
@@ -4759,6 +4807,13 @@ function animate(now) {
     tickProgress = Math.min((now - lastTickTime) / speed, 1);
   }
 
+  // Update death particles
+  if (deathParticles.length > 0) {
+    const dt = Math.min((now - (animate._lastNow || now)) / 1000, 0.05);
+    updateDeathParticles(dt);
+  }
+  animate._lastNow = now;
+
   if (gameMode === 'royale' && royaleActive) {
     syncRoyaleScene();
   } else if (gameMode === 'cube' && cubeActive) {
@@ -4882,7 +4937,7 @@ function initEndless() {
   document.getElementById('cheat-bar').style.display = '';
   document.getElementById('mode-selector').style.display = '';
   document.getElementById('cube-back-bar').style.display = 'none';
-  camera.position.set(0, 16, 14); camera.up.set(0, 1, 0);
+  camera.position.set(0, 20, 14); camera.up.set(0, 1, 0);
   orbitControls.maxDistance = 45;
   const sc2 = dirLight.shadow.camera;
   sc2.left = -18; sc2.right = 18; sc2.top = 18; sc2.bottom = -18; sc2.updateProjectionMatrix();
@@ -4930,7 +4985,7 @@ function initSpeedrun() {
   document.getElementById('cheat-bar').style.display = '';
   document.getElementById('mode-selector').style.display = '';
   document.getElementById('cube-back-bar').style.display = 'none';
-  camera.position.set(0, 16, 14); camera.up.set(0, 1, 0);
+  camera.position.set(0, 20, 14); camera.up.set(0, 1, 0);
   orbitControls.maxDistance = 45;
   const sc2 = dirLight.shadow.camera;
   sc2.left = -18; sc2.right = 18; sc2.top = 18; sc2.bottom = -18; sc2.updateProjectionMatrix();
