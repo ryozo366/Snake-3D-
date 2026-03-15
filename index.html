@@ -2645,13 +2645,34 @@ function gameTick() {
   }
   // Magnet: move ALL nearby food toward player (within 5 cells)
   if (isPowerupActive('magnet')) {
-    for (const cf of classicFoods) {
+    for (let mi = classicFoods.length - 1; mi >= 0; mi--) {
+      const cf = classicFoods[mi];
       const dist = Math.abs(cf.x - head.x) + Math.abs(cf.y - head.y);
       if (dist <= 5) {
         if (cf.x < head.x) cf.x++; else if (cf.x > head.x) cf.x--;
         if (cf.y < head.y) cf.y++; else if (cf.y > head.y) cf.y--;
         // Update mesh position
         if (cf.mesh) { const wp = gridToWorld(cf.x, cf.y); cf.mesh.position.set(wp.x, CELL * 0.4, wp.z); }
+        // Eat food that landed on head after magnet pull
+        if (cf.x === head.x && cf.y === head.y) {
+          const ft = cf.type;
+          const coinMult = isPowerupActive('double') ? 2 : 1;
+          const cg = (ft.coins + getCoinBonus()) * coinMult, sg = Math.round(ft.score * getScoreMult());
+          score += sg; runCoins += cg; runFoodCounts[ft.name]++; runFoodTotal++;
+          if (ft.name === 'Mango') sessionProgress.mangosEaten++;
+          sessionProgress.fruitsEaten++;
+          sessionProgress.score = score;
+          sessionProgress.coinsEarned = runCoins;
+          runMaxLength = Math.max(runMaxLength, snake.length);
+          sessionProgress.length = runMaxLength;
+          playSound('eat');
+          spawnFloatingText(`🧲 ${ft.emoji} +${sg}  🪙${cg}`, '#fff', gridToWorld(head.x, head.y));
+          if (cf.mesh) scene.remove(cf.mesh);
+          classicFoods.splice(mi, 1);
+          placeFood();
+          snake.push({ ...snake[snake.length - 1] });
+          prevSnake.push({ ...prevSnake[prevSnake.length - 1] });
+        }
       }
     }
   }
@@ -3897,6 +3918,19 @@ function royaleTick(now) {
     if (nf) {
       if (nf.x < head.x) nf.x++; else if (nf.x > head.x) nf.x--;
       if (nf.y < head.y) nf.y++; else if (nf.y > head.y) nf.y--;
+      // Eat food that landed on head after magnet pull
+      if (nf.x === head.x && nf.y === head.y) {
+        const ft = nf.type;
+        const coinMult = isPowerupActive('double') ? 2 : 1;
+        const cg = (ft.coins + getCoinBonus()) * coinMult;
+        const sg = Math.round(ft.score * getScoreMult());
+        score += sg; runCoins += cg; runFoodTotal++;
+        playSound('eat');
+        spawnFloatingText(`🧲 ${ft.emoji} +${sg}`, '#fff', gridToWorld(head.x, head.y));
+        royaleFoods.splice(royaleFoods.indexOf(nf), 1);
+        snake.push({ ...snake[snake.length - 1] });
+        prevSnake.push({ ...prevSnake[prevSnake.length - 1] });
+      }
     }
   }
   // Check if player killed a bot (head-on)
