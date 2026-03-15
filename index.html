@@ -850,6 +850,54 @@
     position:absolute; border:2px dashed rgba(231,76,60,0.5); border-radius:50%;
     pointer-events:none; z-index:5;
   }
+
+  /* ===== MOBILE TOUCH CONTROLS ===== */
+  #mobile-controls {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    z-index: 50;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+  .dpad {
+    display: grid;
+    grid-template-columns: 52px 52px 52px;
+    grid-template-rows: 52px 52px 52px;
+    gap: 4px;
+  }
+  .dpad-btn {
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.08s, transform 0.08s;
+    pointer-events: auto;
+    touch-action: none;
+  }
+  .dpad-btn:active, .dpad-btn.pressed {
+    background: rgba(232,120,58,0.7);
+    transform: scale(0.92);
+  }
+  .dpad-empty { visibility: hidden; }
+  @media (hover: hover) and (pointer: fine) {
+    #mobile-controls { display: none !important; }
+  }
+  @media (hover: none) and (pointer: coarse) {
+    #mobile-controls { display: block; }
+  }
 </style>
 </head>
 <body>
@@ -918,7 +966,7 @@
   <div id="speedrun-hud" style="display:none;margin-top:4px;">
     <span class="hud-pill" id="speedrun-timer" style="font-size:16px;padding:4px 16px;background:rgba(255,80,80,0.9);color:#fff;border-color:rgba(255,120,120,0.9);">⏱️ 60s</span>
   </div>
-  <div id="message">Press any arrow key to start</div>
+  <div id="message">Tap or press arrow keys to start</div>
   <div id="cheat-bar" style="margin-top:8px;pointer-events:auto;">
     <input type="text" id="cheat-input" placeholder="Enter code..." spellcheck="false" autocomplete="off"
       style="font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;padding:5px 14px;border-radius:16px;border:2px solid rgba(255,255,255,0.8);background:rgba(255,255,255,0.75);color:#5a3a1a;outline:none;width:160px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
@@ -2378,7 +2426,7 @@ function init() {
   // Restore banner text
   document.querySelector('.go-banner').textContent = 'GAME OVER';
   updateHUD();
-  msgEl.textContent = 'Press any arrow key to start';
+  msgEl.textContent = 'Tap or press arrow keys to start';
   gameoverOverlay.classList.remove('visible');
   // Show menu UI again
   document.getElementById('map-badge').style.display = '';
@@ -3562,7 +3610,7 @@ function initRoyale() {
   document.getElementById('alive-pill').textContent = `👥 ${royaleAlive} Alive`;
   document.getElementById('kills-pill').textContent = `💀 0 Kills`;
   updateHUD();
-  msgEl.textContent = 'Press any arrow key to start!';
+  msgEl.textContent = 'Tap or press arrow keys to start!';
   syncRoyaleScene();
 }
 
@@ -4162,7 +4210,7 @@ function initCube() {
   // UI
   document.querySelector('.go-banner').textContent = 'GAME OVER';
   updateHUD();
-  msgEl.textContent = 'Press any arrow key to start';
+  msgEl.textContent = 'Tap or press arrow keys to start';
   gameoverOverlay.classList.remove('visible');
   document.getElementById('map-badge').style.display = 'none';
   document.getElementById('cheat-bar').style.display = '';
@@ -5317,8 +5365,65 @@ function playArcadeLoop() {
       brSubmit.disabled = false;
     }
   });
+
+// ===== MOBILE TOUCH CONTROLS =====
+document.querySelectorAll('#mobile-controls .dpad-btn').forEach(btn => {
+  const key = btn.dataset.key;
+  function fireKey() {
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true }));
+  }
+  btn.addEventListener('touchstart', e => {
+    e.preventDefault();
+    btn.classList.add('pressed');
+    fireKey();
+  }, { passive: false });
+  btn.addEventListener('touchend', e => {
+    e.preventDefault();
+    btn.classList.remove('pressed');
+  }, { passive: false });
+  btn.addEventListener('mousedown', e => {
+    e.preventDefault();
+    btn.classList.add('pressed');
+    fireKey();
+  });
+  btn.addEventListener('mouseup', () => btn.classList.remove('pressed'));
+  btn.addEventListener('mouseleave', () => btn.classList.remove('pressed'));
+});
+
+// Hide d-pad when overlays are open, show when game is active
+const mobileControls = document.getElementById('mobile-controls');
+const hideMobileOnOverlay = new MutationObserver(() => {
+  const anyOverlayOpen = [gameoverOverlay, shopOverlay, mapShopOverlay, skinShopOverlay, coinShopOverlay, leaderboardOverlay, challengesOverlay, achievementsOverlay].some(
+    el => el && el.classList.contains('visible')
+  );
+  if (anyOverlayOpen) {
+    mobileControls.style.display = 'none';
+  } else {
+    // Restore based on media query
+    mobileControls.style.display = '';
+  }
+});
+[gameoverOverlay, shopOverlay, mapShopOverlay, skinShopOverlay, coinShopOverlay, leaderboardOverlay, challengesOverlay, achievementsOverlay].forEach(el => {
+  if (el) hideMobileOnOverlay.observe(el, { attributes: true, attributeFilter: ['class'] });
+});
+
 })();
 </script>
+
+<!-- Mobile D-Pad -->
+<div id="mobile-controls">
+  <div class="dpad">
+    <div class="dpad-empty"></div>
+    <button class="dpad-btn" data-key="ArrowUp">&#9650;</button>
+    <div class="dpad-empty"></div>
+    <button class="dpad-btn" data-key="ArrowLeft">&#9664;</button>
+    <div class="dpad-empty"></div>
+    <button class="dpad-btn" data-key="ArrowRight">&#9654;</button>
+    <div class="dpad-empty"></div>
+    <button class="dpad-btn" data-key="ArrowDown">&#9660;</button>
+    <div class="dpad-empty"></div>
+  </div>
+</div>
 
 <!-- Footer -->
 <div id="site-footer" style="position:fixed;bottom:0;left:0;right:auto;padding:6px 14px;font-size:10px;font-weight:700;color:rgba(90,58,26,0.5);z-index:5;pointer-events:auto;">
