@@ -698,32 +698,6 @@
   #mode-selector .candy-btn { font-size:14px; padding:6px 18px; }
   .mode-active { box-shadow:0 0 12px rgba(249,202,36,0.6) !important; border:2px solid #f9ca24 !important; }
 
-  /* ===== COIN SHOP ===== */
-  #coinshop-overlay {
-    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5);
-    z-index:200; justify-content:center; align-items:center; backdrop-filter:blur(6px);
-  }
-  #coinshop-overlay.visible { display:flex; animation:fadeIn 0.3s ease; }
-  #coinshop-panel {
-    background:linear-gradient(145deg,#fff8ee,#ffecd2); border-radius:20px;
-    padding:24px 28px; min-width:340px; max-width:440px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.25); text-align:center; border:3px solid #f9ca24;
-  }
-  .coinpack-card {
-    background:rgba(255,255,255,0.8); border-radius:14px; padding:14px;
-    margin:8px 0; display:flex; justify-content:space-between; align-items:center;
-    border:2px solid #e0c89a; transition:transform 0.15s;
-  }
-  .coinpack-card:hover { transform:scale(1.02); }
-  .coinpack-info { text-align:left; }
-  .coinpack-coins { font-size:20px; font-weight:800; color:#5a3a1a; }
-  .coinpack-price {
-    background:linear-gradient(135deg,#f9ca24,#e8783a); color:#fff; border:none;
-    border-radius:12px; padding:8px 16px; font-family:'Baloo 2',sans-serif;
-    font-size:14px; font-weight:700; cursor:pointer; transition:transform 0.15s;
-  }
-  .coinpack-price:hover { transform:scale(1.08); }
-
   /* ===== LEADERBOARD ===== */
   #leaderboard-overlay {
     display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5);
@@ -995,7 +969,6 @@
       <button class="candy-btn btn-shop-go" id="btn-open-shop" style="padding:10px 22px;font-size:15px;">Upgrades</button>
       <button class="candy-btn btn-maps-go" id="btn-open-maps-go" style="padding:8px 14px;font-size:12px;">Maps</button>
       <button class="candy-btn btn-skins-go" id="btn-open-skins-go" style="padding:8px 14px;font-size:12px;">Skins</button>
-      <button class="candy-btn btn-shop-go" id="btn-open-coins-go" style="padding:8px 14px;font-size:12px;">💰 Coins</button>
       <button class="candy-btn btn-maps-go" id="btn-open-lb-go" style="padding:8px 14px;font-size:12px;">🏆 Scores</button>
       <button class="candy-btn btn-skins-go" id="btn-open-ch-go" style="padding:8px 14px;font-size:12px;">📋 Challenges</button>
       <button class="candy-btn btn-retry" id="btn-open-ach-go" style="padding:8px 14px;font-size:12px;">🏅 Badges</button>
@@ -1091,15 +1064,6 @@
   </div>
 </div>
 
-<!-- Coin Shop -->
-<div id="coinshop-overlay">
-  <div id="coinshop-panel">
-    <h2>💰 COIN STORE</h2>
-    <div id="coinshop-wallet">🏦 $0</div>
-    <div id="coinshop-grid"></div>
-    <button class="shop-close-btn" id="coinshop-close">Close</button>
-  </div>
-</div>
 
 <!-- Leaderboard -->
 <div id="leaderboard-overlay">
@@ -2996,7 +2960,7 @@ function closeAllOverlays() {
   shopOverlay.classList.remove('visible');
   mapShopOverlay.classList.remove('visible');
   skinShopOverlay.classList.remove('visible');
-  coinShopOverlay.classList.remove('visible');
+  if (coinShopOverlay) coinShopOverlay.classList.remove('visible');
   leaderboardOverlay.classList.remove('visible');
   challengesOverlay.classList.remove('visible');
   achievementsOverlay.classList.remove('visible');
@@ -3008,7 +2972,6 @@ document.getElementById('btn-play-again').addEventListener('click', () => {
 document.getElementById('btn-open-shop').addEventListener('click', () => openShop());
 document.getElementById('btn-open-maps-go').addEventListener('click', () => openMapShop());
 document.getElementById('btn-open-skins-go').addEventListener('click', () => openSkinShop());
-document.getElementById('btn-open-coins-go').addEventListener('click', () => openCoinShop());
 document.getElementById('btn-open-lb-go').addEventListener('click', () => openLeaderboard());
 document.getElementById('btn-open-ch-go').addEventListener('click', () => openChallenges());
 document.getElementById('btn-open-ach-go').addEventListener('click', () => openAchievements());
@@ -3114,14 +3077,12 @@ document.addEventListener('keydown', e => {
     if (key === 'p' || key === 'P') { togglePixelMode(); return; }
     if (key === 'm' || key === 'M') { if (!running || gameOver) openMapShop(); return; }
     if (key === 'k' || key === 'K') { if (!running || gameOver) openSkinShop(); return; }
-    if (key === 'b' || key === 'B') { if (!running || gameOver) openCoinShop(); return; }
     if (key === 'l' || key === 'L') { if (!running || gameOver) openLeaderboard(); return; }
     if (key === 'j' || key === 'J') { if (!running || gameOver) openChallenges(); return; }
     if (key === 'h' || key === 'H') { if (!running || gameOver) openAchievements(); return; }
     if (key === 'r' || key === 'R') { closeAllOverlays(); init(); return; }
     if (key === 'Escape') {
       if (tutorialOverlay.classList.contains('visible')) { endTutorial(); return; }
-      if (coinShopOverlay.classList.contains('visible')) { closeCoinShop(); return; }
       if (leaderboardOverlay.classList.contains('visible')) { closeLeaderboard(); return; }
       if (challengesOverlay.classList.contains('visible')) { closeChallenges(); return; }
       if (achievementsOverlay.classList.contains('visible')) { closeAchievements(); return; }
@@ -3133,7 +3094,7 @@ document.addEventListener('keydown', e => {
   }
 
   e.preventDefault();
-  if (shopOverlay.classList.contains('visible') || gameoverOverlay.classList.contains('visible') || mapShopOverlay.classList.contains('visible') || skinShopOverlay.classList.contains('visible') || coinShopOverlay.classList.contains('visible') || leaderboardOverlay.classList.contains('visible') || challengesOverlay.classList.contains('visible') || achievementsOverlay.classList.contains('visible') || loginOverlay.classList.contains('visible') || tutorialOverlay.classList.contains('visible')) return;
+  if (shopOverlay.classList.contains('visible') || gameoverOverlay.classList.contains('visible') || mapShopOverlay.classList.contains('visible') || skinShopOverlay.classList.contains('visible') || leaderboardOverlay.classList.contains('visible') || challengesOverlay.classList.contains('visible') || achievementsOverlay.classList.contains('visible') || loginOverlay.classList.contains('visible') || tutorialOverlay.classList.contains('visible')) return;
 
   const normKey = normalizeKey(key);
   let nd;
@@ -4532,43 +4493,8 @@ function cleanupCubeMode() {
 }
 
 // ===== COIN SHOP =====
-const COIN_PACKS = [
-  { id:'pack1', coins:500,   price:'$0.99', emoji:'🪙', gradient:'linear-gradient(135deg,#cd7f32,#b8860b)' },
-  { id:'pack2', coins:2000,  price:'$2.99', emoji:'💰', gradient:'linear-gradient(135deg,#c0c0c0,#a8a8a8)' },
-  { id:'pack3', coins:5000,  price:'$4.99', emoji:'💎', gradient:'linear-gradient(135deg,#ffd700,#ffaa00)' },
-  { id:'pack4', coins:15000, price:'$9.99', emoji:'👑', gradient:'linear-gradient(135deg,#e8783a,#ff4500)' },
-];
-
-function openCoinShop() {
-  gameoverOverlay.classList.remove('visible');
-  renderCoinShop();
-  coinShopOverlay.classList.add('visible');
-}
-function closeCoinShop() {
-  coinShopOverlay.classList.remove('visible');
-  if (gameOver) gameoverOverlay.classList.add('visible');
-}
-function renderCoinShop() {
-  document.getElementById('coinshop-wallet').textContent = `🏦 $${wallet}`;
-  const grid = document.getElementById('coinshop-grid');
-  grid.innerHTML = '';
-  for (const pack of COIN_PACKS) {
-    const card = document.createElement('div');
-    card.className = 'coinpack-card';
-    card.innerHTML = `<div class="coinpack-info"><span class="coinpack-coins">${pack.emoji} ${pack.coins.toLocaleString()} Coins</span></div>`;
-    const btn = document.createElement('button');
-    btn.className = 'coinpack-price'; btn.style.background = pack.gradient;
-    btn.textContent = pack.price;
-    btn.addEventListener('click', () => {
-      wallet += pack.coins;
-      spawnFloatingText(`+${pack.coins.toLocaleString()} 🪙`, '#ffd700', { x:0, z:0 });
-      updateHUD(); renderCoinShop(); saveGame();
-    });
-    card.appendChild(btn);
-    grid.appendChild(card);
-  }
-}
-document.getElementById('coinshop-close').addEventListener('click', closeCoinShop);
+function openCoinShop() {}
+function closeCoinShop() {}
 
 // ===== LEADERBOARD =====
 function openLeaderboard() {
